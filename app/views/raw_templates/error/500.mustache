@@ -1,0 +1,33 @@
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    <div class="jumbotron">
+      <h1><i class="icon-fire-extinguisher"></i> 500 <small>(Internal Server Error)</small></h1>
+      <p>We couldn't complete that request because something went wrong. This error has been reported and we're working on getting it fixed.</p>
+
+      <small>(This page intentionally left ugly)</small>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    {{#req.buckets.enable500Error.status}}
+      <div class="panel panel-danger">
+        <div class="panel-heading">
+          <h3 class="panel-title">Stack Trace</h3>
+        </div>
+        <div class="panel-body">
+          <pre>{{tb}}</pre>
+        </div>
+      </div>
+
+      <div class="panel panel-danger">
+        <div class="panel-heading">
+          <h3 class="panel-title">Exception</h3>
+        </div>
+        <div class="panel-body">
+          <pre>{{error}}</pre>
+        </div>
+      </div>
+    {{/req.buckets.enable500Error.status}}
+  </div>
+</div>

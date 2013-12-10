@@ -1,0 +1,21 @@
+users:
+  - username: bug
+    password: josh
+    groups:
+      - root
+
+tables:
+  - users
+
+buckets:
+  enable500Error:
+    status: true
+    name: Enable errors on 500 pages
+    description: Enable the display of the server errors on 500 pages
+
+flush:
+  rethink:
+    users: false
+  redis:
+    session: true
+    bucket: true

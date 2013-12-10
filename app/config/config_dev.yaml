@@ -1,0 +1,30 @@
+appName: &APP psh
+logName: *APP
+
+port: 8000
+address: 127.0.0.1
+
+files:
+  pid: psh.pid
+  log: psh.log
+  stderr: psh_error.log
+  stdout: psh_out.log
+
+dirs:
+  pid: pid/
+  log: logs/
+  base: /srv/http/
+
+databases:
+  rethink:
+    db: psh
+  redis:
+    db: 1
+    URL: localhost
+
+sockets:
+  zeromq:
+    URL: tcp://127.0.0.1
+    port: 9000
+
+debug: true

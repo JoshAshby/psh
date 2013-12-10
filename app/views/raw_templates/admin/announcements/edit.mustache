@@ -1,0 +1,78 @@
++++
+theme_color: orange
+
+nav:
+  admin_annoucements: true
+
+scriptFiles:
+  - lib/bootstrap-datetimepicker.min
+
+stylesheets:
+  - lib/bootstrap-datetimepicker.min
+
+scripts: "
+  $(function() {
+    $('.datetimepicker').datetimepicker({
+      language: 'en',
+      pick12HourFormat: true,
+      pickSeconds: false,
+    });
+  });
+  "
++++
+
+<ol class="breadcrumb">
+  <li><a href="/admin">Admin</a></li>
+  <li><a href="/admin/announcements">Announcements</a></li>
+  <li class="active">Edit</li>
+
+  <span class="pull-right">T'would be {{now}}</span>
+</ol>
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2 col-sm-12">
+    <div class="thumbnail">
+      <div class="caption">
+        <form method="POST">
+          <fieldset>
+            <legend>Edit Announcement...</legend>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class='input-group date datetimepicker'>
+                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                    <input type='text' class="form-control" name="start" placeholder="{{now}}" value="{{announcement._formated_start}}" />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class='input-group date datetimepicker'>
+                    <input type='text' class="form-control" name="end" placeholder="{{now}}" value="{{announcement._formated_end}}" />
+                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <textarea rows="5" class="form-control" name="message" placeholder="Announcement...">{{announcement.message}}</textarea>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="status" value="true" {{#announcement.status}}checked{{/announcement.status}}/> Make this announcement active?
+              </label>
+            </div>            <button class="btn btn-theme btn-block" type="submit">Update</button>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(function() {
+    $('#datetimepicker').datetimepicker({
+      language: 'en',
+      pick12HourFormat: true
+    });
+  });
+</script>

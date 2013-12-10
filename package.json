@@ -1,0 +1,8 @@
+{
+    "name": "Psh PaaS",
+    "version": "1.0.0alpha",
+    "dependencies" : {
+        "coffee-script": "1.5.0",
+        "recess": "1.1.6"
+    }
+}

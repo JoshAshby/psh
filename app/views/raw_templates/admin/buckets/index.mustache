@@ -1,0 +1,55 @@
++++
+theme_color: orange
+
+nav:
+  admin_buckets: true
++++
+
+<ol class="breadcrumb">
+  <li><a href="/admin">Admin</a></li>
+  <li class="active">Buckets</li>
+</ol>
+
+<div class="row">
+  <div class="col-md-4 col-md-offset-2 col-sm-12">
+  </div>
+  <div class="col-sm-12 col-md-4">
+    <form class="form-inline pull-right" role="pagination_options">
+      {{{page.options}}}
+    </form>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-md-8 col-md-offset-2 col-sm-12">
+    {{#buckets}}
+      <div class="row">
+        <div class="col-md-9">
+          <h4>{{id}} <small>{{name}}</small></h4>
+        </div>
+        <div class="col-md-3">
+          <div class="btn-group pull-right">
+            {{#status}}
+              <a href="#" data-id="{{id}}" class="btn btn-theme btn-sm toggle_btn">
+                <i class="icon-ok"></i>
+              </a>
+            {{/status}}
+            {{^status}}
+              <a href="#" data-id="{{id}}" class="btn btn-default btn-sm toggle_btn">
+                <i class="icon-remove"></i>
+              </a>
+            {{/status}}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          {{description}}
+        </div>
+      </div>
+      <hr>
+    {{/buckets}}
+
+    {{{page.pager}}}
+  </div>
+</div>

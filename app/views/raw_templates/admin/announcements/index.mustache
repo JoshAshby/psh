@@ -1,0 +1,118 @@
++++
+theme_color: orange
+
+nav:
+  admin_annoucements: true
++++
+
+<ol class="breadcrumb">
+  <li><a href="/admin">Admin</a></li>
+  <li class="active">Announcements</li>
+
+  <span class="pull-right">T'would be {{now}}</span>
+</ol>
+
+<div class="row">
+  <div class="col-md-4 col-md-offset-2 col-sm-12">
+    <ul class="nav nav-pills" id="myTab">
+      <li class="active"><a href="#view" data-toggle="tab">View</a></li>
+      <li><a href="#new" data-toggle="tab">New</a></li>
+    </ul>
+  </div>
+  <div class="col-sm-12 col-md-4">
+    <form class="form-inline pull-right" role="pagination_options">
+      {{{page.options}}}
+    </form>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-md-8 col-md-offset-2 col-sm-12">
+    <div id="myTabContent" class="tab-content">
+      <div class="tab-pane active" id="view">
+        {{#announcements}}
+          <div class="row">
+            <div class="col-md-9">
+              <small class="muted">ID: {{id}}<br>
+              Created: {{formated_created}}<br></small>
+            </div>
+            <div class="col-md-3">
+              <div class="btn-group pull-right">
+                {{#status}}
+                  <a href="#" data-id="{{id}}" class="btn btn-theme btn-sm toggle_btn" data-toggle="tooltip" title="Enabled" data-placement="auto left">
+                    <i class="icon-ok"></i>
+                  </a>
+                {{/status}}
+                {{^status}}
+                  <a href="#" data-id="{{id}}" class="btn btn-default btn-sm toggle_btn" data-toggle="tooltip" title="Disabled" data-placement="auto left">
+                    <i class="icon-remove"></i>
+                  </a>
+                {{/status}}
+                <a href="/admin/announcements/edit/{{id}}" class="btn btn-theme btn-sm">
+                  <i class="icon-edit"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md-12">
+              {{message}}
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md-12">
+              {{#start}}
+                Activates on: {{formated_start}}
+              {{/start}}
+              {{#end}}
+                Ends on: {{formated_end}}
+              {{/end}}
+            </div>
+          </div>
+          <hr>
+        {{/announcements}}
+
+        {{{page.pager}}}
+
+      </div>
+      <div class="tab-pane" id="new">
+        <div class="thumbnail">
+          <div class="caption">
+            <form method="POST">
+              <fieldset>
+                <legend>New Announcement...</legend>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class='input-group date'>
+                        <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                        <input type='text' class="form-control" name="start" placeholder="{{now}}" />
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class='input-group date'>
+                        <input type='text' class="form-control" name="end" placeholder="{{now}}" />
+                        <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <textarea rows="5" class="form-control" name="message" placeholder="Announcement..."></textarea>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" name="status" value="true" checked/> Make this announcement active?
+                  </label>
+                </div>                <button class="btn btn-theme btn-block" type="submit">Add announcement</button>
+              </fieldset>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+  <head>
+  <title>Psh PaaS - {{{req.title}}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Begin page stylsheets -->
+    <link href="/static/css/{{theme_color}}_theme.css" rel="stylesheet">
+    {{#stylesheets}}
+      <link href="/static/css/{{.}}.css" rel="stylesheet">
+    {{/stylesheets}}
+
+    <style>
+      {{{styles}}}
+    </style>
+    <!-- End page style sheets -->
+
+    <script src="http://code.jquery.com/jquery.js"></script>
+  </head>
+  <body>
+    {{#req.has_announcements}}
+      <div class="container container-alert">
+        <div class="row">
+          <div class="col-md-1 col-sm-1" style="text-align: center;">
+            <i class="icon-exclamation icon-4x"></i>
+          </div>
+          <div class="col-md-10 col-sm-10">
+            {{#req.announcements}}
+              {{{.}}}
+            {{/req.announcements}}
+          </div>
+        </div>
+      </div>
+    {{/req.has_announcements}}
+    <div class="container">
+      <br>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          <nav class="navbar navbar-default navbar-inverse" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/"><i class="icon-bug"></i> Psh PaaS</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+              <ul class="nav navbar-nav">
+                {{#req.session.id}}
+                  <li {{#nav.mine}}class="active"{{/nav.mine}}><a href="/mine"><i class="icon-screenshot"></i> Mine</a></li>
+                {{/req.session.id}}
+              </ul>
+              {{#req.session.id}}
+                <ul class="nav navbar-nav navbar-right" style="margin-right: 15px">
+
+                  <li class="active"><a href="#" id="nav_extra_menu_btn" data-html="true" data-content='
+<div class="list-group nav_list">
+  {{#req.session.has_root}}
+    <a href="/admin" class="list-group-item"><i class="icon-dashboard"></i> Admin</a>
+  {{/req.session.has_root}}
+  <a href="/logout" class="list-group-item"><i class="icon-signout"></i> Logout</a>
+</div>
+                    ' data-container="body" data-title="What to do..." data-placement="bottom">Ello, {{req.session.username}} <i class="icon-chevron-down"></i></a></li>
+
+                </ul>
+              {{/req.session.id}}
+              {{^req.session.id}}
+                <ul class="nav navbar-nav navbar-right" style="margin-right: 15px">
+                  <li class="active"><a id="nav_extra_menu_btn" href="#" data-html="true" data-content='<form role="logic" action="/login" method="POST"><div class="form-group"><input type="text" class="form-control" placeholder="Username..." name="username"></div><div class="form-group"><input type="password" class="form-control" placeholder="Password..." name="password"></div><button type="submit" class="btn btn-default btn-theme btn-block">Login</button></form>' data-container="body" data-title="Login" data-placement="bottom">Heya, stranger <i class="icon-chevron-down"></i></a>
+                  </li>
+                </ul>
+              {{/req.session.id}}
+            </div><!-- /.navbar-collapse -->
+          </nav>
+        </div>
+      </div>
+
+      <!-- Begin alerts section -->
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          {{{req.session.alerts}}}
+        </div>
+      </div>
+      <!-- End alerts section -->
+
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          {{{body}}}
+        </div>
+      </div>
+
+      <hr>
+      <footer id="footer">
+        <div class="row">
+          <div class="col-md-6">
+            <a href="https://github.com/JoshAshby">JoshAshby - Psh PaaS 2013</a>
+            <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.
+          </div>
+          <div class="col-md-6">
+            <p class="pull-right"><a href="/about">About</a> | <a href="#top">Back to top</a></p>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+    <!-- Begin page scripts -->
+    {{#scriptFiles}}
+      <script src="/static/js/{{.}}.js"></script>
+    {{/scriptFiles}}
+
+    <script>
+      $(function() {
+        $("#nav_extra_menu_btn").popover();
+      });
+
+      {{#scripts}}
+        {{{scripts}}}
+      {{/scripts}}
+    </script>
+    <!-- End page scripts -->
+    <br>
+  </body>
+</html>
