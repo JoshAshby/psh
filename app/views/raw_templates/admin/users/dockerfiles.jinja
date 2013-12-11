@@ -8,7 +8,6 @@ nav:
   <li class="active">Users</li>
 </ol>
 
-
 <div class="row">
   <div class="col-md-2">
     <img src="https://gravatar.com/avatar/{{user.gravatar}}?d=mm&s=100" alt="{{user.email}}" class="img-thumbnail">
@@ -23,30 +22,45 @@ nav:
 <div class="row">
   <div class="col-md-12">
     {{tabs}}
+  </div>
+</div>
 
-    <div class="row">
-      <div class="col-md-12">
+<div class="row">
+  <div class="col-md-12">
+    <br>
+    <form class="form-inline pull-right" role="pagination_options">
+      {{page.options}}
+    </form>
+    <br>
+    <br>
+  </div>
+</div>
 
-        <table class="table table-striped table-hover table-condensed">
-          <thead>
-            <th>Name</th>
-            <th>Created</th>
-            <th>Status</th>
-            <th>Public/Private</th>
-          </thead>
-          <tbody>
-            {% for dockerfile in page.pail %}
-              <tr>
-                <td><a href="/dockerfiles/{{dockerfile.id}}">{{dockerfile.name}}</a></td>
-                <td>{{dockerfile.formated_created}}</td>
-                <td>{{ 'Built' if dockerfile.status else 'In Build Queue' }}</td>
-                <td><i class="fa fa-{{ 'eye' if dockerfile.public else 'eye-slash' }}"></i></td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-striped table-hover table-condensed">
+      <thead>
+        <th>Name</th>
+        <th>Created</th>
+        <th>Status</th>
+        <th>Public/Private</th>
+      </thead>
+      <tbody>
+        {% for dockerfile in page.pail %}
+          <tr>
+            <td><a href="/dockerfiles/{{dockerfile.id}}">{{dockerfile.name}}</a></td>
+            <td>{{dockerfile.formated_created}}</td>
+            <td>{{ 'Built' if dockerfile.status else 'In Build Queue' }}</td>
+            <td><i class="fa fa-{{ 'eye' if dockerfile.public else 'eye-slash' }}"></i></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 
-      </div>
-    </div>
+<div class="row">
+  <div class="col-md-12">
+    {{page.paginate}}
   </div>
 </div>

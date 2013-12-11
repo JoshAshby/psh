@@ -58,12 +58,23 @@
               <ul class="nav navbar-nav">
                 {{#req.session.id}}
                   <li {{#nav.new}}class="active"{{/nav.new}}><a href="/new"><i class="fa fa-upload"></i> New</a></li>
+
+                  <li class="dropdown {{#nav.dockerfiles}}active{{/nav.dockerfiles}}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dockerfiles <i class="fa fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="/dockerfiles">Public</a></li>
+                      <li><a href="/dockerfiles/mine">Mine</a></li>
+                    </ul>
+                  </li>
+
                 {{/req.session.id}}
-                <li {{#nav.dockerfiles}}class="active"{{/nav.dockerfiles}}><a href="/dockerfiles"><i class="fa fa-file"></i> Dockerfiles</a></li>
+                {{^req.session.id}}
+                  <li {{#nav.dockerfiles}}class="active"{{/nav.dockerfiles}}><a href="/dockerfiles"><i class="fa fa-file"></i> Dockerfiles</a></li>
+                {{/req.session.id}}
               </ul>
               {{#req.session.id}}
                 <ul class="nav navbar-nav navbar-right" style="margin-right: 15px">
-                  <li class="active"><a href="#" id="nav_extra_menu_btn" data-html="true" data-content='
+                  <li><a href="#" id="nav_extra_menu_btn" data-html="true" data-content='
 <div class="list-group nav_list">
   {{#req.session.has_admin}}
     <a href="/admin" class="list-group-item"><i class="fa fa-dashboard"></i> Admin</a>
@@ -76,7 +87,7 @@
               {{/req.session.id}}
               {{^req.session.id}}
                 <ul class="nav navbar-nav navbar-right" style="margin-right: 15px">
-                  <li class="active"><a id="signin_btn" href="#" data-html="true" data-content='<form role="logic" action="/login" method="POST"><div class="form-group"><input type="text" class="form-control" placeholder="Username..." name="username"></div><div class="form-group"><input type="password" class="form-control" placeholder="Password..." name="password"></div><button type="submit" class="btn btn-default btn-theme btn-block">Login</button></form>' data-container="body" data-title="Login" data-placement="bottom">Heya, stranger <i class="fa fa-chevron-down"></i></a>
+                  <li><a id="signin_btn" href="#" data-html="true" data-content='<form role="logic" action="/login" method="POST"><div class="form-group"><input type="text" class="form-control" placeholder="Username..." name="username"></div><div class="form-group"><input type="password" class="form-control" placeholder="Password..." name="password"></div><button type="submit" class="btn btn-default btn-theme btn-block">Login</button></form>' data-container="body" data-title="Login" data-placement="bottom">Heya, stranger <i class="fa fa-chevron-down"></i></a>
                   </li>
                 </ul>
               {{/req.session.id}}

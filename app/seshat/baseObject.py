@@ -24,6 +24,7 @@ root_group = "root"
 class BaseHTTPObject(object):
         _login = False
         _groups   = []
+        _redirect_url = ""
 
         """
         Base HTTP page response object
@@ -42,13 +43,19 @@ class BaseHTTPObject(object):
 
             if self._login and not self.request.session.id:
                 self.request.session.push_alert("You need to be logged in to view this page.", level="error")
-                self.head = ("401 UNAUTHORIZED", [])
+                if not self._redirect_url:
+                    self.head = ("401 UNAUTHORIZED", [])
+                else:
+                    self.head = ("303 SEE OTHER", [("Location", self._redirect_url)])
                 return "", self.head
 
             if self._groups and (not self.request.session.has_perm(root_group) \
                or not len(set(self._groups).union(self.request.session.groups)) >= 1):
                     self.request.session.push_alert("You are not authorized to perfom this action.", level="error")
-                    self.head = ("401 UNAUTHORIZED", [])
+                    if not self._redirect_url:
+                        self.head = ("401 UNAUTHORIZED", [])
+                    else:
+                        self.head = ("303 SEE OTHER", [("Location", self._redirect_url)])
                     return "", self.head
 
             self.pre_content_hook()

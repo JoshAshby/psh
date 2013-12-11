@@ -15,10 +15,10 @@ joshuaashby@joshashby.com
 """
 
 
-def login(groups=[], redirect="/login"):
+def login(groups=[], redirect=""):
     def wrapper(HTTPObject):
         HTTPObject._login = True
         HTTPObject._groups = groups
-        HTTPObject._redirect_URL = redirect
+        HTTPObject._redirect_url = redirect
         return HTTPObject
     return wrapper

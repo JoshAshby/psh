@@ -16,7 +16,7 @@ from seshat.baseObject import HTMLObject
 from seshat.objectMods import login
 
 
-@login([], "/about")
+@login(redirect="/login")
 @autoRoute()
 class index(HTMLObject):
     """
