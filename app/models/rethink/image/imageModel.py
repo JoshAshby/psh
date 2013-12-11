@@ -20,13 +20,14 @@ class Image(RethinkModel):
         self._formated_created = ""
 
     @classmethod
-    def new_image(cls, user, name, img, dockerfile):
+    def new_image(cls, user, name, img, dockerfile, log):
         fi = cls.create(user=user,
                         dockerfile=dockerfile,
                         created=arrow.utcnow().timestamp,
                         name=name,
                         img=img,
-                        latest=True)
+                        latest=True,
+                        log=log)
         return fi
 
 

@@ -11,7 +11,7 @@ nav:
     {% if dockerfile.user==req.session.id %}
       <h5>Yours!</h5>
     {% else %}
-      <h5>By {{dockerfile.author}}</h5>
+      <h5>By {{dockerfile.author.username}}</h5>
     {% endif%}
     <small>Created on {{dockerfile.formated_created}}</small>
   </div>
@@ -19,7 +19,7 @@ nav:
     <div class="col-md-5">
       <p>Build Status:
         {% if dockerfile.status %}
-          <a href="/images/{{dockerfile.latest_image}}"><span class="label label-success"><i class="fa fa-check"></i> Built!</span></a>
+          <a href="/images/{{dockerfile.latest_image.id}}"><span class="label label-success"><i class="fa fa-check"></i> Built!</span></a>
         {% else %}
           <span class="label label-danger"><i class="fa fa-frown-o"></i> In Queue</span>
         {% endif %}

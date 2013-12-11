@@ -32,7 +32,6 @@ class Dockerfile(RethinkModel):
 
     @classmethod
     def new_dockerfile(cls, user, name, file_obj, public=False, override=False):
-        print file_obj.extension
         found = r.table(cls.table).filter({'name': name, 'user': user}).count().run()
         if not found or override:
 
@@ -80,12 +79,12 @@ class Dockerfile(RethinkModel):
 
     @property
     def author(self):
-        return um.User(self.user).username
+        return um.User(self.user)
 
     @property
     def latest_image(self):
         img = r.table(im.Image.table).filter({"dockerfile": self.id, "latest": True}).coerce_to("array").run()
         if img:
-            return img[0]["id"]
+            return im.Image(img[0]["id"])
         else:
             return None

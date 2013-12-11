@@ -14,13 +14,23 @@ import urlparse
 
 import requests
 
+import tempfile
+import shutil
 
-def write_file(files, path):
+
+def write_file(path, files):
     """
     Simply writes the files contents the disk at the given location.
     """
     with open(path, 'wb') as f:
         f.write(files.read())
+
+    return True
+
+
+def write_file_string(path, string):
+    with open(path, 'wb') as f:
+        f.write(string)
 
     return True
 
@@ -54,3 +64,29 @@ def download_file(url, path):
     else:
         # TODO: DO Shit
         raise Exception(req.status_code)
+
+
+class TemporaryDirectory(object):
+    def __init__(self, suffix="", prefix="tmp_", dir=None):
+        self.tmp = tempfile.mkdtemp(suffix=suffix, prefix=prefix, dir=dir)
+
+    def __enter__(self):
+        return self.tmp
+
+    def __exit__(self, *errors):
+        return self.destroy()
+
+    def destroy(self):
+        if self.tmp:
+            shutil.rmtree(self.tmp)
+        self.tmp = ""
+
+    def __del__(self):
+        if "tmp" in self.__dict__:
+            self.__exit__(None, None, None)
+
+    def __str__(self):
+        if self.name:
+            return "< TemporaryDirectory at: %s >" % (self.name)
+        else:
+            return "< Deleted TemporaryDirectory >"

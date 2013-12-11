@@ -27,7 +27,7 @@ nav:
           {% for dockerfile in page.pail %}
             <tr>
               <td><a href="/dockerfiles/{{dockerfile.id}}">{{dockerfile.name}}</a></td>
-              <td>{{dockerfile.author}}</td>
+              <td>{{dockerfile.author.username}}</td>
               <td>{{dockerfile.formated_created}}</td>
             </tr>
           {% endfor %}

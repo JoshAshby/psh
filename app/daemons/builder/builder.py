@@ -9,6 +9,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
+import os
 import docker
 
 import rethinkdb as r
@@ -20,6 +21,7 @@ import redis
 import tempfile
 
 import utils.pushover as ps
+import utils.files as fu
 
 from config.standard import StandardConfig
 
@@ -64,12 +66,29 @@ class Builder(object):
 
             r.table(im.Image.table).filter({"name": tag}).update({"latest": False}).run()
 
-            dockerfile = tempfile.TemporaryFile()
-            dockerfile.write(dockerfile_model.dockerfile)
-            dockerfile.seek(0)
+            if not dockerfile_model.additional_files:
+                dockerfile = tempfile.TemporaryFile()
+                dockerfile.write(dockerfile_model.dockerfile)
+                dockerfile.seek(0)
 
-            self.logger.info("Building "+next_id)
-            s, m = self.dc.build(fileobj=dockerfile, tag=tag, rm=True)
+                self.logger.info("Building "+next_id)
+                s, m = self.dc.build(fileobj=dockerfile, tag=tag, rm=True)
+            else:
+                tmp = fu.TemporaryDirectory()
+                path = os.path.abspath(tmp.tmp)
+
+                dockerfile_path = "/".join([path, "Dockerfile"])
+                fu.write_file_string(dockerfile_path, dockerfile_model.dockerfile)
+
+                for add_file in dockerfile_model.additional_files:
+                    add_file_path = "/".join([path, add_file])
+                    fu.write_file_string(add_file_path, dockerfile_model.additional_files[add_file])
+
+                self.logger.info("Building "+next_id+" in a temp dir")
+                s, m = self.dc.build(path=path, tag=tag, rm=True)
+
+                tmp.destroy()
+
             if s:
                 imgs = self.dc.images(tag)
 
@@ -79,7 +98,8 @@ class Builder(object):
                     img_model = im.Image.new_image(user=user.id,
                                                    name=tag,
                                                    img=img["Id"],
-                                                   dockerfile=dockerfile_model.id)
+                                                   dockerfile=dockerfile_model.id,
+                                                   log=m)
 
                     user.images.append(img_model.id)
                     user.save()
