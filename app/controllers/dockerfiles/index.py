@@ -79,4 +79,17 @@ class index(MixedObject):
         except NotFoundError:
             return NotFound()
 
+        if self.request.command == "copy":
+            pass
+
+        else:
+            public = self.request.getParam("public", False)
+
+            if self.request.session.id==dockerfile.user:
+                dockerfile.public = public
+                dockerfile.save()
+                return Redirect("/dockerfiles/"+self.request.id_extended)
+            else:
+                return Unauthorized()
+
         return Redirect("/dockerfiles/"+self.request.id_extended)

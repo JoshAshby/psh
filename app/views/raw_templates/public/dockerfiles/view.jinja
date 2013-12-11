@@ -6,7 +6,7 @@ nav:
   <div class="col-md-2">
     <i class="fa fa-file fa-5x"></i>
   </div>
-  <div class="col-md-10">
+  <div class="col-md-{{ '5' if req.session.id==dockerfile.user else '10' }}">
     <h3>{{dockerfile.name}}</h3>
     {% if dockerfile.user==req.session.id %}
       <h5>Yours!</h5>
@@ -15,6 +15,18 @@ nav:
     {% endif%}
     <small>Created on {{dockerfile.formated_created}}</small>
   </div>
+  {% if req.session.id==dockerfile.user %}
+    <div class="col-md-5">
+      <form method=POST>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="public" value="true" {{ 'checked' if dockerfile.public }}> Make publically viewable?
+          </label>
+        </div>
+        <button type="submit" class="btn btn-theme">Update</button>
+      </form>
+    </div>
+  {% endif %}
 </div>
 <hr>
 <pre>
