@@ -35,6 +35,24 @@ nav:
   {% endif %}
 </div>
 <hr>
-<pre>
-{{dockerfile.dockerfile}}
-</pre>
+<div class="row">
+  <div class="col-md-12">
+    <h1>Dockerfile</h1>
+    <pre>{{dockerfile.dockerfile}}</pre>
+  </div>
+</div>
+{% if dockerfile.additional_files %}
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Additional Files</h1>
+    </div>
+  </div>
+{% endif %}
+{% for name in dockerfile.additional_files %}
+  <div class="row">
+    <div class="col-md-12">
+      <h3>{{name}}</h3>
+      <pre>{{dockerfile.additional_files[name]}}</pre>
+    </div>
+  </div>
+{% endfor %}

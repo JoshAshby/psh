@@ -11,16 +11,15 @@ from rethinkORM import RethinkModel
 import arrow
 
 from errors.general import \
-      ExistingError
-from errors.general import \
-      NotFoundError
-
+      ExistingError, NotFoundError, MissingError
 import rethinkdb as r
 
 from models.rethink.user import userModel as um
 from models.rethink.image import imageModel as im
 
 import config.config as c
+
+import tarfile
 
 
 class Dockerfile(RethinkModel):
@@ -33,14 +32,33 @@ class Dockerfile(RethinkModel):
 
     @classmethod
     def new_dockerfile(cls, user, name, file_obj, public=False, override=False):
+        print file_obj.extension
         found = r.table(cls.table).filter({'name': name, 'user': user}).count().run()
         if not found or override:
+
+            add_files = {}
+            if not file_obj.extension:
+                dockerfile = file_obj.read()
+
+            elif file_obj.extension in ["tar", "tar.gz", "tar.bz2"]:
+                with tarfile.open(fileobj=file_obj.file) as tar:
+                    for entry in tar:
+                        member = tar.extractfile(entry)
+                        if entry.name in ["Dockerfile", "dockerfile"]:
+                            dockerfile = member.read()
+                        else:
+                            add_files[entry.name] = member.read()
+
+                if not dockerfile:
+                    raise MissingError("The file Dockerfile was missing...")
+
             fi = cls.create(user=user,
-                     dockerfile=unicode(file_obj.read()),
-                     created=arrow.utcnow().timestamp,
-                     name=name,
-                     status=False,
-                     public=public)
+                            dockerfile=dockerfile,
+                            additional_files=add_files,
+                            created=arrow.utcnow().timestamp,
+                            name=name,
+                            status=False,
+                            public=public)
 
             u = um.User(user)
             u.dockerfiles.append(fi.id)

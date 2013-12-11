@@ -1,0 +1,19 @@
++++
+nav:
+  images: true
++++
+<div class="row">
+  <div class="col-md-2">
+    <i class="fa fa-picture-o fa-5x"></i>
+  </div>
+  <div class="col-md-10">
+    <h3>{{image.name}}</h3>
+    <small>Created on {{image.formated_created}}</small>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-12">
+    <p>Built from Dockerfile: <a href="/dockerfiles/{{image.dockerfile}}">{{image.dockerfile}}</a></p>
+  </div>
+</div>

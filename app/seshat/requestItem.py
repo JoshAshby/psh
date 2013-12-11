@@ -39,7 +39,7 @@ class FileObject(object):
         self.file = file_obj.file
 
         self.extension = ""
-        parts = self.filename.rsplit(".", 1)
+        parts = self.filename.split(".", 1)
         if len(parts) > 1:
             self.extension = parts[1]
 
