@@ -1,0 +1,63 @@
++++
+theme_color: orange
+
+nav:
+  admin_dockerfiles: true
++++
+<ol class="breadcrumb">
+  <li><a href="/admin">Admin</a></li>
+  <li class="active">Dockerfiles</li>
+</ol>
+
+<div class="row">
+  <div class="col-md-2">
+    <i class="fa fa-file fa-5x"></i>
+  </div>
+  <div class="col-md-5">
+    <h3>{{dockerfile.name}}</h3>
+    {% if dockerfile.user==req.session.id %}
+      <h5>Yours!</h5>
+    {% else %}
+      <h5>By {{dockerfile.author.username}}</h5>
+    {% endif%}
+    <small>Created on {{dockerfile.formated_created}}</small>
+  </div>
+    <div class="col-md-5">
+      <p>Build Status:
+        {% if dockerfile.status %}
+          <a href="/admin/images/{{dockerfile.latest_image.id}}"><span class="label label-success"><i class="fa fa-check"></i> Built!</span></a>
+        {% else %}
+          <span class="label label-danger"><i class="fa fa-frown-o"></i> In Queue</span>
+        {% endif %}
+      <form method=POST>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="public" value="true" {{ 'checked' if dockerfile.public }}> Make publically viewable?
+          </label>
+        </div>
+        <button type="submit" class="btn btn-theme">Update</button>
+      </form>
+    </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-12">
+    <h1>Dockerfile</h1>
+    <pre>{{dockerfile.dockerfile}}</pre>
+  </div>
+</div>
+{% if dockerfile.additional_files %}
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Additional Files</h1>
+    </div>
+  </div>
+{% endif %}
+{% for name in dockerfile.additional_files %}
+  <div class="row">
+    <div class="col-md-12">
+      <h3>{{name}}</h3>
+      <pre>{{dockerfile.additional_files[name]}}</pre>
+    </div>
+  </div>
+{% endfor %}

@@ -27,7 +27,7 @@ class Dockerfile(RethinkModel):
 
     def finish_init(self):
         if not self._data:
-            raise NotFoundError("User was not found.")
+            raise NotFoundError("Dockerfile was not found.")
         self._formated_created = ""
 
     @classmethod

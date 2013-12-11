@@ -16,6 +16,10 @@ from seshat.actions import Redirect
 
 from models.rethink.dockerfile import dockerfileModel as dfm
 
+from errors.general import \
+      MissingError
+
+
 @login()
 @autoRoute()
 class index(HTMLObject):
@@ -30,10 +34,16 @@ class index(HTMLObject):
         name = self.request.getParam("name")
         public = self.request.getParam("public", False)
 
-        if files:
-            dockerfile = dfm.Dockerfile.new_dockerfile(self.request.session.id,
-                                                       name=name,
-                                                       file_obj=files,
-                                                       public=public)
+        try:
+            if files:
+                dockerfile = dfm.Dockerfile.new_dockerfile(self.request.session.id,
+                                                           name=name,
+                                                           file_obj=files,
+                                                           public=public)
 
-        return Redirect("/dockerfiles/"+dockerfile.id)
+            return Redirect("/dockerfiles/"+dockerfile.id)
+
+        except MissingError as e:
+            self.view.data = {"name": name, "public": public, "error": str(e)}
+
+            return self.view

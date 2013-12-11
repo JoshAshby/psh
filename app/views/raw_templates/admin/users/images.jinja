@@ -47,9 +47,9 @@ nav:
       <tbody>
         {% for image in page.pail %}
           <tr>
-            <td><a href="/images/{{image.id}}">{{image.name}}</a></td>
+            <td><a href="/admin/images/{{image.id}}">{{image.name}}</a></td>
             <td>{{image.formated_created}}</td>
-            <td><a href="/dockerfiles/{{image.dockerfile}}">{{image.dockerfile}}</a></td>
+            <td><a href="/admin/dockerfiles/{{image.dockerfile}}">{{image.dockerfile}}</a></td>
           </tr>
         {% endfor %}
       </tbody>

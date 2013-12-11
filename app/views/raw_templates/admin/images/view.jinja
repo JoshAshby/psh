@@ -1,0 +1,37 @@
++++
+theme_color: orange
+
+nav:
+  admin_images: true
++++
+<ol class="breadcrumb">
+  <li><a href="/admin">Admin</a></li>
+  <li class="active">Images</li>
+</ol>
+
+<div class="row">
+  <div class="col-md-2">
+    <i class="fa fa-file fa-5x"></i>
+  </div>
+  <div class="col-md-10">
+    <h3>{{image.name}}</h3>
+    {% if image.user==req.session.id %}
+      <h5>Yours!</h5>
+    {% else %}
+      <h5>By {{image.author.username}}</h5>
+    {% endif%}
+    <small>Created on {{image.formated_created}}</small>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-12">
+    <p>Built from Dockerfile: <a href="/admin/dockerfiles/{{image.dockerfile}}">{{image.dockerfile}}</a></p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <h1>Build log</h1>
+    <pre>{{image.log}}</pre>
+  </div>
+</div>

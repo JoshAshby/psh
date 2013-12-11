@@ -48,13 +48,13 @@ nav:
       <tbody>
         {% for dockerfile in page.pail %}
           <tr>
-            <td><a href="/dockerfiles/{{dockerfile.id}}">{{dockerfile.name}}</a></td>
+            <td><a href="/admin/dockerfiles/{{dockerfile.id}}">{{dockerfile.name}}</a></td>
             <td>{{dockerfile.formated_created}}</td>
 
             <td>
 
         {% if dockerfile.status %}
-          <a href="/images/{{dockerfile.latest_image.id}}"><span class="label label-success"><i class="fa fa-check"></i> Built!</span></a>
+          <a href="/admin/images/{{dockerfile.latest_image.id}}"><span class="label label-success"><i class="fa fa-check"></i> Built!</span></a>
         {% else %}
           <span class="label label-danger"><i class="fa fa-frown-o"></i> In Queue</span>
         {% endif %}

@@ -12,11 +12,16 @@ import arrow
 
 from models.rethink.user import userModel as um
 
+from errors.general import \
+      NotFoundError
+
 
 class Image(RethinkModel):
     table = "images"
 
     def finish_init(self):
+        if not self._data:
+            raise NotFoundError("Image was not found.")
         self._formated_created = ""
 
     @classmethod
@@ -40,4 +45,4 @@ class Image(RethinkModel):
 
     @property
     def author(self):
-        return um.User(self.user).username
+        return um.User(self.user)
