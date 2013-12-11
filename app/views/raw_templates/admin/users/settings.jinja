@@ -1,0 +1,48 @@
++++
+theme_color: orange
+nav:
+  admin_users: true
++++
+<div class="row">
+  <div class="col-md-2">
+    <img src="https://gravatar.com/avatar/{{user.gravatar}}?d=mm&s=100" alt="{{user.email}}" class="img-thumbnail">
+  </div>
+  <div class="col-md-10">
+    <h3>{{user.username}}</h3>
+    <h5>{{user.email}}</h5>
+    <small>Created on {{user.formated_created}}</small>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-12">
+    {{tabs}}
+
+    <div class="row">
+      <div class="col-md-12">
+
+    <form role="form" method="POST">
+      <div class="form-group {{ 'has-error' if error=="password" }}">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" placeholder="Password..." name="password" value="{{password}}">
+        <span class="help-text">
+          Only changes the password if not blank. If resetting a users password, be sure to send them an email with the new password and instructions to change it.
+        </span>
+        {% if error=="password" %}
+          <span class="help-text">
+            {{error_msg}}
+          </span>
+        {% endif %}
+      </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="disable" value="true" {{ 'checked' if user.disable }}> Disable account?
+        </label>
+      </div>
+      <button type="submit" class="btn btn-theme">Update</button>
+    </form>
+
+      </div>
+    </div>
+  </div>
+</div>

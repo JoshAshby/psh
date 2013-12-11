@@ -40,16 +40,16 @@ nav:
               <div class="btn-group pull-right">
                 {{#status}}
                   <a href="#" data-id="{{id}}" class="btn btn-theme btn-sm toggle_btn" data-toggle="tooltip" title="Enabled" data-placement="auto left">
-                    <i class="icon-ok"></i>
+                    <i class="fa fa-check"></i>
                   </a>
                 {{/status}}
                 {{^status}}
                   <a href="#" data-id="{{id}}" class="btn btn-default btn-sm toggle_btn" data-toggle="tooltip" title="Disabled" data-placement="auto left">
-                    <i class="icon-remove"></i>
+                    <i class="fa fa-times"></i>
                   </a>
                 {{/status}}
                 <a href="/admin/announcements/edit/{{id}}" class="btn btn-theme btn-sm">
-                  <i class="icon-edit"></i>
+                  <i class="fa fa-edit"></i>
                 </a>
               </div>
             </div>
@@ -87,14 +87,14 @@ nav:
                   <div class="row">
                     <div class="col-md-6">
                       <div class='input-group date'>
-                        <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                         <input type='text' class="form-control" name="start" placeholder="{{now}}" />
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class='input-group date'>
                         <input type='text' class="form-control" name="end" placeholder="{{now}}" />
-                        <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                       </div>
                     </div>
                   </div>

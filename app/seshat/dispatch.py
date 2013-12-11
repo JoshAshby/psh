@@ -49,7 +49,12 @@ def dispatch(env, start_response):
 
     found, ID = c.urls.get(request.url)
     if found is not None:
-        request.id = ID
+        parts = ID.split('/', 1)
+        request.id = parts[0]
+        if len(parts) > 1:
+            request.command = parts[1]
+        else:
+            request.command = None
         obj = found.__module__+"/"+found.__name__
         newHTTPObject = found(request)
         if c.general["debug"]: logObj(request, obj)

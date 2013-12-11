@@ -26,7 +26,7 @@ logger = logging.getLogger(c.general["logName"]+".views")
 
 time_format = "dd MMM DD HH:mm:ss:SS YYYY"
 config_delim = "+++"
-default_theme_color = "blue"
+default_theme_color = "red"
 
 
 tmplPath = os.path.dirname(__file__)+"/raw_templates/"

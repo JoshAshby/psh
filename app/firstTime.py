@@ -62,9 +62,10 @@ def userSetup():
     print "Setting up inital users..."
     for user in c.general.users:
         try:
-            newUser = um.User.new_user(user["username"], user["password"])
+            newUser = um.User.new_user(user["username"], user["password"], user["email"])
             print "Adding new user `%s`"%user["username"]
             print "\tpassword `%s`"%user["password"]
+            print "\temail `%s`"%user["email"]
             print "\tgroups" + str(user["groups"])
             newUser.groups = user["groups"]
             newUser.save()

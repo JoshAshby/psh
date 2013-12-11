@@ -2,16 +2,16 @@
   <ul class="pager">
     <li class="previous {{ 'disabled' if not has_prev }}">
       {% if has_prev %}
-        <a href="?page={{page-1}}{{ '&' if query }}{{query}}"><i class="icon-chevron-left"></i> Prev</a>
+        <a href="?page={{page-1}}{{ '&' if query }}{{query}}"><i class="fa fa-chevron-left"></i> Prev</a>
       {% else %}
-        <a><i class="icon-chevron-left"></i> Prev</a>
+        <a><i class="fa fa-chevron-left"></i> Prev</a>
       {% endif %}
     </li>
     <li class="next {{ 'disabled' if not has_next }}">
       {% if has_next %}
-        <a href="?page={{page+1}}{{ '&' if query }}{{query}}">Next <i class="icon-chevron-right"></i></a>
+        <a href="?page={{page+1}}{{ '&' if query }}{{query}}">Next <i class="fa fa-chevron-right"></i></a>
       {% else %}
-        <a>Next <i class="icon-chevron-right"></i></a>
+        <a>Next <i class="fa fa-chevron-right"></i></a>
       {% endif %}
     </li>
   </ul>

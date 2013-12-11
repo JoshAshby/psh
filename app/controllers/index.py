@@ -25,4 +25,5 @@ class index(HTMLObject):
     _title = "Home"
     _defaultTmpl = "public/index/index"
     def GET(self):
+        #self.request.session.push_alert("testing")
         return self.view

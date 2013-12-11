@@ -1,0 +1,46 @@
++++
+theme_color: orange
+nav:
+  admin_users: true
++++
+<div class="row">
+  <div class="col-md-2">
+    <img src="https://gravatar.com/avatar/{{user.gravatar}}?d=mm&s=100" alt="{{user.email}}" class="img-thumbnail">
+  </div>
+  <div class="col-md-10">
+    <h3>{{user.username}}</h3>
+    <h5>{{user.email}}</h5>
+    <small>Created on {{user.formated_created}}</small>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-12">
+    {{tabs}}
+
+    <div class="row">
+      <div class="col-md-12">
+
+        <table class="table table-striped table-hover table-condensed">
+          <thead>
+            <th>Name</th>
+            <th>Created</th>
+            <th>Status</th>
+            <th>Public/Private</th>
+          </thead>
+          <tbody>
+            {% for dockerfile in page.pail %}
+              <tr>
+                <td><a href="/dockerfiles/{{dockerfile.id}}">{{dockerfile.name}}</a></td>
+                <td>{{dockerfile.formated_created}}</td>
+                <td>{{ 'Built' if dockerfile.status else 'In Build Queue' }}</td>
+                <td><i class="fa fa-{{ 'eye' if dockerfile.public else 'eye-slash' }}"></i></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>

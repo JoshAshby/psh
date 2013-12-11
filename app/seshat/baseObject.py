@@ -47,7 +47,7 @@ class BaseHTTPObject(object):
 
             if self._groups and (not self.request.session.has_perm(root_group) \
                or not len(set(self._groups).union(self.request.session.groups)) >= 1):
-                    self.request.session.push_alert("You are not authorized to perfom this action.", "error")
+                    self.request.session.push_alert("You are not authorized to perfom this action.", level="error")
                     self._redirect(self._redirect_URL)
                     return "", self.head
 
@@ -106,7 +106,7 @@ class HTMLObject(BaseHTTPObject):
         try:
             title = self._title
         except:
-            title = "untitled"
+            title = "Untitled"
 
         self.request.title = title
 
@@ -137,6 +137,17 @@ class JSONObject(BaseHTTPObject):
 
 
 class MixedObject(BaseHTTPObject):
+    _type = "HTML"
+    def post_init_hook(self):
+        self.head = ("200 OK", [("Content-Type", "text/html")])
+
+        try:
+            title = self._title
+        except:
+            title = "Untitled"
+
+        self.request.title = title
+
     def pre_content_hook(self):
         try:
           self.view = template(self._default_tmpl, self.request)
@@ -145,15 +156,15 @@ class MixedObject(BaseHTTPObject):
 
     def post_content_hook(self, content):
         if self._type == "JSON":
-            if not self.head:
-                self.head = ("200 OK", [("Content-Type", "application/json")])
+            self.head = (self.head[0], [("Content-Type", "application/json")])
+
             response = [{"data": content}]
 
             return json.dumps(response)
 
         elif self._type == "HTML":
-            if not self.head:
-                self.head = ("200 OK", [("Content-Type", "text/html")])
+            self.head = (self.head[0], [("Content-Type", "text/html")])
+
             if isinstance(content, template):
                 string = content.render()
                 del content

@@ -8,8 +8,8 @@
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
     <!-- Begin page stylsheets -->
     <link href="/static/css/{{theme_color}}_theme.css" rel="stylesheet">
@@ -29,7 +29,7 @@
       <div class="container container-alert">
         <div class="row">
           <div class="col-md-1 col-sm-1" style="text-align: center;">
-            <i class="icon-exclamation icon-4x"></i>
+            <i class="fa fa-exclamation fa-4x"></i>
           </div>
           <div class="col-md-10 col-sm-10">
             {{#req.announcements}}
@@ -48,18 +48,16 @@
             <div class="navbar-header">
               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
                 <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
+                <span class="fa fa-bars"></span>
               </button>
-              <a class="navbar-brand" href="/"><i class="icon-bug"></i> Psh PaaS</a>
+              <a class="navbar-brand" href="/">Psh PaaS</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
               <ul class="nav navbar-nav">
                 {{#req.session.id}}
-                  <li {{#nav.mine}}class="active"{{/nav.mine}}><a href="/mine"><i class="icon-screenshot"></i> Mine</a></li>
+                  <li {{#nav.new}}class="active"{{/nav.new}}><a href="/new"><i class="fa fa-upload"></i> New</a></li>
                 {{/req.session.id}}
               </ul>
               {{#req.session.id}}
@@ -68,17 +66,17 @@
                   <li class="active"><a href="#" id="nav_extra_menu_btn" data-html="true" data-content='
 <div class="list-group nav_list">
   {{#req.session.has_root}}
-    <a href="/admin" class="list-group-item"><i class="icon-dashboard"></i> Admin</a>
+    <a href="/admin" class="list-group-item"><i class="fa fa-dashboard"></i> Admin</a>
   {{/req.session.has_root}}
-  <a href="/logout" class="list-group-item"><i class="icon-signout"></i> Logout</a>
+  <a href="/logout" class="list-group-item"><i class="fa fa-signout"></i> Logout</a>
 </div>
-                    ' data-container="body" data-title="What to do..." data-placement="bottom">Ello, {{req.session.username}} <i class="icon-chevron-down"></i></a></li>
+                    ' data-container="body" data-title="What to do..." data-placement="bottom">Ello, {{req.session.username}} <i class="fa fa-chevron-down"></i></a></li>
 
                 </ul>
               {{/req.session.id}}
               {{^req.session.id}}
                 <ul class="nav navbar-nav navbar-right" style="margin-right: 15px">
-                  <li class="active"><a id="nav_extra_menu_btn" href="#" data-html="true" data-content='<form role="logic" action="/login" method="POST"><div class="form-group"><input type="text" class="form-control" placeholder="Username..." name="username"></div><div class="form-group"><input type="password" class="form-control" placeholder="Password..." name="password"></div><button type="submit" class="btn btn-default btn-theme btn-block">Login</button></form>' data-container="body" data-title="Login" data-placement="bottom">Heya, stranger <i class="icon-chevron-down"></i></a>
+                  <li class="active"><a id="nav_extra_menu_btn" href="#" data-html="true" data-content='<form role="logic" action="/login" method="POST"><div class="form-group"><input type="text" class="form-control" placeholder="Username..." name="username"></div><div class="form-group"><input type="password" class="form-control" placeholder="Password..." name="password"></div><button type="submit" class="btn btn-default btn-theme btn-block">Login</button></form>' data-container="body" data-title="Login" data-placement="bottom">Heya, stranger <i class="fa fa-chevron-down"></i></a>
                   </li>
                 </ul>
               {{/req.session.id}}

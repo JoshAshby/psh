@@ -69,6 +69,7 @@ class login(HTMLObject):
 
         except se.DisableError as e:
             exc = e
+            self.view.data = {"banError": True}
 
         exc = unicode(exc).strip("'")
 

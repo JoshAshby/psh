@@ -89,13 +89,13 @@ class requestItem(object):
         self.referer = env["HTTP_REFERER"] if "HTTP_REFERER" in env else "No Referer"
 
         self.id = None
+        self.command = None
 
     def buildParams(self):
         all_mem = {}
         all_raw = {}
         all_files = {}
 
-        #temp_file = cStringIO.StringIO()
         temp_file = tempfile.TemporaryFile()
         temp_file.write(self._env['wsgi.input'].read()) # or use buffered read()
         temp_file.seek(0)
@@ -162,3 +162,10 @@ class requestItem(object):
     def getFile(self, name):
         if name in self.files and self.files[name].filename:
               return self.files[name]
+
+    @property
+    def id_extended(self):
+        if self.command is None:
+            return str(self.id)
+        else:
+            return "/".join([self.id, self.command])

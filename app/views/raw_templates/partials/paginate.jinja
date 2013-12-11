@@ -3,21 +3,21 @@
     <ul class="pagination pagination-sm">
       <li class="{{ 'disabled' if not has_prev }}">
         {% if has_prev %}
-          <a href="?page={{page-1}}{{ '&' if query }}{{query}}"><i class="icon-chevron-left"></i> Prev</a>
+          <a href="?page={{page-1}}{{ '&' if query }}{{query}}"><i class="fa fa-chevron-left"></i> Prev</a>
         {% else %}
-          <a><i class="icon-chevron-left"></i> Prev</a>
+          <a><i class="fa fa-chevron-left"></i> Prev</a>
         {% endif %}
       </li>
-      <li class="{{ 'disabled' if not has_prev }}"><a href="?page=0{{ '&' if query }}{{query}}"><i class="icon-double-angle-left"></i> First</a></li>
+      <li class="{{ 'disabled' if not has_prev }}"><a href="?page=0{{ '&' if query }}{{query}}"><i class="fa fa-double-angle-left"></i> First</a></li>
       {% for i in range(count_start, count_end) %}
         <li {{ 'class="active"' if page==i }}><a href="?page={{i}}{{ '&' if query }}{{query}}">{{i}}</a></li>
       {% endfor %}
-      <li class="{{ 'disabled' if not has_next }}"><a href="?page={{last_page}}{{ '&' if query }}{{query}}">Last <i class="icon-double-angle-right"></i></a></li>
+      <li class="{{ 'disabled' if not has_next }}"><a href="?page={{last_page}}{{ '&' if query }}{{query}}">Last <i class="fa fa-double-angle-right"></i></a></li>
       <li class="{{ 'disabled' if not has_next }}">
         {% if has_next %}
-          <a href="?page={{page+1}}{{ '&' if query }}{{query}}">Next <i class="icon-chevron-right"></i></a>
+          <a href="?page={{page+1}}{{ '&' if query }}{{query}}">Next <i class="fa fa-chevron-right"></i></a>
         {% else %}
-          <a>Next <i class="icon-chevron-right"></i></a>
+          <a>Next <i class="fa fa-chevron-right"></i></a>
         {% endif %}
       </li>
     </ul>

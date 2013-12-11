@@ -1,0 +1,7 @@
+    <ul class="nav nav-tabs">
+      <li {{ 'class="active"' if not command }}><a href="/admin/users/{{user.id}}">Settings</a></li>
+      <li {{ 'class="active"' if command=="emails" }}><a href="/admin/users/{{user.id}}/emails">Emails</a></li>
+      <li {{ 'class="active"' if command=="dockerfiles" }}><a href="/admin/users/{{user.id}}/dockerfiles">Dockerfiles <span class="badge">{{user.dockerfiles|length}}</span></a></li>
+      <li {{ 'class="active"' if command=="images" }}><a href="/admin/users/{{user.id}}/images">Images <span class="badge">{{user.images|length}}</span></a></li>
+      <li {{ 'class="active"' if command=="containers" }}><a href="/admin/users/{{user.id}}/containers">Containers <span class="badge">{{user.containers|length}}</span></a></li>
+    </ul>

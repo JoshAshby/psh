@@ -25,7 +25,7 @@ import rethinkdb as r
 class session(brm.SeshatRedisModel):
     _protected_items = []
     def _finish_init(self):
-        if not hasattr(self, "alerts"): self._raw_alerts = "[]"
+        if not hasattr(self, "raw_alerts"): self.raw_alerts = "[]"
         if not hasattr(self, "username"): self.username = ""
         if not hasattr(self, "id"): self.id = ""
         if not hasattr(self, "groups"): self.groups = []
@@ -117,9 +117,9 @@ class session(brm.SeshatRedisModel):
         :param quip: Similar to a title, however just a quick attention getter
         :param level: Can be any of `success` `error` `info` `warning`
         """
-        alerts = json.loads(self._raw_alerts)
+        alerts = json.loads(self.raw_alerts)
         alerts.append({"msg": message, "level": level, "expire": "next", "quip": quip})
-        self._raw_alerts = json.dumps(alerts)
+        self.raw_alerts = json.dumps(alerts)
 
     @property
     def alerts(self, no_cache=False):
@@ -138,29 +138,29 @@ class session(brm.SeshatRedisModel):
         """
         Clears the current users expired alerts.
         """
-        alerts = json.loads(self._raw_alerts)
+        alerts = json.loads(self.raw_alerts)
         for alert in alerts:
             if alert["expire"] == "next":
                 alerts.pop(alerts.index(alert))
 
-        self._raw_alerts = json.dumps(alerts)
+        self.raw_alerts = json.dumps(alerts)
 
     def _render_alerts(self):
-        alerts = json.loads(self._raw_alerts)
+        alerts = json.loads(self.raw_alerts)
 
         alertStr = ""
         for alert in alerts:
             if alert["level"] == "info":
-                alert["icon"] = "info-sign"
+                alert["icon"] = "info"
             elif alert["level"] == "success":
                 alert["icon"] = "thumbs-up"
             elif alert["level"] == "warning":
-                alert["icon"] = "excalmation-mark"
+                alert["icon"] = "excalmation"
             elif alert["level"] == "error":
-                alert["icon"] = "warning-sign"
+                alert["icon"] = "warning"
                 alert["level"] = "danger"
 
-            alertStr += ("""<div class="alert alert-{level}"><i class="icon-{icon}"></i><strong>{quip}</strong> {msg}</div>""").format(**alert)
+            alertStr += ("""<div class="alert alert-{level}"><i class="fa fa-{icon}"></i><strong>{quip}</strong> {msg}</div>""").format(**alert)
 
         self._HTML_alerts = unicode(alertStr)
 

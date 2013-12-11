@@ -49,3 +49,9 @@ class UsernameError(UserModelError):
     def __init__(self, msg, user):
         UserModelError.__init__(self, msg)
         self.user = user
+
+
+class EmailError(UserModelError):
+    def __init__(self, msg, user):
+        UserModelError.__init__(self, msg)
+        self.email = user

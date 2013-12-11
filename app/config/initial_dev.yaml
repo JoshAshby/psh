@@ -1,11 +1,19 @@
 users:
   - username: bug
     password: josh
+    email: joshuaashby@joshashby.com
     groups:
       - root
 
+  - username: test
+    password: test
+    email: test@joshashby.com
+    groups:
+      - default
+
 tables:
   - users
+  - dockerfiles
 
 buckets:
   enable500Error:
@@ -15,7 +23,8 @@ buckets:
 
 flush:
   rethink:
-    users: false
+    users: true
+    dockerfiles: true
   redis:
     session: true
     bucket: true

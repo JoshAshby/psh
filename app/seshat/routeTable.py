@@ -56,6 +56,7 @@ class RouteTable(object):
                             found = True
         if base is not None:
             obj = self._data[base].pageObject
+        print extended
         return obj, extended
 
     def __repr__(self):
