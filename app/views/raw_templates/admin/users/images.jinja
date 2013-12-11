@@ -8,7 +8,6 @@ nav:
   <li class="active">Users</li>
 </ol>
 
-
 <div class="row">
   <div class="col-md-2">
     <img src="https://gravatar.com/avatar/{{user.gravatar}}?d=mm&s=100" alt="{{user.email}}" class="img-thumbnail">
@@ -23,10 +22,43 @@ nav:
 <div class="row">
   <div class="col-md-12">
     {{tabs}}
+  </div>
+</div>
 
-    <div class="row">
-      <div class="col-md-12">
-      </div>
-    </div>
+<div class="row">
+  <div class="col-md-12">
+    <br>
+    <form class="form-inline pull-right" role="pagination_options">
+      {{page.options}}
+    </form>
+    <br>
+    <br>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-striped table-hover table-condensed">
+      <thead>
+        <th>Name</th>
+        <th>Created</th>
+        <th>Dockerfile</th>
+      </thead>
+      <tbody>
+        {% for image in page.pail %}
+          <tr>
+            <td><a href="/images/{{image.id}}">{{image.name}}</a></td>
+            <td>{{image.formated_created}}</td>
+            <td><a href="/dockerfiles/{{image.dockerfile}}">{{image.dockerfile}}</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    {{page.paginate}}
   </div>
 </div>

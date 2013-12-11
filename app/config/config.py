@@ -13,14 +13,14 @@ import os
 import yaml
 import redis
 import rethinkdb
-from gevent_zeromq import zmq
+#from gevent_zeromq import zmq
 
 from standard import StandardConfig
 
 from seshat.routeTable import RouteTable
 
-context = zmq.Context()
-zmqSock = context.socket(zmq.PUB)
+#context = zmq.Context()
+#zmqSock = context.socket(zmq.PUB)
 
 current_path = os.path.dirname(__file__) + "/"
 base_path = current_path.rsplit("config")[0]
@@ -34,7 +34,7 @@ if not general:
 
 general["rethink"] = rethinkdb.connect(db=general["databases"]["rethink"]["db"]).repl()
 general["redis"] = redis.StrictRedis(general["databases"]["redis"]["URL"], db=general["databases"]["redis"]["db"])
-general["zeromq"] = zmqSock.bind(general["sockets"]["zeromq"]["URL"]+":"+str(general["sockets"]["zeromq"]["port"]))
+#general["zeromq"] = zmqSock.bind(general["sockets"]["zeromq"]["URL"]+":"+str(general["sockets"]["zeromq"]["port"]))
 
 for directory in general.dirs:
     if general.dirs[directory][0] != "/":

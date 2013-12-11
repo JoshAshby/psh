@@ -17,6 +17,12 @@ nav:
   </div>
   {% if req.session.id==dockerfile.user %}
     <div class="col-md-5">
+      <p>Build Status:
+        {% if dockerfile.status %}
+          <a href="/images/{{dockerfile.latest_image}}"><span class="label label-success"><i class="fa fa-check"></i> Built!</span></a>
+        {% else %}
+          <span class="label label-danger"><i class="fa fa-frown-o"></i> In Queue</span>
+        {% endif %}
       <form method=POST>
         <div class="checkbox">
           <label>

@@ -1,0 +1,26 @@
+log_name: &APP psh_builder
+
+files:
+  pid: psh_builder.pid
+  log: psh_builder.log
+  stderr: psh_builder_error.log
+  stdout: psh_builder_out.log
+
+dirs:
+  pid: pid/
+  log: logs/
+
+databases:
+  rethink:
+    db: psh
+  redis:
+    db: 1
+    URL: localhost
+
+docker:
+  url: http://127.0.0.1
+  port: 3945
+  version: 1.7
+  timeout: 600
+
+debug: true

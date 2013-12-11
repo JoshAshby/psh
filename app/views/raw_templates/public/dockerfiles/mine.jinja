@@ -29,7 +29,16 @@ nav:
             <tr>
               <td><a href="/dockerfiles/{{dockerfile.id}}">{{dockerfile.name}}</a></td>
               <td>{{dockerfile.formated_created}}</td>
-              <td>{{ 'Built' if dockerfile.status else 'In Build Queue' }}</td>
+
+              <td>
+
+        {% if dockerfile.status %}
+          <a href="/images/{{dockerfile.latest_image}}"><span class="label label-success"><i class="fa fa-check"></i> Built!</span></a>
+        {% else %}
+          <span class="label label-danger"><i class="fa fa-frown-o"></i> In Queue</span>
+        {% endif %}
+
+              </td>
               <td><i class="fa fa-{{ 'eye' if dockerfile.public else 'eye-slash' }}"></i></td>
             </tr>
           {% endfor %}

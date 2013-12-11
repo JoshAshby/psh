@@ -14,6 +14,8 @@ users:
 tables:
   - users
   - dockerfiles
+  - images
+  - containers
 
 buckets:
   enable500Error:
@@ -25,6 +27,8 @@ flush:
   rethink:
     users: true
     dockerfiles: true
+    images: true
+    containers: true
   redis:
     session: true
     bucket: true

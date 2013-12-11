@@ -14,7 +14,6 @@ from seshat.baseObject import HTMLObject
 from seshat.objectMods import login
 from seshat.actions import Redirect
 
-from models.rethink.user import userModel as um
 from models.rethink.dockerfile import dockerfileModel as dfm
 
 @login()
@@ -36,10 +35,5 @@ class index(HTMLObject):
                                                        name=name,
                                                        file_obj=files,
                                                        public=public)
-
-        user = um.User(self.request.session.id)
-        user.dockerfiles.append(dockerfile.id)
-
-        user.save()
 
         return Redirect("/dockerfiles/"+dockerfile.id)
