@@ -42,13 +42,13 @@ class BaseHTTPObject(object):
 
             if self._login and not self.request.session.id:
                 self.request.session.push_alert("You need to be logged in to view this page.", level="error")
-                self._redirect(self._redirect_URL)
+                self.head = ("401 UNAUTHORIZED", [])
                 return "", self.head
 
             if self._groups and (not self.request.session.has_perm(root_group) \
                or not len(set(self._groups).union(self.request.session.groups)) >= 1):
                     self.request.session.push_alert("You are not authorized to perfom this action.", level="error")
-                    self._redirect(self._redirect_URL)
+                    self.head = ("401 UNAUTHORIZED", [])
                     return "", self.head
 
             self.pre_content_hook()
@@ -73,12 +73,6 @@ class BaseHTTPObject(object):
 
         def post_content_hook(self, content):
             return content
-
-        def _404(self):
-            self.head = ("404 NOT FOUND", [])
-
-        def _redirect(self, loc):
-            self.head = ("303 SEE OTHER", [("Location", loc)])
 
         def HEAD(self):
             """

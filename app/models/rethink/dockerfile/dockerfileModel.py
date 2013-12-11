@@ -15,6 +15,8 @@ from errors.general import \
 
 import rethinkdb as r
 
+from models.rethink.user import userModel as um
+
 
 class Dockerfile(RethinkModel):
     table = "dockerfiles"
@@ -43,3 +45,7 @@ class Dockerfile(RethinkModel):
             self._formated_created = arrow.get(self.created).format("MM/DD/YYYY hh:mm")
 
         return self._formated_created
+
+    @property
+    def author(self):
+        return um.User(self.user).username

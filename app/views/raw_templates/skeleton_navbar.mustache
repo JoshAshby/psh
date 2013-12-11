@@ -59,6 +59,7 @@
                 {{#req.session.id}}
                   <li {{#nav.new}}class="active"{{/nav.new}}><a href="/new"><i class="fa fa-upload"></i> New</a></li>
                 {{/req.session.id}}
+                <li {{#nav.dockerfiles}}class="active"{{/nav.dockerfiles}}><a href="/dockerfiles"><i class="fa fa-file"></i> Dockerfiles</a></li>
               </ul>
               {{#req.session.id}}
                 <ul class="nav navbar-nav navbar-right" style="margin-right: 15px">
@@ -68,7 +69,7 @@
   {{#req.session.has_root}}
     <a href="/admin" class="list-group-item"><i class="fa fa-dashboard"></i> Admin</a>
   {{/req.session.has_root}}
-  <a href="/logout" class="list-group-item"><i class="fa fa-signout"></i> Logout</a>
+  <a href="/logout" class="list-group-item"><i class="fa fa-sign-out"></i> Logout</a>
 </div>
                     ' data-container="body" data-title="What to do..." data-placement="bottom">Ello, {{req.session.username}} <i class="fa fa-chevron-down"></i></a></li>
 

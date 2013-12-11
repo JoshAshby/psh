@@ -27,6 +27,19 @@ class error404(HTMLObject):
         return self.view
 
 
+class error401(HTMLObject):
+    """
+    Returns base 401 error page.
+    """
+    _title = "401 UNAUTHORIZED"
+    _defaultTmpl = "error/401"
+    def GET(self):
+        """
+        """
+        self.head = ("401 UNAUTHORIZED", [("Content-Type", "text/html")])
+        return self.view
+
+
 class error500(HTMLObject):
     """
     Returns base 500 error page.

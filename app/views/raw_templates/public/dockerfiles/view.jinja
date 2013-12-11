@@ -1,0 +1,22 @@
++++
+nav:
+  dockerfiles: true
++++
+<div class="row">
+  <div class="col-md-2">
+    <i class="fa fa-file fa-5x"></i>
+  </div>
+  <div class="col-md-10">
+    <h3>{{dockerfile.name}}</h3>
+    {% if dockerfile.user==req.session.id %}
+      <h5>Yours!</h5>
+    {% else %}
+      <h5>By {{dockerfile.author}}</h5>
+    {% endif%}
+    <small>Created on {{dockerfile.formated_created}}</small>
+  </div>
+</div>
+<hr>
+<pre>
+{{dockerfile.dockerfile}}
+</pre>

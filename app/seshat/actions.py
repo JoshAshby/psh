@@ -33,3 +33,8 @@ class Redirect(BaseAction):
 class NotFound(BaseAction):
     def __init__(self):
         self.head = ("404 NOT FOUND", [])
+
+
+class Unauthorized(BaseAction):
+    def __init__(self):
+        self.head = ("401 UNAUTHORIZED", [])
