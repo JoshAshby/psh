@@ -43,11 +43,12 @@ class Dockerfile(RethinkModel):
             elif file_obj.extension in ["tar", "tar.gz", "tar.bz2"]:
                 with tarfile.open(fileobj=file_obj.file) as tar:
                     for entry in tar:
-                        member = tar.extractfile(entry)
-                        if entry.name in ["Dockerfile", "dockerfile"]:
-                            dockerfile = member.read()
-                        else:
-                            add_files[entry.name] = member.read()
+                        if entry.isfile():
+                            member = tar.extractfile(entry)
+                            if entry.name in ["Dockerfile", "dockerfile"]:
+                                dockerfile = member.read()
+                            else:
+                                add_files[entry.name] = member.read()
 
                 if not dockerfile:
                     raise MissingError("The file Dockerfile was missing...")
