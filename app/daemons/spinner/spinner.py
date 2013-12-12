@@ -16,14 +16,13 @@ import random
 
 from config.standard import StandardConfig
 
-from parse import parse
-
 import rethinkdb as r
 from models.rethink.container import containerModel as cm
 
 import redis
 
 import utils.pushover as ps
+import utils.nginx as nu
 
 
 class Spinner(object):
@@ -80,8 +79,8 @@ class Spinner(object):
         image_id = container_model.image.docker_id
 
         ports = []
-        for port in container_model.ports:
-            ports.append(port["container_port"])
+        for port, options in container_model.ports.iteritems():
+            ports.append(port)
 
         container_id = self.dc.create_container(image=image_id,
                                                 ports=ports,
@@ -93,8 +92,9 @@ class Spinner(object):
 
     def start_container(self, container_model):
         bindings = {}
-        for port in container_model.ports:
-            bindings[port["container_port"]] = random.randint(1025, 500000)
+        for port, options in container_model.ports.iteritems():
+            if not options["internal"]:
+                bindings[port] = random.randint(1025, 500000)
 
         success = False
         while not success:
@@ -109,6 +109,13 @@ class Spinner(object):
                     for port in bindings:
                         if bindings[port] == bad_port:
                             bindings[port] = random.randint(1025, 500000)
+
+        for con_port, host_port in bindings.iteritems():
+            container_model.ports[con_port]["internal"] = host_port
+
+        container_model.save()
+
+        nu.container_nginx_config(container_model)
 
     def restart_container(self, container_model):
         self.stop_container(self, container_model)

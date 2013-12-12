@@ -19,6 +19,7 @@ from models.rethink.user import userModel as um
 
 import redis
 import tempfile
+import cStringIO
 
 import utils.pushover as ps
 import utils.files as fu
@@ -80,7 +81,8 @@ class Builder(object):
 
                 for add_file in dockerfile_model.additional_files:
                     add_file_path = "/".join([path, add_file])
-                    fu.write_file_string(add_file_path, dockerfile_model.additional_files[add_file])
+                    buff = cStringIO.cStringIO(dockerfile_model.additional_files[add_file])
+                    fu.write_file(add_file_path, buff)
 
                 self.logger.info("Building "+next_id+" in a temp dir")
                 s, m = self.dc.build(path=path, tag=tag, rm=True)

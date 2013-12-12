@@ -32,14 +32,15 @@ class Container(RethinkModel):
         self._image = None
 
     @classmethod
-    def new_container(cls, user, name, img, ports):
+    def new_container(cls, user, name, img, ports, hostname):
         fi = cls.create(user=user,
                         created=arrow.utcnow().timestamp,
                         name=name,
                         image_id=img,
                         disable=False,
                         docker_id=None,
-                        ports=ports)
+                        ports=ports,
+                        hostname=hostname)
 
         fi.queue_action("build")
 

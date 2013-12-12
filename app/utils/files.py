@@ -28,13 +28,6 @@ def write_file(path, files):
     return True
 
 
-def write_file_string(path, string):
-    with open(path, 'wb') as f:
-        f.write(string)
-
-    return True
-
-
 def download_file(url, path):
     """
     Download the given url to the path. File extension added automatically.
