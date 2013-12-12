@@ -7,6 +7,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
+import rethinkdb as r
 from rethinkORM import RethinkModel
 import arrow
 
@@ -23,18 +24,22 @@ class Image(RethinkModel):
         if not self._data:
             raise NotFoundError("Image was not found.")
         self._formated_created = ""
+        self._latest = None
+        self._user = None
 
     @classmethod
     def new_image(cls, user, name, img, dockerfile, log):
+        found = r.table(cls.table).filter({'name': name, 'user': user}).count().run()
+
         fi = cls.create(user=user,
                         dockerfile=dockerfile,
                         created=arrow.utcnow().timestamp,
                         name=name,
                         img=img,
-                        latest=True,
-                        log=log)
+                        log=log,
+                        rev=found+1,
+                        disable=False)
         return fi
-
 
     @property
     def formated_created(self, no_cache=False):
@@ -44,5 +49,18 @@ class Image(RethinkModel):
         return self._formated_created
 
     @property
-    def author(self):
-        return um.User(self.user)
+    def author(self, no_cache=False):
+        if not self._user or no_cache:
+            self._user = um.User(self.user)
+        return self._user
+
+    @property
+    def latest(self, no_cache=False):
+        if not self._latest or no_cache:
+            max_rev = r.table(self.table).filter({"dockerfile": self.dockerfile}).map(lambda user: user["rev"]).reduce(lambda left, right: r.branch(left>right,left,right)).run()
+
+            img = r.table(self.table).filter({"dockerfile": self.dockerfile, "rev": max_rev}).pluck("id").coerce_to("array").run()
+            if img and img[0]["id"] != self.id:
+                self._latest = Image(img[0]["id"])
+
+        return self._latest

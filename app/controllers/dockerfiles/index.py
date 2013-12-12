@@ -15,16 +15,18 @@ from seshat.baseObject import MixedObject
 from seshat.actions import NotFound, Redirect, Unauthorized
 from errors.general import NotFoundError
 
-import rethinkdb as r
 from rethinkORM import RethinkCollection
 
 from models.rethink.dockerfile import dockerfileModel as dfm
 
+from models.utils import dbUtils as dbu
 from utils.paginate import Paginate
 
 commands = [
     None,
-    "copy"
+    "copy",
+    "update",
+    "rebuild"
     ]
 
 
@@ -34,7 +36,7 @@ class index(MixedObject):
     _default_tmpl = "public/dockerfiles/index"
     def GET(self):
         if not self.request.id:
-            q = r.table(dfm.Dockerfile.table).filter({"public": True})
+            q = dbu.rql_where_not(dfm.Dockerfile.table, "disable", True).filter({"public": True})
             res = RethinkCollection(dfm.Dockerfile, query=q)
             page = Paginate(res, self.request, "name")
 
@@ -44,17 +46,20 @@ class index(MixedObject):
         else:
             try:
                 dockerfile = dfm.Dockerfile(self.request.id)
-
             except NotFoundError:
                 return NotFound()
 
-            if not self.request.session.has_admin and \
+            if not self.request.session.has_admin or \
                 (dockerfile.user != self.request.session.id and \
                 not dockerfile.public):
                   return Unauthorized()
 
             if self.request.command not in commands:
                 return NotFound()
+
+            if dockerfile.disable:
+                self.view.template = "public/dockerfiles/disabled"
+                return self.view
 
             if not self.request.command:
                 self.view.template = "public/dockerfiles/view"
@@ -79,17 +84,32 @@ class index(MixedObject):
         except NotFoundError:
             return NotFound()
 
+        if dockerfile.disable:
+            self.view.template = "public/dockerfiles/disabled"
+            return self.view
+
         if self.request.command == "copy":
-            pass
+            new_dock = dockerfile
+            del new_dock.id
+            new_dock.user = self.request.session.id
+
+            new_dock.save()
+
+            return Redirect("/dockerfiles/"+new_dock.id)
 
         else:
-            public = self.request.getParam("public", False)
+            if not self.request.session.has_admin or \
+                (dockerfile.user != self.request.session.id and \
+                not dockerfile.public):
+                  return Unauthorized()
 
-            if self.request.session.id==dockerfile.user:
+            if self.request.command == "update":
+                public = self.request.getParam("public", False)
+
                 dockerfile.public = public
                 dockerfile.save()
-                return Redirect("/dockerfiles/"+self.request.id_extended)
-            else:
-                return Unauthorized()
 
-        return Redirect("/dockerfiles/"+self.request.id_extended)
+            elif self.request.command == "rebuild":
+                dockerfile.queue_build()
+
+            return Redirect("/dockerfiles/"+self.request.id)

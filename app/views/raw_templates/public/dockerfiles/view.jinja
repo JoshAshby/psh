@@ -6,8 +6,9 @@ nav:
   <div class="col-md-2">
     <i class="fa fa-file fa-5x"></i>
   </div>
-  <div class="col-md-{{ '5' if req.session.id==dockerfile.user else '10' }}">
+  <div class="col-md-{{ '5' if req.session.id else '10' }}">
     <h3>{{dockerfile.name}}</h3>
+    <h5>Rev: {{dockerfile.rev}} {% if dockerfile.latest %}(<a href="/dockerfiles/{{dockerfiles.latest.id}}">latest</a>){% endif %}</h5>
     {% if dockerfile.user==req.session.id %}
       <h5>Yours!</h5>
     {% else %}
@@ -15,24 +16,34 @@ nav:
     {% endif%}
     <small>Created on {{dockerfile.formated_created}}</small>
   </div>
-  {% if req.session.id==dockerfile.user %}
-    <div class="col-md-5">
-      <p>Build Status:
-        {% if dockerfile.status %}
-          <a href="/images/{{dockerfile.latest_image.id}}"><span class="label label-success"><i class="fa fa-check"></i> Built!</span></a>
+    {% if req.session.id %}
+      <div class="col-md-5">
+        {% if req.session.id==dockerfile.user %}
+          <p>Build Status:
+            {% if dockerfile.status %}
+              <a href="/images/{{dockerfile.latest_image.id}}"><span class="label label-success"><i class="fa fa-check"></i> Built!</span></a>
+            {% else %}
+              <span class="label label-danger"><i class="fa fa-frown-o"></i> In Queue</span>
+            {% endif %}
+          <form method=POST action="/dockerfiles/{{dockerfile.id}}/update" class="form-inline">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="public" value="true" {{ 'checked' if dockerfile.public }}> Make publically viewable?
+              </label>
+            </div>
+            <button type="submit" class="btn btn-default">Update</button>
+          </form>
+          <br>
+          <form method="POST" action="/dockerfiles/{{dockerfile.id}}/rebuild">
+            <button type="submit" class="btn btn-theme"><i class="fa fa-refresh"></i> Rebuild</button>
+          </form>
         {% else %}
-          <span class="label label-danger"><i class="fa fa-frown-o"></i> In Queue</span>
+          <form method="POST" action="/dockerfiles/{{dockerfile.id}}/copy">
+            <button type="submit" class="btn btn-theme">Copy</button>
+          </form>
         {% endif %}
-      <form method=POST>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" name="public" value="true" {{ 'checked' if dockerfile.public }}> Make publically viewable?
-          </label>
-        </div>
-        <button type="submit" class="btn btn-theme">Update</button>
-      </form>
-    </div>
-  {% endif %}
+      </div>
+    {% endif %}
 </div>
 <hr>
 <div class="row">

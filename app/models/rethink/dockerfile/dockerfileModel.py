@@ -11,7 +11,7 @@ from rethinkORM import RethinkModel
 import arrow
 
 from errors.general import \
-      ExistingError, NotFoundError, MissingError
+      NotFoundError, MissingError
 import rethinkdb as r
 
 from models.rethink.user import userModel as um
@@ -29,46 +29,55 @@ class Dockerfile(RethinkModel):
         if not self._data:
             raise NotFoundError("Dockerfile was not found.")
         self._formated_created = ""
+        self._latest = None
+        self._latest_img = None
+        self._user = None
 
     @classmethod
     def new_dockerfile(cls, user, name, file_obj, public=False, override=False):
         found = r.table(cls.table).filter({'name': name, 'user': user}).count().run()
-        if not found or override:
 
-            add_files = {}
-            if not file_obj.extension:
-                dockerfile = file_obj.read()
+        add_files = {}
+        if not file_obj.extension:
+            dockerfile = file_obj.read()
 
-            elif file_obj.extension in ["tar", "tar.gz", "tar.bz2"]:
-                with tarfile.open(fileobj=file_obj.file) as tar:
-                    for entry in tar:
-                        if entry.isfile():
-                            member = tar.extractfile(entry)
-                            if entry.name in ["Dockerfile", "dockerfile"]:
-                                dockerfile = member.read()
-                            else:
-                                add_files[entry.name] = member.read()
+        elif file_obj.extension in ["tar", "tar.gz", "tar.bz2"]:
+            dockerfile = None
+            with tarfile.open(fileobj=file_obj.file) as tar:
+                for entry in tar:
+                    if entry.isfile():
+                        member = tar.extractfile(entry)
+                        if entry.name in ["Dockerfile", "dockerfile"]:
+                            dockerfile = member.read()
+                        else:
+                            add_files[entry.name] = member.read()
 
-                if not dockerfile:
-                    raise MissingError("The file Dockerfile was missing...")
+            if not dockerfile:
+                raise MissingError("The Dockerfile was missing...")
 
-            fi = cls.create(user=user,
-                            dockerfile=dockerfile,
-                            additional_files=add_files,
-                            created=arrow.utcnow().timestamp,
-                            name=name,
-                            status=False,
-                            public=public)
+        fi = cls.create(user=user,
+                        dockerfile=dockerfile,
+                        additional_files=add_files,
+                        created=arrow.utcnow().timestamp,
+                        name=name,
+                        status=False,
+                        public=public,
+                        rev=found+1,
+                        disable=False)
 
-            u = um.User(user)
-            u.dockerfiles.append(fi.id)
-            u.save()
+        u = um.User(user)
+        u.dockerfiles.append(fi.id)
+        u.save()
 
-            c.general.redis.rpush("build:queue", fi.id)
-            return fi
+        fi.queue_build()
 
-        else:
-            raise ExistingError("Another Dockerfile of that name exists in the system.")
+        return fi
+
+
+    def queue_build(self):
+        self.status = False
+        self.save()
+        c.general.redis.rpush("build:queue", self.id)
 
     @property
     def formated_created(self, no_cache=False):
@@ -78,13 +87,30 @@ class Dockerfile(RethinkModel):
         return self._formated_created
 
     @property
-    def author(self):
-        return um.User(self.user)
+    def author(self, no_cache=False):
+        if not self._user or no_cache:
+            self._user = um.User(self.user)
+
+        return self._user
 
     @property
-    def latest_image(self):
-        img = r.table(im.Image.table).filter({"dockerfile": self.id, "latest": True}).coerce_to("array").run()
-        if img:
-            return im.Image(img[0]["id"])
-        else:
-            return None
+    def latest(self, no_cache=False):
+        if not self._latest or no_cache:
+            max_rev = r.table(self.table).filter({"name": self.name}).map(lambda user: user["rev"]).reduce(lambda left, right: r.branch(left>right,left,right)).run()
+
+            img = r.table(self.table).filter({"name": self.name, "rev": max_rev}).pluck("id").coerce_to("array").run()
+            if img and img[0]["id"] != self.id:
+                self._latest = Dockerfile(img[0]["id"])
+
+        return self._latest
+
+    @property
+    def latest_image(self, no_cache=False):
+        if not self._latest_img or no_cache:
+            max_rev = r.table(im.Image.table).filter({"dockerfile": self.id}).map(lambda user: user["rev"]).reduce(lambda left, right: r.branch(left>right,left,right)).run()
+
+            img = r.table(im.Image.table).filter({"dockerfile": self.id, "rev": max_rev}).pluck("id").coerce_to("array").run()
+            if img:
+                self._latest_img = im.Image(img[0]["id"])
+
+        return self._latest_img

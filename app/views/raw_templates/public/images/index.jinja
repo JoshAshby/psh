@@ -20,6 +20,7 @@ nav:
       <table class="table table-striped table-hover table-condensed">
         <thead>
           <th>Name</th>
+          <th>Rev</th>
           <th>Created</th>
           <th>Dockerfile</th>
         </thead>
@@ -28,6 +29,7 @@ nav:
         {% for image in page.pail %}
           <tr>
             <td><a href="/images/{{image.id}}">{{image.name}}</a></td>
+            <td>{{image.rev}}</td>
             <td>{{image.formated_created}}</td>
             <td><a href="/dockerfiles/{{image.dockerfile}}">{{image.dockerfile}}</a></td>
           </tr>

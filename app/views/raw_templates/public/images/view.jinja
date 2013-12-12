@@ -8,6 +8,7 @@ nav:
   </div>
   <div class="col-md-10">
     <h3>{{image.name}}</h3>
+    <h5>Rev: {{image.rev}} {% if image.latest %}(<a href="/images/{{images.latest.id}}">latest</a>){% endif %}</h5>
     <small>Created on {{image.formated_created}}</small>
   </div>
 </div>

@@ -64,8 +64,6 @@ class Builder(object):
 
             tag = "/".join([user.username, dockerfile_model.name])
 
-            r.table(im.Image.table).filter({"name": tag}).update({"latest": False}).run()
-
             if not dockerfile_model.additional_files:
                 dockerfile = tempfile.TemporaryFile()
                 dockerfile.write(dockerfile_model.dockerfile)

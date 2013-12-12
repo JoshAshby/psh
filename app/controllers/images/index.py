@@ -16,11 +16,11 @@ from seshat.objectMods import login
 from seshat.actions import NotFound, Unauthorized
 from errors.general import NotFoundError
 
-import rethinkdb as r
 from rethinkORM import RethinkCollection
 
 from models.rethink.image import imageModel as im
 
+from models.utils import dbUtils as dbu
 from utils.paginate import Paginate
 
 
@@ -31,7 +31,7 @@ class index(MixedObject):
     _default_tmpl = "public/images/index"
     def GET(self):
         if not self.request.id:
-            q = r.table(im.Image.table).filter({"user": self.request.session.id})
+            q = dbu.rql_where_not(im.Image.table, "disable", True).filter({"user": self.request.session.id})
             res = RethinkCollection(im.Image, query=q)
             page = Paginate(res, self.request, "name")
 
@@ -41,13 +41,16 @@ class index(MixedObject):
         else:
             try:
                 image = im.Image(self.request.id)
-
             except NotFoundError:
                 return NotFound()
 
-            if not self.request.session.has_admin and \
+            if not self.request.session.has_admin or \
                 (image.user != self.request.session.id):
                   return Unauthorized()
+
+            if image.disable:
+                self.view.template = "public/images/disabled"
+                return self.view
 
             self.view.template = "public/images/view"
 

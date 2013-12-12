@@ -20,6 +20,7 @@ from rethinkORM import RethinkCollection
 
 from models.rethink.dockerfile import dockerfileModel as dfm
 
+from models.utils import dbUtils as dbu
 from utils.paginate import Paginate
 
 
@@ -30,7 +31,12 @@ class index(MixedObject):
     _default_tmpl = "admin/dockerfiles/index"
     def GET(self):
         if not self.request.id:
-            res = RethinkCollection(dfm.Dockerfile)
+            disabled = self.request.getParam("d", False)
+            if disabled:
+                q = dbu.rql_where_not(dfm.Dockerfile.table, "disable", True)
+                res = RethinkCollection(dfm.Dockerfile, query=q)
+            else:
+                res = RethinkCollection(dfm.Dockerfile)
             page = Paginate(res, self.request, "name")
 
             self.view.data = {"page": page}
@@ -58,9 +64,16 @@ class index(MixedObject):
         except NotFoundError:
             return NotFound()
 
-        public = self.request.getParam("public", False)
+        if self.request.command == "update":
+            public = self.request.getParam("public", False)
+            dockerfile.public = public
+            dockerfile.save()
 
-        dockerfile.public = public
-        dockerfile.save()
+        if self.request.command == "rebuild":
+            dockerfile.queue_build()
 
-        return Redirect("/admin/dockerfiles/"+self.request.id_extended)
+        if self.request.command == "disable":
+            dockerfile.disable = not dockerfile.disable
+            dockerfile.save()
+
+        return Redirect("/admin/dockerfiles/"+self.request.id)

@@ -84,6 +84,9 @@ class User(RethinkModel):
 
     @property
     def gravatar(self, no_cache=False):
+        """
+        Generates a Gravatar email hash
+        """
         if not self._gravatar or no_cache:
             self._gravatar = hashlib.md5(self.email.strip(" ").lower()).hexdigest()
 

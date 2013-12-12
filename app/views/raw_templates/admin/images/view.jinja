@@ -13,8 +13,9 @@ nav:
   <div class="col-md-2">
     <i class="fa fa-file fa-5x"></i>
   </div>
-  <div class="col-md-10">
+  <div class="col-md-5">
     <h3>{{image.name}}</h3>
+    <h5>Rev: {{image.rev}} {% if image.latest %}(<a href="/admin/images/{{image.latest.id}}">latest</a>){% endif %}</h5>
     {% if image.user==req.session.id %}
       <h5>Yours!</h5>
     {% else %}
@@ -22,6 +23,16 @@ nav:
     {% endif%}
     <small>Created on {{image.formated_created}}</small>
   </div>
+  <div class="col-md-5">
+    <form method="POST" action="/admin/images/{{image.id}}/disable" class="form-inline">
+      {% if image.disable %}
+        <button type="submit" class="btn btn-success"><i class="fa fa-power-off"></i> Enable</button>
+      {% else %}
+        <button type="submit" class="btn btn-danger"><i class="fa fa-power-off"></i> Disable</button>
+      {% endif %}
+    </form>
+  </div>
+
 </div>
 <hr>
 <div class="row">
