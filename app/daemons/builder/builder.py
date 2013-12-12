@@ -95,7 +95,7 @@ class Builder(object):
 
                     img_model = im.Image.new_image(user=user.id,
                                                    name=tag,
-                                                   img=img["Id"],
+                                                   docker_id=img["Id"],
                                                    dockerfile=dockerfile_model.id,
                                                    log=m)
 

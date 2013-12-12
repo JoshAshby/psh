@@ -28,14 +28,14 @@ class Image(RethinkModel):
         self._user = None
 
     @classmethod
-    def new_image(cls, user, name, img, dockerfile, log):
+    def new_image(cls, user, name, docker_id, dockerfile, log):
         found = r.table(cls.table).filter({'name': name, 'user': user}).count().run()
 
         fi = cls.create(user=user,
                         dockerfile=dockerfile,
                         created=arrow.utcnow().timestamp,
                         name=name,
-                        img=img,
+                        docker_id=docker_id,
                         log=log,
                         rev=found+1,
                         disable=False)
