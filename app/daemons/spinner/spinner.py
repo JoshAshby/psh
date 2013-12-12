@@ -12,8 +12,11 @@ joshuaashby@joshashby.com
 import docker
 import json
 import logging
+import random
 
 from config.standard import StandardConfig
+
+from parse import parse
 
 import rethinkdb as r
 from models.rethink.container import containerModel as cm
@@ -21,9 +24,6 @@ from models.rethink.container import containerModel as cm
 import redis
 
 import utils.pushover as ps
-import utils.nginx as n
-import utils.maradns as dns
-import utils.iptables as ip
 
 
 class Spinner(object):
@@ -55,7 +55,7 @@ class Spinner(object):
 
     def poll(self):
         while True:
-            next_json = self.redis.blpop("spin:queue")[1]
+            next_json = self.c.redis.blpop("spin:queue")[1]
 
             next_parsed = json.loads(next_json)
 
@@ -80,21 +80,40 @@ class Spinner(object):
         image_id = container_model.image.docker_id
 
         ports = []
-        bindings = {}
         for port in container_model.ports:
             ports.append(port["container_port"])
-            bindings[port["container_port"]] = None
 
-        self.dc.create_container(image=image_id,
-            ports=ports,
-            name=container_model.name,
-            hostname=container_model.hostname)
+        container_id = self.dc.create_container(image=image_id,
+                                                ports=ports,
+                                                name=container_model.name,
+                                                hostname=container_model.hostname)
+
+        container_model.docker_id = container_id
+        container_model.save()
 
     def start_container(self, container_model):
-        pass
+        bindings = {}
+        for port in container_model.ports:
+            bindings[port["container_port"]] = random.randint(1025, 500000)
+
+        success = False
+        while not success:
+            try:
+                self.dc.start(container_model.docker_id, bindings=bindings)
+                success = True
+            except docker.client.APIError as e:
+                if e.is_server_error():
+                    msg = e.explanation.rsplit(":", 1)
+                    bad_port = int(msg)
+
+                    for port in bindings:
+                        if bindings[port] == bad_port:
+                            bindings[port] = random.randint(1025, 500000)
 
     def restart_container(self, container_model):
-        pass
+        self.stop_container(self, container_model)
+        self.start_container(self, container_model)
 
     def stop_container(self, container_model):
+        self.dc.stop(container_model.docker_id)
         pass
