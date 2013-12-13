@@ -28,9 +28,6 @@ time_format = "dd MMM DD HH:mm:ss:SS YYYY"
 config_delim = "+++"
 default_theme_color = "red"
 
-
-tmplPath = os.path.dirname(__file__)+"/raw_templates/"
-
 tmpls = {}
 
 
@@ -41,7 +38,7 @@ class templateFile(object):
         object to that of the file at the current moment.
         """
         self._file_bit = fileBit
-        self._file = ''.join([tmplPath, fileBit])
+        self._file = ''.join([c.dirs.templates, fileBit])
         self._mtime = 0
 
         self._config = {}
@@ -55,7 +52,7 @@ class templateFile(object):
         mode. Otherwise this will just return the template stored in memory
         from first read/startup.
         """
-        if c.general["debug"]:
+        if c.debug:
             self._read_template()
 
         return self._template
@@ -84,7 +81,7 @@ class templateFile(object):
         mtime = os.path.getmtime(self._file)
 
         if self._mtime < mtime:
-            if c.general["debug"]:
+            if c.debug:
                 pt = arrow.get(self._mtime).format(time_format)
                 nt = arrow.get(mtime).format(time_format)
                 logger.debug("""\n\r============== Template =================
@@ -267,9 +264,9 @@ class PartialTemplate(template):
         return unicode(body)
 
 
-for top, folders, files in os.walk(tmplPath):
+for top, folders, files in os.walk(c.dirs.templates):
     for fi in files:
-        base = top.split(tmplPath)[1]
+        base = top.split(c.dirs.templates)[1]
         file_name, extension = fi.rsplit('.', 1)
         if extension in ["mustache", "jinja"]:
             name = '/'.join([base, file_name]).lstrip('/')

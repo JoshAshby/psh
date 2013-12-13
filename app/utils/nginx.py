@@ -11,6 +11,7 @@ joshuaashby@joshashby.com
 """
 from views.template import template
 import utils.files as fu
+import config.config as c
 
 import cStringIO
 
@@ -29,4 +30,5 @@ def container_nginx_config(container):
           filz.write(tmpl.render())
 
     filz.seek(0)
-    fu.write_file("/nginx_config/"+container.hostname, filz)
+    path = "/".join([c.dirs.nginx, container.hostname])
+    fu.write_file(path, filz)

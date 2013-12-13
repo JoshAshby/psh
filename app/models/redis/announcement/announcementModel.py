@@ -19,15 +19,15 @@ import arrow
 
 def all_announcements():
     keys = []
-    for key in c.general.redis.keys("announcement:*:status"):
+    for key in c.redis.keys("announcement:*:status"):
         data = {}
-        val = dbu.toBoolean(c.general.redis.get(key))
+        val = dbu.toBoolean(c.redis.get(key))
         ID = key.split(":")[1]
         ann_key = ':'.join([key.rsplit(":", 1)[0], "message"])
-        message = c.general.redis.get(ann_key)
+        message = c.redis.get(ann_key)
 
         ann_time_created_key = ':'.join([key.rsplit(":", 1)[0], "created"])
-        time_created = arrow.get(c.general.redis.get(ann_time_created_key))
+        time_created = arrow.get(c.redis.get(ann_time_created_key))
 
         data = {"message": message,
                 "status": val,
@@ -37,7 +37,7 @@ def all_announcements():
 
 
         ann_start_key = ':'.join([key.rsplit(":", 1)[0], "start"])
-        start = c.general.redis.get(ann_start_key)
+        start = c.redis.get(ann_start_key)
         if start and start != '0':
             start = arrow.get(start)
             data["start"] = start.timestamp
@@ -46,7 +46,7 @@ def all_announcements():
             data["start"] = 0
 
         ann_end_key = ':'.join([key.rsplit(":", 1)[0], "end"])
-        end = c.general.redis.get(ann_end_key)
+        end = c.redis.get(ann_end_key)
         if end and end != '0':
             end = arrow.get(end)
             data["end"] = end.timestamp
@@ -60,17 +60,17 @@ def all_announcements():
 
 
 class CfgAnnouncements(StandardConfig):
-    def __init__(self, redis=c.general.redis):
+    def __init__(self, redis=c.redis):
         self._redis = redis
         keys = {}
         for key in self._redis.keys("announcement:*:status"):
             val = dbu.toBoolean(self._redis.get(key))
 
             ann_start_key = ':'.join([key.rsplit(":", 1)[0], "start"])
-            start = c.general.redis.get(ann_start_key)
+            start = c.redis.get(ann_start_key)
 
             ann_end_key = ':'.join([key.rsplit(":", 1)[0], "end"])
-            end = c.general.redis.get(ann_end_key)
+            end = c.redis.get(ann_end_key)
 
             start = long(start) if start else 0
             end = long(end) if end else 0

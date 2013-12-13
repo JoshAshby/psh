@@ -19,17 +19,17 @@ from config.standard import StandardConfig
 
 
 class CfgBuckets(StandardConfig):
-    def __init__(self, redis=c.general.redis):
+    def __init__(self, redis=c.redis):
         self._redis = redis
         keys = {}
         for key in self._redis.keys("bucket:*:status"):
             val = dbu.toBoolean(self._redis.get(key))
 
             name_key = ':'.join([key.rsplit(":", 1)[0], "name"])
-            name= c.general.redis.get(name_key)
+            name= c.redis.get(name_key)
 
             desc_key = ':'.join([key.rsplit(":", 1)[0], "description"])
-            desc = c.general.redis.get(desc_key)
+            desc = c.redis.get(desc_key)
 
             ID = key.split(":")[1]
             keys[ID] = StandardConfig(name=name, description=desc, status=val, id=ID)

@@ -51,7 +51,7 @@ def setupLog():
     import logging
     import config.config as c
     level = logging.WARNING
-    if c.general.debug:
+    if c.debug:
             level = logging.DEBUG
 
     formatter = logging.Formatter("""%(asctime)s - %(name)s - %(levelname)s
@@ -60,12 +60,12 @@ def setupLog():
     logger = logging.getLogger(c.general.logName)
     logger.setLevel(level)
 
-    fh = logging.FileHandler(c.general.files["log"])
+    fh = logging.FileHandler(c.files.log)
     fh.setLevel(level)
     fh.setFormatter(formatter)
     logger.addHandler(fh)
 
-    if c.general.debug:
+    if c.debug:
         """
         Make sure we're not in daemon mode if we're logging to console too
         """

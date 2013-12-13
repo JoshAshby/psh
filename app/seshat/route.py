@@ -14,20 +14,20 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import config.config as c
+import urls as u
 
 import baseURL as bu
 import logging
 logger = logging.getLogger(c.general["logName"]+".seshat.route")
 
 
-def autoRoute(urls=c.urls):
+def autoRoute(urls=u.urls):
     def wrapper(HTTPObject):
         urlObject = bu.AutoURL(HTTPObject)
 
         urls.append(urlObject)
-        if c.general["debug"]: logger.debug("""Auto generated route table entry for:
+        if c.debug: logger.debug("""Auto generated route table entry for:
         Object: %(objectName)s
         Pattern: %(url)s""" % {"url": urlObject.url, "objectName": HTTPObject.__module__ + "/" + HTTPObject.__name__})
-        #if c.general.debug: logger.debug(urlObject)
         return HTTPObject
     return wrapper

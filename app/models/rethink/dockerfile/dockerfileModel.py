@@ -77,7 +77,7 @@ class Dockerfile(RethinkModel):
     def queue_build(self):
         self.status = False
         self.save()
-        c.general.redis.rpush("build:queue", self.id)
+        c.redis.rpush("build:queue", self.id)
 
     @property
     def formated_created(self, no_cache=False):

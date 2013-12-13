@@ -13,14 +13,17 @@ import os
 import yaml
 import redis
 import rethinkdb
-#from gevent_zeromq import zmq
+import docker
 
 from standard import StandardConfig
 
-from seshat.routeTable import RouteTable
 
-#context = zmq.Context()
-#zmqSock = context.socket(zmq.PUB)
+"""
+#########################STOP EDITING#####################################
+***WARNING***
+Don't change these following settings unless you know what you're doing!!!
+##########################################################################
+"""
 
 current_path = os.path.dirname(__file__) + "/"
 base_path = current_path.rsplit("config")[0]
@@ -32,31 +35,45 @@ with open(current_path + "config.yaml", "r") as open_config:
 if not general:
     raise Exception("Could not load config.yaml into StandardConfig!")
 
-general["rethink"] = rethinkdb.connect(db=general["databases"]["rethink"]["db"]).repl()
-general["redis"] = redis.StrictRedis(general["databases"]["redis"]["URL"], db=general["databases"]["redis"]["db"])
-#general["zeromq"] = zmqSock.bind(general["sockets"]["zeromq"]["URL"]+":"+str(general["sockets"]["zeromq"]["port"]))
 
-for directory in general.dirs:
-    if general.dirs[directory][0] != "/":
-        direct = base_path + general.dirs[directory]
-    else:
-        direct = general.dirs[directory]
-    if not os.path.exists(direct):
-        os.makedirs(direct)
-    general.dirs[directory] = direct
+def parse_files(conf):
+    if "dirs" in conf:
+        for directory in conf.dirs:
+            if conf.dirs[directory][0] != "/":
+                direct = base_path + conf.dirs[directory]
+            else:
+                direct = conf.dirs[directory]
+            if not os.path.exists(direct):
+                os.makedirs(direct)
+            conf.dirs[directory] = direct
+
+    if "files" in conf:
+        for fi in conf.files:
+            extension = conf.files[fi].rsplit(".", 1)
+            if "pid" in extension:
+                conf.files[fi] = conf.dirs["pid"] + conf.files[fi]
+            elif "log" in extension:
+                conf.files[fi] = conf.dirs["log"] + conf.files[fi]
 
 
-for fi in general.files:
-    extension = general.files[fi].rsplit(".", 1)
-    if "pid" in extension:
-        general.files[fi] = general.dirs["pid"] + general.files[fi]
-    elif "log" in extension:
-        general.files[fi] = general.dirs["log"] + general.files[fi]
+rethink = rethinkdb.connect(db=general["databases"]["rethink"]["db"]).repl()
+redis = redis.StrictRedis(general["databases"]["redis"]["URL"], db=general["databases"]["redis"]["db"])
 
-"""
-#########################STOP EDITING#####################################
-***WARNING***
-Don't change these following settings unless you know what you're doing!!!
-##########################################################################
-"""
-urls = RouteTable()
+docker_url = ":".join([general["docker"]["url"], str(general["docker"]["port"])])
+docker = docker.Client(base_url=docker_url,
+                       version=str(general["docker"]["version"]),
+                       timeout=general["docker"]["timeout"])
+del docker_url
+
+parse_files(general)
+
+builder = StandardConfig(**general.builder)
+parse_files(builder)
+
+spinner = StandardConfig(**general.spinner)
+parse_files(spinner)
+
+dirs = StandardConfig(**general.dirs)
+files = StandardConfig(**general.files)
+
+debug = general["debug"]

@@ -33,9 +33,9 @@ def initialSetup():
     print "Setting up database..."
     dbs = rethinkdb.db_list().run()
 
-    if not con.general.databases["rethink"]["db"] in dbs:
+    if not con.rethink["db"] in dbs:
         print "Creating database in rethink"
-        rethinkdb.db_create(con.general.databases["rethink"]["db"]).run()
+        rethinkdb.db_create(con.rethink["db"]).run()
 
     dbt = list(rethinkdb.table_list().run())
     for db in c.general.flush["rethink"]:
@@ -54,8 +54,8 @@ def initialSetup():
     for key in c.general.flush["redis"]:
         if c.general.flush["redis"][key]:
             print "Flushing redis "+key+" keys..."
-            keys = con.general.redis.keys(key+":*")
-            for key in keys: con.general.redis.delete(key)
+            keys = con.redis.keys(key+":*")
+            for key in keys: con.redis.delete(key)
 
 
 def userSetup():

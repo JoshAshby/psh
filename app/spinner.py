@@ -1,17 +1,17 @@
 #!/usr/bin/env python2
-"""Psh Builder Daemon
+"""Psh Spinner Daemon
 
 Usage:
-  builder.py start [-d | --daemon]
-  builder.py stop
-  builder.py restart
-  builder.py --version
-  builder.py (-h | --help)
+  spinner.py start [-d | --daemon]
+  spinner.py stop
+  spinner.py restart
+  spinner.py --version
+  spinner.py (-h | --help)
 
 
 Options:
   --help -h      Show this
-  --daemon -d    Start the builder as a daemon
+  --daemon -d    Start the spinner as a daemon
 
 """
 import sys
@@ -25,7 +25,7 @@ sys.path.append(abspath)
 os.chdir(abspath)
 current_path = os.getcwd() + "/"
 
-config = yaml.load(file(current_path+"/config/builder_config.yaml", 'r'))
+config = yaml.load(file(current_path+"/config/config.yaml", 'r'))
 
 for directory in config["dirs"]:
     if config["dirs"][directory][0] != "/":
@@ -49,18 +49,19 @@ def setupLog():
     Sets up the main logger for the daemon
     """
     import logging
+    import config.config as c
 
     level = logging.WARNING
-    if config["debug"]:
+    if c.debug:
             level = logging.DEBUG
 
     formatter = logging.Formatter("""%(asctime)s - %(name)s - %(levelname)s
     %(message)s""")
 
-    logger = logging.getLogger(config["log_name"])
+    logger = logging.getLogger(c.spinner["log_name"])
     logger.setLevel(level)
 
-    fh = logging.FileHandler(config["files"]["log"])
+    fh = logging.FileHandler(c.spinner["files"]["log"])
     fh.setLevel(level)
     fh.setFormatter(formatter)
     logger.addHandler(fh)
@@ -84,10 +85,10 @@ from utils.simpleDaemon import Daemon
 class AppDaemon(Daemon):
     def run(self):
         logger = setupLog()
-        from daemons.builder.builder import Builder
+        from daemons.spinner.spinner import Spinner
 
-        builder = Builder(config)
-        builder.start()
+        spinner = Spinner()
+        spinner.start()
 
 
 class AppNoDaemon(object):
@@ -96,10 +97,10 @@ class AppNoDaemon(object):
 
     def start(self):
         logger = setupLog()
-        from daemons.builder.builder import Builder
+        from daemons.spinner.spinner import Spinner
 
-        builder = Builder(config)
-        builder.start()
+        spinner = Spinner()
+        spinner.start()
 
     def stop(self):
         pass
@@ -109,7 +110,7 @@ class AppNoDaemon(object):
 
 
 if __name__ == "__main__":
-    arguments = docopt(__doc__, version='Psh Builder Daemon v0.1.0')
+    arguments = docopt(__doc__, version='Psh Spinner Daemon v0.1.0')
 
     if arguments["--daemon"] or arguments["stop"] or arguments["restart"]:
         app = AppDaemon(config["files"]["pid"], stderr=config["files"]["stderr"])

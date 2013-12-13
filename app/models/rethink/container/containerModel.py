@@ -33,6 +33,15 @@ class Container(RethinkModel):
 
     @classmethod
     def new_container(cls, user, name, img, ports, hostname):
+        """
+        ports should be in the form of:
+        {
+          container_port: {
+            "host": ##,
+            "route": True/False,
+          }
+        }
+        """
         fi = cls.create(user=user,
                         created=arrow.utcnow().timestamp,
                         name=name,
@@ -61,7 +70,7 @@ class Container(RethinkModel):
 
     def queue_action(self, action):
         data = json.dumps({"id": self.id, "action": action})
-        c.general.redis.rpush("spin:queue", data)
+        c.redis.rpush("spin:queue", data)
 
     @property
     def formated_created(self, no_cache=False):

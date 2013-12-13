@@ -14,6 +14,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import config.config as c
+import urls as u
 
 import gevent
 
@@ -45,9 +46,9 @@ def dispatch(env, start_response):
     request = requestItem(env)
     newHTTPObject = None
 
-    if c.general.debug: logRequest(request)
+    if c.debug: logRequest(request)
 
-    found, ID = c.urls.get(request.url)
+    found, ID = u.urls.get(request.url)
     if found is not None:
         parts = ID.split('/', 1)
         request.id = parts[0]
@@ -57,7 +58,7 @@ def dispatch(env, start_response):
             request.command = None
         obj = found.__module__+"/"+found.__name__
         newHTTPObject = found(request)
-        if c.general["debug"]: logObj(request, obj)
+        if c.debug: logObj(request, obj)
 
     else:
         return error404(request, start_response)
@@ -83,7 +84,7 @@ def dispatch(env, start_response):
         if content:
             header = request.generateHeader(header, len(content))
 
-        if c.general["debug"]: gevent.spawn(logResponse, request, status, header)
+        if c.debug: gevent.spawn(logResponse, request, status, header)
 
         start_response(status, header)
 
@@ -104,7 +105,7 @@ def error404(request, start_response):
     Returns a base 404 not found error page
     """
     newHTTPObject = error.error404(request)
-    if c.general["debug"]: gevent.spawn(log404, request)
+    if c.debug: gevent.spawn(log404, request)
 
     dataThread = gevent.spawn(newHTTPObject.build)
     dataThread.join()
@@ -130,7 +131,7 @@ def error500(request, start_response):
     error logged to the default logger.
     """
     newHTTPObject = error.error500(request)
-    if c.general["debug"]: gevent.spawn(log500, request)
+    if c.debug: gevent.spawn(log500, request)
 
     dataThread = gevent.spawn(newHTTPObject.build)
     dataThread.join()
@@ -154,7 +155,7 @@ def error401(request, start_response):
     Returns the base 401 Unauthorized page.
     """
     newHTTPObject = error.error401(request)
-    if c.general["debug"]: gevent.spawn(log401, request)
+    if c.debug: gevent.spawn(log401, request)
 
     dataThread = gevent.spawn(newHTTPObject.build)
     dataThread.join()

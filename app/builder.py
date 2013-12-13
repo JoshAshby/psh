@@ -25,7 +25,7 @@ sys.path.append(abspath)
 os.chdir(abspath)
 current_path = os.getcwd() + "/"
 
-config = yaml.load(file(current_path+"/config/builder_config.yaml", 'r'))
+config = yaml.load(file(current_path+"/config/config.yaml", 'r'))
 
 for directory in config["dirs"]:
     if config["dirs"][directory][0] != "/":
@@ -49,18 +49,19 @@ def setupLog():
     Sets up the main logger for the daemon
     """
     import logging
+    import config.config as c
 
     level = logging.WARNING
-    if config["debug"]:
+    if c.debug:
             level = logging.DEBUG
 
     formatter = logging.Formatter("""%(asctime)s - %(name)s - %(levelname)s
     %(message)s""")
 
-    logger = logging.getLogger(config["log_name"])
+    logger = logging.getLogger(c.builder["log_name"])
     logger.setLevel(level)
 
-    fh = logging.FileHandler(config["files"]["log"])
+    fh = logging.FileHandler(c.builder["files"]["log"])
     fh.setLevel(level)
     fh.setFormatter(formatter)
     logger.addHandler(fh)
@@ -86,7 +87,7 @@ class AppDaemon(Daemon):
         logger = setupLog()
         from daemons.builder.builder import Builder
 
-        builder = Builder(config)
+        builder = Builder()
         builder.start()
 
 
@@ -98,7 +99,7 @@ class AppNoDaemon(object):
         logger = setupLog()
         from daemons.builder.builder import Builder
 
-        builder = Builder(config)
+        builder = Builder()
         builder.start()
 
     def stop(self):

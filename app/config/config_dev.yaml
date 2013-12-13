@@ -14,6 +14,8 @@ dirs:
   pid: pid/
   log: logs/
   base: /srv/http/
+  nginx: /nginx_config/
+  templates: views/raw_templates/
 
 databases:
   rethink:
@@ -22,9 +24,36 @@ databases:
     db: 1
     URL: localhost
 
-sockets:
-  zeromq:
-    URL: tcp://127.0.0.1
-    port: 9000
+docker:
+  url: http://127.0.0.1
+  port: 3945
+  version: 1.7
+  timeout: 600
 
 debug: true
+
+builder:
+  log_name: psh_builder
+
+  files:
+    pid: psh_builder.pid
+    log: psh_builder.log
+    stderr: psh_builder_error.log
+    stdout: psh_builder_out.log
+
+  dirs:
+    pid: pid/
+    log: logs/
+
+spinner:
+  log_name: psh_spinner
+
+  files:
+    pid: psh_spinner.pid
+    log: psh_spinner.log
+    stderr: psh_spinner_error.log
+    stdout: psh_spinner_out.log
+
+  dirs:
+    pid: pid/
+    log: logs/

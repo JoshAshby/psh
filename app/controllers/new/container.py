@@ -14,7 +14,7 @@ from seshat.baseObject import HTMLObject
 from seshat.objectMods import login
 from seshat.actions import Redirect
 
-from models.rethink.containerimport containerModel as cm
+from models.rethink.container import containerModel as cm
 
 from errors.general import \
       MissingError

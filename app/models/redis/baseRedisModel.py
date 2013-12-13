@@ -14,5 +14,5 @@ from models.redis.redisModel import RedisModel
 
 
 class SeshatRedisModel(RedisModel):
-    def __init__(self, key, redis=c.general.redis, **kwargs):
+    def __init__(self, key, redis=c.redis, **kwargs):
         super(SeshatRedisModel, self).__init__(key, redis, **kwargs)

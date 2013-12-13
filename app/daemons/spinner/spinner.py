@@ -14,52 +14,35 @@ import json
 import logging
 import random
 
-from config.standard import StandardConfig
+import config.config as c
 
-import rethinkdb as r
 from models.rethink.container import containerModel as cm
-
-import redis
 
 import utils.pushover as ps
 import utils.nginx as nu
 
+logger = logging.getLogger(c.spinner.log_name)
+
 
 class Spinner(object):
-    def __init__(self, config):
-        self.c = StandardConfig(**config)
-
-        if not self.c:
-            raise Exception("Could not load spinner_config.yaml!")
-
-        r.connect(db=self.c["databases"]["rethink"]["db"]).repl()
-
-        self.redis = redis.StrictRedis(self.c["databases"]["redis"]["URL"],
-                                       db=self.c["databases"]["redis"]["db"])
-
-        dc_url = ":".join([self.c["docker"]["url"], str(self.c["docker"]["port"])])
-        self.dc = docker.Client(base_url=dc_url,
-                                version=str(self.c["docker"]["version"]),
-                                timeout=self.c["docker"]["timeout"])
-
-        self.logger = logging.getLogger(self.c.log_name)
+    def __init__(self):
+        pass
 
     def start(self):
         try:
-            self.logger.info("Starting up spin worker...")
+            logger.info("Starting up spin worker...")
             self.poll()
         except KeyboardInterrupt:
-            self.logger.info("Keyboard shutdown")
-            pass
+            logger.info("Keyboard shutdown")
 
     def poll(self):
         while True:
-            next_json = self.c.redis.blpop("spin:queue")[1]
+            next_json = c.redis.blpop("spin:queue")[1]
 
             next_parsed = json.loads(next_json)
 
             log = "Got Container doc id: {id} with action {action}".format(next_parsed)
-            self.logger.debug(log)
+            logger.debug(log)
 
             container = cm.Container(next_parsed["id"])
 
@@ -82,7 +65,7 @@ class Spinner(object):
         for port, options in container_model.ports.iteritems():
             ports.append(port)
 
-        container_id = self.dc.create_container(image=image_id,
+        container_id = c.docker.create_container(image=image_id,
                                                 ports=ports,
                                                 name=container_model.name,
                                                 hostname=container_model.hostname)
@@ -93,13 +76,13 @@ class Spinner(object):
     def start_container(self, container_model):
         bindings = {}
         for port, options in container_model.ports.iteritems():
-            if not options["internal"]:
+            if not "internal" in options or not options["internal"]:
                 bindings[port] = random.randint(1025, 500000)
 
         success = False
         while not success:
             try:
-                self.dc.start(container_model.docker_id, bindings=bindings)
+                c.docker.start(container_model.docker_id, bindings=bindings)
                 success = True
             except docker.client.APIError as e:
                 if e.is_server_error():
@@ -123,4 +106,3 @@ class Spinner(object):
 
     def stop_container(self, container_model):
         self.dc.stop(container_model.docker_id)
-        pass
