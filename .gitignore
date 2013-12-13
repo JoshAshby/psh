@@ -14,7 +14,6 @@
 .sw[nop]
 *.tmp
 *.scratchpad
-.flagSearchIndex/
 virt/
 *.out
 node_modules
@@ -27,13 +26,13 @@ app/pid/
 app/.coverage
 app/config/*.json
 .pylintrc
-*.flagr.js
-old/
 interface/templates/
 app/rethinkdb_data
 
 app/config/config.yaml
 app/config/initial.yaml
+app/config/builder_config.yaml
+app/config/spinner_config.yaml
 
 # Compiled source #
 ###################
