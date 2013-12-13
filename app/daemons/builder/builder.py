@@ -27,7 +27,7 @@ logger = logging.getLogger(c.builder.log_name)
 
 
 class Builder(object):
-    def __init__(self, config):
+    def __init__(self):
         pass
 
     def start(self):
@@ -39,7 +39,7 @@ class Builder(object):
 
     def poll(self):
         while True:
-            next_id = self.redis.blpop("build:queue")[1]
+            next_id = c.redis.blpop("build:queue")[1]
             logger.debug("Got Dockerfile document id: "+next_id)
             dockerfile_model = dfm.Dockerfile(next_id)
             user = um.User(dockerfile_model.user)
