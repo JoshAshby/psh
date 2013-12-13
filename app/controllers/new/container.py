@@ -22,7 +22,7 @@ from errors.general import \
 
 @login()
 @autoRoute()
-class index(HTMLObject):
+class container(HTMLObject):
     _title = "New Dockerfile"
     _defaultTmpl = "public/new/container"
     def GET(self):

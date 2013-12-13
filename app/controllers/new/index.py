@@ -24,7 +24,7 @@ from errors.general import \
 @autoRoute()
 class index(HTMLObject):
     _title = "New Dockerfile"
-    _defaultTmpl = "public/new/index"
+    _defaultTmpl = "public/new/dockerfile"
     def GET(self):
         return self.view
 

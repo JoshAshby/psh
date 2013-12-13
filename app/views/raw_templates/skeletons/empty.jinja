@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-  <title>Psh PaaS - {{{req.title}}}</title>
+  <title>Psh PaaS - {{req.title}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
@@ -13,49 +13,46 @@
 
     <!-- Begin page stylsheets -->
     <link href="/static/css/{{theme_color}}_theme.css" rel="stylesheet">
-    {{#stylesheets}}
-      <link href="/static/css/{{.}}.css" rel="stylesheet">
-    {{/stylesheets}}
+    {% for sheet in stylesheets %}
+      <link href="/static/css/{{sheet}}.css" rel="stylesheet">
+    {% endfor %}
 
     <style>
-      {{{styles}}}
+      body { padding-top: 70px; }
+      {{styles}}
     </style>
     <!-- End page style sheets -->
 
     <script src="http://code.jquery.com/jquery.js"></script>
   </head>
   <body>
-    {{^hide_announcements}}
-      {{#req.has_announcements}}
-        <div class="container container-alert">
-          <div class="row">
-            <div class="col-md-1 col-sm-1">
-              <i class="fa fa-exclamation fa-3x"></i>
-            </div>
-            <div class="col-md-10 col-sm-10">
-              {{#req.announcements}}
-                {{{.}}}
-              {{/req.announcements}}
-            </div>
+    {% if req.has_announcements and not hide_announcements %}
+      <div class="container container-alert">
+        <div class="row">
+          <div class="col-md-1 col-sm-1" style="text-align: center;">
+            <i class="fa fa-exclamation fa-4x"></i>
+          </div>
+          <div class="col-md-10 col-sm-10">
+            {% for announcement in req.announcements %}
+              {{announcement}}
+            {% endfor %}
           </div>
         </div>
-      {{/req.has_announcements}}
-    {{/hide_announcements}}
+      </div>
+    {% endif %}
 
-    {{{body}}}
+    {{body}}
 
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
     <!-- Begin page scripts -->
-    {{#scriptFiles}}
-      <script src="/static/js/{{.}}.js"></script>
-    {{/scriptFiles}}
+    {% for script in scriptFiles %}
+      <script src="/static/js/{{script}}.js"></script>
+    {% endfor %}
 
-    {{#scripts}}
-      <script>
-        {{{scripts}}}
-      </script>
-    {{/scripts}}
+    <script>
+      {{scripts}}
+    </script>
     <!-- End page scripts -->
     <br>
   </body>

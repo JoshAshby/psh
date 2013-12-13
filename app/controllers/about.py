@@ -21,5 +21,5 @@ class about(HTMLObject):
     _title = "about"
     _defaultTmpl = "public/about/about"
     def GET(self):
-        self.view.data = {"header": "About Psh PaaS"}
+        self.view.data = {"header": "<h1>About Psh PaaS</h1>"}
         return self.view

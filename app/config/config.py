@@ -11,9 +11,9 @@ joshuaashby@joshashby.com
 """
 import os
 import yaml
-import redis
-import rethinkdb
-import docker
+import redis as red
+import rethinkdb as r
+import docker as d
 
 from standard import StandardConfig
 
@@ -56,13 +56,13 @@ def parse_files(conf):
                 conf.files[fi] = conf.dirs["log"] + conf.files[fi]
 
 
-rethink = rethinkdb.connect(db=general["databases"]["rethink"]["db"]).repl()
-redis = redis.StrictRedis(general["databases"]["redis"]["URL"], db=general["databases"]["redis"]["db"])
+rethink = r.connect(db=general["databases"]["rethink"]["db"]).repl()
+redis = red.StrictRedis(general["databases"]["redis"]["URL"], db=general["databases"]["redis"]["db"])
 
 docker_url = ":".join([general["docker"]["url"], str(general["docker"]["port"])])
-docker = docker.Client(base_url=docker_url,
-                       version=str(general["docker"]["version"]),
-                       timeout=general["docker"]["timeout"])
+docker = d.Client(base_url=docker_url,
+                  version=str(general["docker"]["version"]),
+                  timeout=general["docker"]["timeout"])
 del docker_url
 
 parse_files(general)

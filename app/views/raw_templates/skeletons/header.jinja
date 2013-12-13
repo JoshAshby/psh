@@ -1,0 +1,211 @@
+<!doctype html>
+<html>
+  <head>
+  <title>Psh PaaS - {{req.title}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Begin page stylsheets -->
+    <link href="/static/css/{{theme_color}}_theme.css" rel="stylesheet">
+    {% for sheet in stylesheets %}
+      <link href="/static/css/{{sheet}}.css" rel="stylesheet">
+    {% endfor %}
+
+    <style>
+      {{styles}}
+    </style>
+    <!-- End page style sheets -->
+
+    <script src="http://code.jquery.com/jquery.js"></script>
+  </head>
+  <body>
+    {% if req.has_announcements %}
+      <div class="container container-alert">
+        <div class="row">
+          <div class="col-md-1 col-sm-1" style="text-align: center;">
+            <i class="fa fa-exclamation fa-4x"></i>
+          </div>
+          <div class="col-md-10 col-sm-10">
+            {% for announcement in req.announcements %}
+              {{announcement}}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    <div class="container container-full">
+      <nav class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="fa fa-bars"></span>
+          </button>
+          <a class="navbar-brand" href="/">Psh PaaS</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+          <ul class="nav navbar-nav">
+            {% if req.session.id %}
+              <li class="dropdown {{ 'active' if nav=="new" }}">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-upload"></i> New <i class="fa fa-caret-down"></i></a>
+                <ul class="dropdown-menu">
+                  <li><a href="/new">Dockerfile</a></li>
+                  <li><a href="/new/container">Container</a></li>
+                </ul>
+              </li>
+
+              <li class="dropdown {{ 'active' if nav=="dockerfiles" }}">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dockerfiles <i class="fa fa-caret-down"></i></a>
+                <ul class="dropdown-menu">
+                  <li><a href="/dockerfiles">Public</a></li>
+                  <li><a href="/dockerfiles/mine">Mine</a></li>
+                </ul>
+              </li>
+
+              <li {{ 'class="active"' if nav=="images" }}><a href="/images"><i class="fa fa-picture-o"></i> Images</a></li>
+
+            {% else %}
+              <li {{ 'class="active"' if nav=="dockerfiles" }}><a href="/dockerfiles"><i class="fa fa-file"></i> Dockerfiles</a></li>
+            {% endif %}
+
+          </ul>
+          {% if req.session.id%}
+            <ul class="nav navbar-nav navbar-right" style="margin-right: 15px">
+              <li class="dropdown {{ 'active' if "admin" in nav }}">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Heya, {{req.session.username}} <i class="fa fa-caret-down"></i></a>
+                <ul class="dropdown-menu">
+                  {% if req.session.has_admin %}
+                  <li><a href="/admin"><i class="fa fa-cogs"></i> Admin</a></li>
+                    <li class="divider"></li>
+                  {% endif %}
+                  <li><a href="/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+                </ul>
+              </li>
+            </ul>
+          {% else %}
+            <ul class="nav navbar-nav navbar-right" style="margin-right: 15px">
+              <li><a id="nav_extra_menu_btn" href="#" data-html="true" data-content='<form role="logic" action="/login" method="POST"><div class="form-group"><input type="text" class="form-control" placeholder="Username..." name="username"></div><div class="form-group"><input type="password" class="form-control" placeholder="Password..." name="password"></div><button type="submit" class="btn btn-default btn-theme btn-block">Login</button></form>' data-container="body" data-title="Login" data-placement="bottom">Heya, stranger <i class="fa fa-chevron-down"></i></a>
+              </li>
+            </ul>
+          {% endif %}
+        </div><!-- /.navbar-collapse -->
+      </nav>
+
+      <div style="height: {{ '70' if header else '70' }}px">
+      </div>
+
+      <!-- Begin alerts section -->
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          {{req.session.alerts}}
+        </div>
+      </div>
+      <!-- End alerts section -->
+
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          {{header}}
+        </div>
+      </div> <!-- /row -->
+    </div> <!-- /container full -->
+
+    <div class="container">
+      <br>
+      {% if breadcrumbs_top or "admin" in nav %}
+        <div class="row">
+          <div class="col-md-10 col-md-offset-1">
+            <ol class="breadcrumb">
+              {% set breadcrumb_parts = "" %}
+              {% for bit in req.pre_id_url %}
+                {% set breadcrumb_parts = breadcrumb_parts+"/"+bit %}
+                {% if loop.last and not req.command and not req.id %}
+                  <li class="active">{{bit|capitalize}}</li>
+                {% elif loop.last and req.id and not req.command %}
+                  <li><a href="{{breadcrumb_parts}}">{{bit|capitalize}}</a></li>
+                  <li class="active">{{req.id|truncate(10, True)}}</li>
+                {% elif loop.last and req.command %}
+                  <li><a href="{{breadcrumb_parts}}">{{bit|capitalize}}</a></li>
+                  <li><a href="{{breadcrumb_parts}}/{{req.id}}">{{req.id|truncate(10, True)}}</a></li>
+                  <li class="active">{{req.command|capitalize}}</li>
+                {% else %}
+                  <li><a href="{{breadcrumb_parts}}">{{bit|capitalize}}</a></li>
+                {% endif %}
+              {% endfor %}
+            </ol>
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          {{body}}
+        </div>
+      </div>
+      <br>
+
+      {% if breadcrumbs and not (breadcrumbs_top or "admin" in nav) %}
+        <div class="row">
+          <div class="col-md-10 col-md-offset-1">
+            <ol class="breadcrumb">
+              {% set breadcrumb_parts = "" %}
+              {% for bit in req.pre_id_url %}
+                {% set breadcrumb_parts = breadcrumb_parts+"/"+bit %}
+                {% if loop.last and not req.command and not req.id %}
+                  <li class="active">{{bit|capitalize}}</li>
+                {% elif loop.last and req.id and not req.command %}
+                  <li><a href="{{breadcrumb_parts}}">{{bit|capitalize}}</a></li>
+                  <li class="active">{{req.id|truncate(10, True)}}</li>
+                {% elif loop.last and req.command %}
+                  <li><a href="{{breadcrumb_parts}}">{{bit|capitalize}}</a></li>
+                  <li><a href="{{breadcrumb_parts}}/{{req.id}}">{{req.id|truncate(10, True)}}</a></li>
+                  <li class="active">{{req.command|capitalize}}</li>
+                {% else %}
+                  <li><a href="{{breadcrumb_parts}}">{{bit|capitalize}}</a></li>
+                {% endif %}
+              {% endfor %}
+            </ol>
+          </div>
+        </div>
+      {% endif %}
+
+      <hr>
+      <footer id="footer">
+        <div class="row">
+          <div class="col-md-6">
+            <a href="https://github.com/JoshAshby">JoshAshby - Psh PaaS 2013</a>
+            <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.
+          </div>
+          <div class="col-md-6">
+            <p class="pull-right"><a href="/about">About</a> | <a href="#top">Back to top</a></p>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+    <!-- Begin page scripts -->
+    {% for script in scriptFiles %}
+      <script src="/static/js/{{script}}.js"></script>
+    {% endfor %}
+
+    <script>
+      {% if not req.session.id %}
+        $(function() {
+          $("#nav_extra_menu_btn").popover();
+        });
+      {% endif %}
+
+      {{scripts}}
+    </script>
+    <!-- End page scripts -->
+    <br>
+  </body>
+</html>

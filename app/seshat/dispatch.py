@@ -56,6 +56,12 @@ def dispatch(env, start_response):
             request.command = parts[1]
         else:
             request.command = None
+
+        if request.id:
+            request.pre_id_url = request.url.path.split(request.id)[0].strip("/").split("/")
+        else:
+            request.pre_id_url = request.url.path.strip("/").split("/")
+
         obj = found.__module__+"/"+found.__name__
         newHTTPObject = found(request)
         if c.debug: logObj(request, obj)

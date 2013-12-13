@@ -141,11 +141,12 @@ class template(object):
             "req": data,
             "stylesheets": [],
             "scripts": "",
-            "scriptFiles": []
+            "scriptFiles": [],
+            "breadcrumbs": True,
         }
 
         self._template = template
-        self._base = "skeleton_navbar"
+        self._base = "skeletons/navbar"
 
     @property
     def template(self):

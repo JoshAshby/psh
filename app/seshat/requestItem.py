@@ -88,6 +88,7 @@ class requestItem(object):
         self.user_agent = env["HTTP_USER_AGENT"] if "HTTP_USER_AGENT" in env else "Unknown User Agent"
         self.referer = env["HTTP_REFERER"] if "HTTP_REFERER" in env else "No Referer"
 
+        self.pre_id_url = None
         self.id = None
         self.command = None
 
