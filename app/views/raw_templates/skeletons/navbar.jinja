@@ -78,9 +78,9 @@
             {% endif %}
 
           </ul>
-          {% if req.session.id%}
+          {% if req.session.id %}
             <ul class="nav navbar-nav navbar-right" style="margin-right: 15px">
-              <li class="dropdown {{ 'active' if "admin" in nav }}">
+              <li class="dropdown {{ 'active' if nav=="admin" }}">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Heya, {{req.session.username}} <i class="fa fa-caret-down"></i></a>
                 <ul class="dropdown-menu">
                   {% if req.session.has_admin %}
@@ -109,7 +109,7 @@
       <!-- End alerts section -->
       <br>
 
-      {% if breadcrumbs_top or "admin" in nav %}
+      {% if breadcrumbs_top or nav=="admin" %}
         <div class="row">
           <div class="col-md-10 col-md-offset-1">
             <ol class="breadcrumb">
@@ -141,7 +141,7 @@
       </div>
       <br>
 
-      {% if breadcrumbs and not (breadcrumbs_top or "admin" in nav) %}
+      {% if breadcrumbs and not (breadcrumbs_top or nav=="admin") %}
         <div class="row">
           <div class="col-md-10 col-md-offset-1">
             <ol class="breadcrumb">

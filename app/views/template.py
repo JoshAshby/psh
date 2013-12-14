@@ -142,7 +142,8 @@ class template(object):
             "stylesheets": [],
             "scripts": "",
             "scriptFiles": [],
-            "breadcrumbs": True,
+            "breadcrumbs": False,
+            "breadcrumbs_top": False,
         }
 
         self._template = template
@@ -241,9 +242,6 @@ class template(object):
 
         else:
             _render = body
-
-        self._baseData = {}
-        data = {}
 
         del data
         del self._baseData

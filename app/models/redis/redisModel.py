@@ -67,8 +67,9 @@ class RedisKeysBase(object):
             self.redis.set(key, value)
 
     def __delitem__(self, item):
+        key = ':'.join([self.key, item])
         self._data.pop(item)
-        self.redis.delete(self.key+item)
+        self.redis.delete(key)
 
     def __contains__(self, item):
         return item in self._data
@@ -224,12 +225,19 @@ class RedisModel(object):
     def __setitem__(self, item, value):
         return self._set(item, value)
 
+    def __delattr__(self, item):
+        keys = object.__getattribute__(self, "_keys")
+        if item in keys:
+            del keys[item]
+        else:
+            object.__delattr__(self, item)
+
     def __delitem__(self, item):
         keys = object.__getattribute__(self, "_keys")
         if item in keys:
-            keys.pop(item)
+            del keys[item]
         else:
-            object.__delitem__(self, item)
+            object.__delattr__(self, item)
 
     def __contains__(self, item):
         keys = object.__getattribute__(self, "_keys")

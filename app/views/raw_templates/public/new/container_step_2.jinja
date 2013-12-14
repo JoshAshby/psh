@@ -10,9 +10,9 @@ nav: new
   <div class="col-md-12">
     <form method="POST" enctype="multipart/form-data" class="form-horizontal">
       <fieldset>
-        <legend>Domain and Ports</legend>
         <div class="row">
           <div class="col-md-6">
+            <legend>Domain</legend>
             <div class="row">
               <label class="control-label col-md-2" for="hostname">Domain:</label>
               <div class="col-md-10">
@@ -24,16 +24,18 @@ nav: new
             </div>
           </div>
           <div class="col-md-6">
+            <legend>Ports</legend>
             {% for port in ports %}
               <div class="row">
                 <div class="col-md-12">
                   <label class="sr-only" for="host">Host:</label>
                   <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Username">
-                    <input class="form-control" type="text" name="host">
+                    <span class="input-group-addon">{{port}}</span>
+                    <input class="form-control" type="text" name="port_{{port}}" placeholder="Host Port">
                   </div>
                 </div>
               </div>
+              <br>
             {% endfor %}
           </div>
         </div>

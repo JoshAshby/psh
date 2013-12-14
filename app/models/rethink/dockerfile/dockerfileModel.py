@@ -9,6 +9,7 @@ joshuaashby@joshashby.com
 """
 from rethinkORM import RethinkModel
 import arrow
+import cStringIO
 
 from errors.general import \
       NotFoundError, MissingError
@@ -28,7 +29,9 @@ class Dockerfile(RethinkModel):
     def finish_init(self):
         if not self._data:
             raise NotFoundError("Dockerfile was not found.")
+
         self._formated_created = ""
+        self._ports = []
         self._latest = None
         self._latest_img = None
         self._user = None
@@ -114,3 +117,20 @@ class Dockerfile(RethinkModel):
                 self._latest_img = im.Image(img[0]["id"])
 
         return self._latest_img
+
+    @property
+    def ports(self, no_cache=False):
+        if not self._ports or no_cache:
+            string = cStringIO.StringIO(self.dockerfile)
+
+            p= []
+
+            for line in string:
+                line = line.strip(" \n")
+                if line.startswith("EXPOSE"):
+                    ps = line[6:].strip(" ").split(" ")
+                    p.extend(ps)
+
+            self._ports = p
+
+        return self._ports

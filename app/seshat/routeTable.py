@@ -37,9 +37,11 @@ class RouteTable(object):
         orig_path = parsed_url.path.rstrip("/")
         if not orig_path:
             base = "/"
+
         else:
             if orig_path in self._data:
                 base = orig_path
+
             else:
                 found = False
                 path = orig_path
@@ -49,14 +51,16 @@ class RouteTable(object):
                     if base in self._data:
                         found = True
                         extended = orig_path[len(base)+1:]
+
                     else:
                         path = path_parts[0]
                         if not path:
                             base = None
                             found = True
+
         if base is not None:
             obj = self._data[base].pageObject
-        print extended
+
         return obj, extended
 
     def __repr__(self):
@@ -71,4 +75,5 @@ class RouteTable(object):
             "id": id(self),
             "table": routes
           })
+
         return string

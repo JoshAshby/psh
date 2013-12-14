@@ -103,7 +103,7 @@ class requestItem(object):
         form = cgi.FieldStorage(fp=temp_file, environ=self._env, keep_blank_values=True)
 
         for bit in form:
-            if form[bit].filename is not None:
+            if hasattr(form[bit], "filename") and form[bit].filename is not None:
                 fi = FileObject(form[bit])
                 all_files[fi.name] = fi
             else:
