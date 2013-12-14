@@ -12,6 +12,7 @@ joshuaashby@joshashby.com
 """
 import rethinkdb as r
 
+
 def toBoolean(str):
     if str == 'True':
         return True
@@ -19,6 +20,7 @@ def toBoolean(str):
         return False
     else:
         raise Exception("Not a boolean")
+
 
 def rql_where_not(table, field, value):
     """
@@ -34,3 +36,30 @@ def rql_where_not(table, field, value):
 
     query = r.table(table).filter(lambda doc: ~r.expr(hidden_ids).contains(doc["id"]))
     return query
+
+
+def rql_highest_revs(query, field):
+    """
+    r.db("psh").table("images").groupedMapReduce(
+      function(image) {
+        return image('dockerfile')
+      },
+      function(image) {
+        return {rev: image('rev'), id: image('id')}
+      },
+      function(left, right) {
+        return r.branch(left('rev').gt(right('rev')), left, right)
+      }
+    ).map(
+      function(group) {
+        return group('reduction')("id")
+      }
+    )
+    """
+    ids = query.grouped_map_reduce(
+        lambda image: image[field],
+        lambda image: {"rev": image["rev"], "id": image["id"]},
+        lambda left, right: r.branch(left["rev"]>right["rev"], left, right)
+    ).map(lambda group: group["reduction"]["id"]).coerce_to("array").run()
+
+    return query.filter(lambda doc: r.expr(ids).contains(doc["id"]))

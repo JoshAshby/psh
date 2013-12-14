@@ -33,8 +33,6 @@ class index(HTMLObject):
         f = page.pail
 
         self.view.data = {"announcements": f, "page": page, "now": arrow.utcnow().format("MM/DD/YYYY HH:mm")}
-        self.view.scripts = ["admin/announcement", "lib/bootstrap-datetimepicker.min"]
-        self.view.stylesheets = ["lib/bootstrap-datetimepicker.min"]
 
         return self.view
 

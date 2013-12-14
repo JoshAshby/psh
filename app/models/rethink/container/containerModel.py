@@ -36,20 +36,26 @@ class Container(RethinkModel):
         """
         ports should be in the form of:
         {
-          container_port: {
-            "host": ##,
-            "route": True/False,
-          }
+          container_port: host
         }
+
+        where host can be None or a number
         """
+        port_bindings = {}
+        for container, host in ports.iteritems():
+            port_bindings[container] = {
+                "host": host,
+                "internal": None
+            }
+
         fi = cls.create(user=user,
-                        created=arrow.utcnow().timestamp,
                         name=name,
                         image_id=img,
+                        ports=port_bindings,
+                        hostname=hostname,
+                        created=arrow.utcnow().timestamp,
                         disable=False,
-                        docker_id=None,
-                        ports=ports,
-                        hostname=hostname)
+                        docker_id=None)
 
         fi.queue_action("build")
 

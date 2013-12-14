@@ -26,6 +26,5 @@ class index(HTMLObject):
         f = page.pail
 
         self.view.data = {"buckets": f, "page": page}
-        self.view.scripts = ["admin/bucket"]
 
         return self.view

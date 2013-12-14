@@ -1,9 +1,6 @@
 server {
   listen {{host_port}};
-  server_name www.{{hostname}} {{hostname}};
-
-  access_log
-  error_log
+  server_name www.{{hostname}} {{hostname}} {{image}}.{{username}}.transientbug.com;
 
   error_page 502 503 /static/503.html;
 

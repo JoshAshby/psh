@@ -1,0 +1,43 @@
++++
+nav: new
++++
+<div class="row">
+  <div class="col-md-12">
+    <h1>New Container - Step 1</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+      <fieldset>
+        <legend>Basics</legend>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row">
+              <label class="control-label col-md-2" for="name">Name:</label>
+              <div class="col-md-10">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Container Name..." value="{{name}}" required>
+                <span class="help-block">
+                  This is the primary way that we'll identify this container to you throughout the site.
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="row">
+              <label class="control-label col-md-2" for="image">Image:</label>
+              <div class="col-md-10">
+                <select id="img" name="image">
+                  {% for image in images %}
+                    <option value="{{image.id}}">{{image.name}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      <button class="btn btn-theme pull-right" type="submit">Step two <i class="fa fa-arrow-right"></i></button>
+    </form>
+  </div>
+</div>

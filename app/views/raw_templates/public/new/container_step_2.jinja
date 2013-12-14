@@ -1,0 +1,44 @@
++++
+nav: new
++++
+<div class="row">
+  <div class="col-md-12">
+    <h1>New Container - Step 2</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+      <fieldset>
+        <legend>Domain and Ports</legend>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row">
+              <label class="control-label col-md-2" for="hostname">Domain:</label>
+              <div class="col-md-10">
+                <input type="text" class="form-control" id="hostname" name="hostname" placeholder="Domain..." value="{{hostname}}" required>
+                <span class="help-block">
+                  The is different from the containers name, and should be a domain that you own. Once you finish getting your new container spun up, you'll recieve instructions on how to point your domain at it.
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            {% for port in ports %}
+              <div class="row">
+                <div class="col-md-12">
+                  <label class="sr-only" for="host">Host:</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Username">
+                    <input class="form-control" type="text" name="host">
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </fieldset>
+      <button class="btn btn-theme pull-right" type="submit">Spin up! <i class="fa fa-check"></i></button>
+    </form>
+  </div>
+</div>
