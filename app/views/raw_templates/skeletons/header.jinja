@@ -62,18 +62,9 @@
                 </ul>
               </li>
 
-              <li class="dropdown {{ 'active' if nav=="dockerfiles" }}">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dockerfiles <i class="fa fa-caret-down"></i></a>
-                <ul class="dropdown-menu">
-                  <li><a href="/dockerfiles">Public</a></li>
-                  <li><a href="/dockerfiles/mine">Mine</a></li>
-                </ul>
-              </li>
+              <li {{ 'class="active"' if nav=="images" }}><a href="/images"><i class="fa fa-file"></i> Images</a></li>
 
-              <li {{ 'class="active"' if nav=="images" }}><a href="/images"><i class="fa fa-picture-o"></i> Images</a></li>
-
-            {% else %}
-              <li {{ 'class="active"' if nav=="dockerfiles" }}><a href="/dockerfiles"><i class="fa fa-file"></i> Dockerfiles</a></li>
+              <li {{ 'class="active"' if nav=="containers" }}><a href="/containers"><i class="fa fa-desktop"></i> Containers</a></li>
             {% endif %}
 
           </ul>

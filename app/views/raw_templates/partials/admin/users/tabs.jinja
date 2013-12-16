@@ -1,7 +1,20 @@
+<div class="row">
+  <div class="col-md-2">
+    <img src="https://gravatar.com/avatar/{{user.gravatar}}?d=mm&s=100" alt="{{user.email}}" class="img-thumbnail">
+  </div>
+  <div class="col-md-10">
+    <h3>{{user.username}}</h3>
+    <h5>{{user.email}}</h5>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-12">
     <ul class="nav nav-tabs">
       <li {{ 'class="active"' if not command }}><a href="/admin/users/{{user.id}}">Settings</a></li>
       <li {{ 'class="active"' if command=="emails" }}><a href="/admin/users/{{user.id}}/emails">Emails</a></li>
-      <li {{ 'class="active"' if command=="dockerfiles" }}><a href="/admin/users/{{user.id}}/dockerfiles">Dockerfiles <span class="badge">{{user.dockerfiles|length}}</span></a></li>
-      <li {{ 'class="active"' if command=="images" }}><a href="/admin/users/{{user.id}}/images">Images <span class="badge">{{user.images|length}}</span></a></li>
-      <li {{ 'class="active"' if command=="containers" }}><a href="/admin/users/{{user.id}}/containers">Containers <span class="badge">{{user.containers|length}}</span></a></li>
+      <li {{ 'class="active"' if command=="images" }}><a href="/admin/users/{{user.id}}/images">Images <span class="badge">{{images}}</span></a></li>
+      <li {{ 'class="active"' if command=="containers" }}><a href="/admin/users/{{user.id}}/containers">Containers <span class="badge">{{containers}}</span></a></li>
     </ul>
+  </div>
+</div>

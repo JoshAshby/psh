@@ -1,23 +1,9 @@
 +++
 theme_color: orange
 nav: admin_users
+breadcrumbs_top: True
 +++
-<div class="row">
-  <div class="col-md-2">
-    <img src="https://gravatar.com/avatar/{{user.gravatar}}?d=mm&s=100" alt="{{user.email}}" class="img-thumbnail">
-  </div>
-  <div class="col-md-10">
-    <h3>{{user.username}}</h3>
-    <h5>{{user.email}}</h5>
-    <small>Created on {{user.formated_created}}</small>
-  </div>
-</div>
-<hr>
-<div class="row">
-  <div class="col-md-12">
-    {{tabs}}
-  </div>
-</div>
+{{tabs}}
 
 <div class="row">
   <div class="col-md-12">
@@ -35,15 +21,17 @@ nav: admin_users
     <table class="table table-striped table-hover table-condensed">
       <thead>
         <th>Name</th>
+        <th>Rev</th>
         <th>Created</th>
-        <th>Dockerfile</th>
+        <th>Status</th>
       </thead>
       <tbody>
         {% for image in page.pail %}
           <tr>
             <td><a href="/admin/images/{{image.id}}">{{image.name}}</a></td>
+            <td>{{image.rev}}</td>
             <td>{{image.formated_created}}</td>
-            <td><a href="/admin/dockerfiles/{{image.dockerfile}}">{{image.dockerfile}}</a></td>
+            <td></td>
           </tr>
         {% endfor %}
       </tbody>

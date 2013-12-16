@@ -16,8 +16,10 @@ import rethinkdb as r
 def toBoolean(str):
     if str == 'True':
         return True
+
     elif str == 'False':
         return False
+
     else:
         raise Exception("Not a boolean")
 

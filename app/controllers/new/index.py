@@ -14,7 +14,7 @@ from seshat.baseObject import HTMLObject
 from seshat.objectMods import login
 from seshat.actions import Redirect
 
-from models.rethink.dockerfile import dockerfileModel as dfm
+from models.rethink.image import imageModel as im
 
 from errors.general import \
       MissingError
@@ -23,7 +23,7 @@ from errors.general import \
 @login()
 @autoRoute()
 class index(HTMLObject):
-    _title = "New Dockerfile"
+    _title = "New Image"
     _defaultTmpl = "public/new/dockerfile"
     def GET(self):
         return self.view
@@ -36,12 +36,12 @@ class index(HTMLObject):
 
         try:
             if files:
-                dockerfile = dfm.Dockerfile.new_dockerfile(self.request.session.id,
-                                                           name=name,
-                                                           file_obj=files,
-                                                           public=public)
+                image= im.Image.new_image(user_id=self.request.session.id,
+                                          name=name,
+                                          file_obj=files,
+                                          public=public)
 
-            return Redirect("/dockerfiles/"+dockerfile.id)
+            return Redirect("/images/"+image.id)
 
         except MissingError as e:
             self.view.data = {"name": name, "public": public, "error": str(e)}

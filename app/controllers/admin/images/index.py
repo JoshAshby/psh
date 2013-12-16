@@ -31,12 +31,13 @@ class index(MixedObject):
     _default_tmpl = "admin/images/index"
     def GET(self):
         if not self.request.id:
-            disabled = self.request.getParam("d", False)
+            disabled = self.request.getParam("d", True)
             if disabled:
                 q = dbu.rql_where_not(im.Image.table, "disable", True)
                 res = RethinkCollection(im.Image, query=q)
             else:
                 res = RethinkCollection(im.Image)
+
             page = Paginate(res, self.request, "name")
 
             self.view.data = {"page": page}

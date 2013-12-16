@@ -1,5 +1,5 @@
 +++
-nav: dockerfiles
+nav: containers
 +++
 {% if page.pail %}
   <div class="row">
@@ -19,28 +19,27 @@ nav: dockerfiles
       <table class="table table-striped table-hover table-condensed">
         <thead>
           <th>Name</th>
-          <th>Rev</th>
-          <th>Owner</th>
+          <th>Image</th>
           <th>Created</th>
+          <th>Status</th>
         </thead>
         <tbody>
-          {% for dockerfile in page.pail %}
-            <tr>
-              <td><a href="/dockerfiles/{{dockerfile.id}}">{{dockerfile.name}}</a></td>
-              <td>{{dockerfile.rev}}</td>
-              <td>{{dockerfile.author.username}}</td>
-              <td>{{dockerfile.formated_created}}</td>
-            </tr>
-          {% endfor %}
+
+        {% for con in page.pail %}
+          <tr>
+            <td><a href="/containers/{{con.id}}">{{con.name}}</a></td>
+            <td><a href="/images/{{con.image.id}}">{{con.image.name}}</a></td>
+            <td>{{con.formated_created}}</td>
+            <td>{{con.status}}</td>
+          </tr>
+        {% endfor %}
+
         </tbody>
       </table>
     {% else %}
       <div class="jumbotron">
-        <h1>So sad...</h1>
-        <p>We currently don't have any public Dockerfiles to show you!</p>
-        {% if req.session.id %}
-          <p>Perhaps you should <a href="/dockerfiles/mine">view your own Dockerfiles?</a></p>
-        {% endif %}
+        <h1>Oh...</h1>
+        <p>You don't currently have any containers! <a href="/new/container">Maybe spin one up?</a></p>
       </div>
     {% endif %}
   </div>

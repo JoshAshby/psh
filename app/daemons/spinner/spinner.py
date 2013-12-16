@@ -41,8 +41,8 @@ class Spinner(object):
 
             next_parsed = json.loads(next_json)
 
-            log = "Got Container doc id: {id} with action {action}".format(next_parsed)
-            logger.debug(log)
+            log = "Got Container doc id: {id} with action {action}".format(**next_parsed)
+            logger.info(log)
 
             container = cm.Container(next_parsed["id"])
 
@@ -65,13 +65,16 @@ class Spinner(object):
         for port, options in container_model.ports.iteritems():
             ports.append(port)
 
+        name = container_model.user.username+":"+container_model.name
         container_id = c.docker.create_container(image=image_id,
-                                                ports=ports,
-                                                name=container_model.name,
-                                                hostname=container_model.hostname)
+                                                 ports=ports,
+                                                 name=name,
+                                                 hostname=container_model.hostname)["Id"]
 
         container_model.docker_id = container_id
         container_model.save()
+
+        self.start_container(container_model)
 
     def start_container(self, container_model):
         bindings = {}
@@ -80,11 +83,16 @@ class Spinner(object):
                 bindings[port] = random.randint(1025, 500000)
 
         success = False
-        while not success:
+        error = None
+        while not success and not error:
             try:
-                c.docker.start(container_model.docker_id, bindings=bindings)
+                c.docker.start(container_model.docker_id, port_bindings=bindings)
                 success = True
             except docker.client.APIError as e:
+                print e
+                if e.is_client_error():
+                    error = e
+                    logger.error(e)
                 if e.is_server_error():
                     msg = e.explanation.rsplit(":", 1)
                     bad_port = int(msg)
@@ -93,12 +101,14 @@ class Spinner(object):
                         if bindings[port] == bad_port:
                             bindings[port] = random.randint(1025, 500000)
 
-        for con_port, host_port in bindings.iteritems():
-            container_model.ports[con_port]["internal"] = host_port
+        if not error:
+            logger.info("Container started: "+container_model.id)
+            for con_port, host_port in bindings.iteritems():
+                container_model.ports[con_port]["internal"] = host_port
 
-        container_model.save()
+            container_model.save()
 
-        nu.container_nginx_config(container_model)
+            nu.container_nginx_config(container_model)
 
     def restart_container(self, container_model):
         self.stop_container(self, container_model)

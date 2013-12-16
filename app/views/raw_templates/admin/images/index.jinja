@@ -1,7 +1,7 @@
 +++
 theme_color: orange
-
 nav: admin_images
+breadcrumbs_top: True
 +++
 {% if page.pail %}
   <div class="row">
@@ -30,14 +30,16 @@ nav: admin_images
           <th>Rev</th>
           <th>Owner</th>
           <th>Created</th>
+          <th>Status</th>
         </thead>
         <tbody>
           {% for image in page.pail %}
             <tr {{ 'class="danger"' if image.disable }}>
               <td><a href="/admin/images/{{image.id}}">{{image.name}}</a></td>
               <td>{{image.rev}}</td>
-              <td>{{image.author.username}}</td>
+              <td><a href="/admin/users/{{image.user.id}}">{{image.user.username}}</a></td>
               <td>{{image.formated_created}}</td>
+              <td></td>
             </tr>
           {% endfor %}
         </tbody>

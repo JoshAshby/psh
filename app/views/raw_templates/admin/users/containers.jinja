@@ -1,25 +1,6 @@
 +++
 theme_color: orange
+breadcrumbs_top: True
 nav: admin_users
 +++
-<div class="row">
-  <div class="col-md-2">
-    <img src="https://gravatar.com/avatar/{{user.gravatar}}?d=mm&s=100" alt="{{user.email}}" class="img-thumbnail">
-  </div>
-  <div class="col-md-10">
-    <h3>{{user.username}}</h3>
-    <h5>{{user.email}}</h5>
-    <small>Created on {{user.formated_created}}</small>
-  </div>
-</div>
-<hr>
-<div class="row">
-  <div class="col-md-12">
-    {{tabs}}
-
-    <div class="row">
-      <div class="col-md-12">
-      </div>
-    </div>
-  </div>
-</div>
+{{tabs}}

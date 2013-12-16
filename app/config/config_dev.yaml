@@ -32,6 +32,8 @@ docker:
 
 debug: true
 
+time_format: "MM/DD/YYYY hh:mm a"
+
 builder:
   log_name: psh_builder
 

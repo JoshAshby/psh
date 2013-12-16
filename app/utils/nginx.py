@@ -9,7 +9,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from views.template import template
+from views import template as t
 import utils.files as fu
 import config.config as c
 
@@ -17,13 +17,13 @@ import cStringIO
 
 
 def container_nginx_config(container):
-    tmpl = template.PartialTemplate("config/nginx")
+    tmpl = t.PartialTemplate("config/nginx")
     tmpl.data = {"hostname": container.hostname}
 
-    filz = cStringIO.cStringIO()
+    filz = cStringIO.StringIO()
 
     for port, options in container.ports.iteritems():
-        if options["route"]:
+        if options["host"]:
           tmpl.data = {"internal_port": options["internal"],
                        "host_port": options["host"]}
 

@@ -21,7 +21,7 @@ nav: images
           <th>Name</th>
           <th>Rev</th>
           <th>Created</th>
-          <th>Dockerfile</th>
+          <th>Status</th>
         </thead>
         <tbody>
 
@@ -30,7 +30,7 @@ nav: images
             <td><a href="/images/{{image.id}}">{{image.name}}</a></td>
             <td>{{image.rev}}</td>
             <td>{{image.formated_created}}</td>
-            <td><a href="/dockerfiles/{{image.dockerfile.id}}">{{image.dockerfile.name}}</a></td>
+            <td></td>
           </tr>
         {% endfor %}
 

@@ -19,10 +19,9 @@ from errors.general import NotFoundError
 
 import rethinkdb as r
 from rethinkORM import RethinkCollection
-
 from models.rethink.user import userModel as um
-from models.rethink.dockerfile import dockerfileModel as dfm
 from models.rethink.image import imageModel as im
+from models.rethink.container import containerModel as cm
 
 from models.utils import dbUtils as dbu
 from utils.paginate import Paginate
@@ -30,7 +29,6 @@ from utils.paginate import Paginate
 commands = [
     None,
     "emails",
-    "dockerfiles",
     "images",
     "containers"
     ]
@@ -47,8 +45,10 @@ class index(MixedObject):
             if disabled:
                 q = dbu.rql_where_not(um.User.table, "disable", True)
                 res = RethinkCollection(um.User, query=q)
+
             else:
                 res = RethinkCollection(um.User)
+
             page = Paginate(res, self.request, "username")
 
             self.view.data = {"page": page}
@@ -66,28 +66,28 @@ class index(MixedObject):
 
             if not self.request.command:
                 self.view.template = "admin/users/settings"
+
             else:
                 self.view.template = "admin/users/"+self.request.command
 
             self.request.title = user.username
 
+            imgs = r.table(im.Image.table).filter({"user_id": user.id})\
+                .count().run()
+            cons = r.table(cm.Container.table).filter({"user_id": user.id})\
+                .count().run()
+
             self.view.partial("tabs",
                               "partials/admin/users/tabs",
                               {"user": user,
-                                "command": self.request.command})
+                               "command": self.request.command,
+                               "images": imgs,
+                               "containers": cons})
 
             self.view.data = {"user": user}
 
-
-            if self.request.command == "dockerfiles":
-                q = r.table(dfm.Dockerfile.table).filter({"user": user.id})
-                dockerfiles = RethinkCollection(dfm.Dockerfile, query=q)
-                page = Paginate(dockerfiles, self.request, "name")
-
-                self.view.data = {"page": page}
-
             if self.request.command == "images":
-                q= r.table(im.Image.table).filter({"user": user.id})
+                q= r.table(im.Image.table).filter({"user_id": user.id})
                 images = RethinkCollection(im.Image, query=q)
                 page = Paginate(images, self.request, "name")
 

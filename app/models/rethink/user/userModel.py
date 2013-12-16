@@ -8,7 +8,6 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from rethinkORM import RethinkModel
 import arrow
 import bcrypt
 
@@ -18,8 +17,11 @@ from errors.general import \
       NotFoundError
 
 import rethinkdb as r
+from rethinkORM import RethinkModel
 
 import hashlib
+
+import config.config as c
 
 
 class User(RethinkModel):
@@ -51,18 +53,18 @@ class User(RethinkModel):
         if not found_u and not found_e:
             passwd = bcrypt.hashpw(password, bcrypt.gensalt())
             user = cls.create(username=username,
-                       password=passwd,
-                       created=arrow.utcnow().timestamp,
-                       disable=False,
-                       email=email,
-                       groups=[],
-                       dockerfiles=[],
-                       images=[],
-                       containters=[])
+                              password=passwd,
+                              created=arrow.utcnow().timestamp,
+                              disable=False,
+                              email=email,
+                              groups=[])
+
             return user
+
         elif found_u:
             raise UsernameError("That username is taken, please choose again.",
-                    username)
+                                username)
+
         elif found_e:
             raise EmailError("That email is already in our system.", email)
 
@@ -78,7 +80,7 @@ class User(RethinkModel):
     @property
     def formated_created(self, no_cache=False):
         if not self._formated_created or no_cache:
-            self._formated_created = arrow.get(self.created).format("MM/DD/YYYY hh:mm")
+            self._formated_created = arrow.get(self.created).format(c.general.time_format)
 
         return self._formated_created
 
@@ -95,4 +97,5 @@ class User(RethinkModel):
     def has_perm(self, group_name):
         if group_name in self.groups:
             return True
+
         return False

@@ -1,0 +1,82 @@
++++
+nav: containers
++++
+<div class="row">
+  <div class="col-md-2">
+    <i class="fa fa-desktop fa-5x"></i>
+  </div>
+  <div class="col-md-10">
+    <h2>{{container.name}}</h2>
+  </div>
+</div>
+<hr>
+
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#info" data-toggle="tab">Info</a></li>
+  <li><a href="#settings" data-toggle="tab">Settings</a></li>
+</ul>
+<div class="tab-content">
+  <div class="tab-pane active" id="info">
+    <br>
+    <div class="row">
+      <div class="col-md-12">
+        <b>Status: </b>
+        {{container.status}}
+      </div>
+    </div>
+    <br>
+    <br>
+    <div class="row">
+      <div class="col-md-12">
+        <b>Actions: </b>
+          {% if "Up" not in container.status %}
+            <form method="POST" action="/containers/{{container.id}}/start">
+              <button id="start" class="btn btn-success"><i class="fa fa-power-off"></i> Start</button>
+            </form>
+          {% else %}
+            <form method="POST" action="/containers/{{container.id}}/restart">
+              <button id="stop" class="btn btn-danger"><i class="fa fa-power-off"></i> Stop</button>
+            </form>
+            <form method="POST" action="/containers/{{container.id}}/stop">
+              <button id="restart" class="btn btn-warning"><i class="fa fa-refresh"></i> Restart</button>
+            </form>
+          {% endif %}
+      </div>
+    </div>
+    <br>
+    <br>
+    <div class="row">
+      <div class="col-md-12">
+        <b>Built from image:</b> <a href="/images/{{container.image.id}}">{{container.image.name}}</a><br>
+        <b>Created on:</b> {{container.formated_created}}
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane" id="settings">
+    <br>
+    <div class="row">
+      <div class="col-md-12">
+        <form method=POST>
+          <fieldset>
+            <legend>Ports</legend>
+            {% for port in container.ports %}
+              <div class="row">
+                <div class="col-md-12">
+                  <label class="sr-only" for="host">Host:</label>
+                  <div class="input-group">
+                    <span class="input-group-addon">{{port}}</span>
+                    <input class="form-control" type="text" name="port_{{port}}" placeholder="Host Port" value={{container.ports[port]["host"]}}>
+                    <span class="input-group-addon">{{container.ports[port]["internal"]}}</span>
+                  </div>
+                </div>
+              </div>
+              <br>
+            {% endfor %}
+          </fieldset>
+          <button class="btn btn-theme pull-right" type="submit">Update</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>

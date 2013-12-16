@@ -6,15 +6,17 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import json
-import config.config as c
-
 import docker
 import arrow
+import json
+
+import config.config as c
+from config.standard import StandardConfig
 
 from rethinkORM import RethinkModel
-from models.rethink.image import imageModel as im
 from models.rethink.user import userModel as um
+from models.rethink.image import imageModel as im
+
 from errors.general import \
       NotFoundError
 
@@ -32,7 +34,7 @@ class Container(RethinkModel):
         self._image = None
 
     @classmethod
-    def new_container(cls, user, name, img, ports, hostname):
+    def new_container(cls, user_id, name, image_id, ports, hostname):
         """
         ports should be in the form of:
         {
@@ -48,9 +50,9 @@ class Container(RethinkModel):
                 "internal": None
             }
 
-        fi = cls.create(user=user,
+        fi = cls.create(user_id=user_id,
+                        image_id=image_id,
                         name=name,
-                        image_id=img,
                         ports=port_bindings,
                         hostname=hostname,
                         created=arrow.utcnow().timestamp,
@@ -61,34 +63,41 @@ class Container(RethinkModel):
 
         return fi
 
+    def queue_action(self, action):
+        data = json.dumps({"id": self.id, "action": action})
+        c.redis.rpush("spin:queue", data)
+
     @property
-    def docker_container(self, no_cache=False):
+    def docker(self, no_cache=False):
         if not self._con or no_cache:
-            containers = docker.containers(all=True)
+            containers = docker.containers(self.docker_id, all=True)
             for container in containers:
                 if container["Id"] == self.docker_id:
-                    self._con = container
+                    self._con = StandardConfig(**container)
 
         if not self._con:
             raise NotFoundError("Container was not found in docker")
 
         return self._con
 
-    def queue_action(self, action):
-        data = json.dumps({"id": self.id, "action": action})
-        c.redis.rpush("spin:queue", data)
+    @property
+    def status(self, no_cache=False):
+        self.docker(no_cache)
+
+        return self._con.Status
 
     @property
     def formated_created(self, no_cache=False):
         if not self._formated_created or no_cache:
-            self._formated_created = arrow.get(self.created).format("MM/DD/YYYY hh:mm")
+            self._formated_created = arrow.get(self.created).format(c.general.time_format)
 
         return self._formated_created
 
     @property
-    def author(self, no_cache=False):
+    def user(self, no_cache=False):
         if not self._user or no_cache:
-            self._user = um.User(self.user)
+            self._user = um.User(self.user_id)
+
         return self._user
 
     @property
