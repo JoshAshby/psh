@@ -62,6 +62,7 @@ class Image(RethinkModel):
                         name=name,
                         public=public,
                         rev=found+1,
+                        build_status="queue",
                         disable=False)
 
         fi.queue_build()

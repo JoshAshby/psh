@@ -13,6 +13,7 @@ import docker
 import json
 import logging
 import random
+import docker
 
 import config.config as c
 
@@ -73,7 +74,7 @@ class Spinner(object):
 
             self.start_container()
 
-        except c.docker.client.APIError as e:
+        except docker.client.APIError as e:
             logger.error(e)
 
     def start_container(self):
@@ -116,6 +117,7 @@ class Spinner(object):
 
     def stop_container(self):
         try:
-            self.dc.stop(self.container.docker_id)
-        except c.docker.client.APIError as e:
+            c.docker.stop(self.container.docker_id)
+            logger.info("Container stoped: "+self.container.id)
+        except docker.client.APIError as e:
             logger.error(e)

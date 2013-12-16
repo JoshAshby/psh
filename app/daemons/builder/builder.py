@@ -16,6 +16,8 @@ from models.rethink.image import imageModel as im
 import tempfile
 import cStringIO
 
+import docker
+
 import utils.pushover as ps
 import utils.files as fu
 
@@ -44,6 +46,7 @@ class Builder(object):
             logger.debug("Got Image document id: "+next_id)
             self.image = im.Image(next_id)
             self.image_tag = "/".join([self.image.user.username, self.image.name])
+            self.image_tag = "-".join([self.image_tag, self.image.rev])
 
             self.build()
 
@@ -64,7 +67,7 @@ class Builder(object):
 
             self.successful_build(s, m)
 
-        except c.docker.client.APIError as e:
+        except docker.client.APIError as e:
             self.failed_build(e)
 
     def from_package(self, image_model):
@@ -80,13 +83,13 @@ class Builder(object):
                 buff = cStringIO.StringIO(self.image.additional_files[add_file])
                 fu.write_file(add_file_path, buff)
 
-            logger.info("Building "+self.image.id+" in a temp dir")
+            logger.debug("Building "+self.image.id+" in a temp dir")
             s, m = c.docker.build(path=path, tag=self.image_tag, rm=True)
 
             tmp.destroy()
             self.successful_build(s, m)
 
-        except c.docker.client.APIError as e:
+        except docker.client.APIError as e:
             self.failed_build(e)
 
 
@@ -94,7 +97,7 @@ class Builder(object):
         ps.pushover(message="Building of image {id} failed.".format(id=self.image.id[:11]),
                     title="Failed image build")
         logger.error(str(e))
-        self.image.add_image("fail", log=str(e))
+        self.image.add_image("failed", log=str(e))
 
     def successful_build(self, s, m):
         img = c.docker.images(self.image_tag)[0]

@@ -1,5 +1,8 @@
 +++
 nav: containers
+
+scriptFiles:
+ - container
 +++
 <div class="row">
   <div class="col-md-2">
@@ -29,16 +32,23 @@ nav: containers
     <div class="row">
       <div class="col-md-12">
         <b>Actions: </b>
-          {% if "Up" not in container.status %}
+          {% if not container.status[:2]=="Up" %}
             <form method="POST" action="/containers/{{container.id}}/start">
               <button id="start" class="btn btn-success"><i class="fa fa-power-off"></i> Start</button>
             </form>
           {% else %}
-            <form method="POST" action="/containers/{{container.id}}/restart">
-              <button id="stop" class="btn btn-danger"><i class="fa fa-power-off"></i> Stop</button>
-            </form>
-            <form method="POST" action="/containers/{{container.id}}/stop">
-              <button id="restart" class="btn btn-warning"><i class="fa fa-refresh"></i> Restart</button>
+
+            <form method="POST" data-id="{{container.id}}">
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger" id="stop"><i class="fa fa-power-off"></i> Shutdown</button>
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-caret-down"></i>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li id="restart"><a href="#"><i class="fa fa-refresh"></i> Restart</a></li>
+                </ul>
+              </div>
             </form>
           {% endif %}
       </div>

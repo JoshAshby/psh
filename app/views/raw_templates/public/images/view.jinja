@@ -5,16 +5,28 @@ nav: images
   <div class="col-md-2">
     <i class="fa fa-file fa-5x"></i>
   </div>
-  <div class="col-md-10">
+  <div class="col-md-5">
     <h2>{{image.name}}</h2>
     <h5>Rev: {{image.rev}} {% if image.latest %}(<a href="/images/{{image.latest.id}}">latest</a>){% endif %}</h5>
+  </div>
+  <div class="col-md-5">
+    <b>Build Status: </b>
+    {% if image.build_status=="queue" %}
+      <span class="label label-default">Queued <i class="fa fa-refresh"></i></span>
+    {% elif image.build_status=="success" %}
+      <span class="label label-success">Built <i class="fa fa-check"></i></span>
+    {% else %}
+      <span class="label label-danger">Failed <i class="fa fa-frown"></i></span>
+    {% endif %}
   </div>
 </div>
 <hr>
 
 <ul class="nav nav-tabs">
   <li class="active"><a href="#info" data-toggle="tab">Info</a></li>
-  <li><a href="#log" data-toggle="tab">Build Log</a></li>
+  {% if image.build_status != "queue" %}
+    <li><a href="#log" data-toggle="tab">Build Log</a></li>
+  {% endif %}
   <li><a href="#files" data-toggle="tab">Files</a></li>
 </ul>
 <div class="tab-content">
@@ -27,14 +39,16 @@ nav: images
       </div>
     </div>
   </div>
-  <div class="tab-pane" id="log">
-    <br>
-    <div class="row">
-      <div class="col-md-12">
-        <pre>{{image.log}}</pre>
+  {% if image.build_status != "queue" %}
+    <div class="tab-pane" id="log">
+      <br>
+      <div class="row">
+        <div class="col-md-12">
+          <pre>{{image.log}}</pre>
+        </div>
       </div>
     </div>
-  </div>
+  {% endif %}
   <div class="tab-pane" id="files">
     <br>
     <div class="row">

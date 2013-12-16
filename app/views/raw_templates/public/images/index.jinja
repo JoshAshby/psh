@@ -30,7 +30,15 @@ nav: images
             <td><a href="/images/{{image.id}}">{{image.name}}</a></td>
             <td>{{image.rev}}</td>
             <td>{{image.formated_created}}</td>
-            <td></td>
+            <td>
+              {% if image.build_status=="queue" %}
+                <span class="label label-default">Queued <i class="fa fa-refresh"></i></span>
+              {% elif image.build_status=="success" %}
+                <span class="label label-success">Built <i class="fa fa-check"></i></span>
+              {% else %}
+                <span class="label label-danger">Failed <i class="fa fa-frown"></i></span>
+              {% endif %}
+            </td>
           </tr>
         {% endfor %}
 

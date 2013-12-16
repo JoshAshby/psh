@@ -13,7 +13,6 @@ users:
 
 tables:
   - users
-  - dockerfiles
   - images
   - containers
 
@@ -28,7 +27,7 @@ flush:
     users: true
     dockerfiles: true
     images: true
-    containers: true
+
   redis:
     session: true
     bucket: true

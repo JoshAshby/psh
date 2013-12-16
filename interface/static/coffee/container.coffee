@@ -1,8 +1,11 @@
 $ ->
-  $("#start").click ->
-    $.post
+  $("#restart").click ->
+    id = $(this).parents("form").data "id"
+    $(this).parents("form").attr "action", "/containers/#{ id }/restart"
+    $(this).parents("form").submit()
 
-queue_action = (id, action) ->
-  $.post "/containers/#{ id }/queue", {action: action}, (data) ->
-    if data.success
-      window.location.reload
+  $("#stop").click ->
+    id = $(this).parents("form").data "id"
+    $(this).parents("form").attr "action", "/containers/#{ id }/stop"
+    $(this).parents("form").submit()
+

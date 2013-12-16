@@ -79,7 +79,7 @@ class container(MixedObject):
                 self.request.session.push_alert("Missing vital info (Please fill out a name for the container before procceding to step 2)!", level="error")
                 return Redirect("/new/container/step-1")
 
-            domain = self.request.getParam("hostname")
+            domain = self.request.getParam("hostname", "")
 
             ports = {}
             p = im.Image(self.request.session.c_image).ports

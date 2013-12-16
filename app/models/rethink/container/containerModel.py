@@ -6,7 +6,6 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import docker
 import arrow
 import json
 
@@ -70,7 +69,7 @@ class Container(RethinkModel):
     @property
     def docker(self, no_cache=False):
         if not self._con or no_cache:
-            containers = docker.containers(self.docker_id, all=True)
+            containers = c.docker.containers(all=True)
             for container in containers:
                 if container["Id"] == self.docker_id:
                     self._con = StandardConfig(**container)
@@ -81,10 +80,8 @@ class Container(RethinkModel):
         return self._con
 
     @property
-    def status(self, no_cache=False):
-        self.docker(no_cache)
-
-        return self._con.Status
+    def status(self):
+        return self.docker.Status
 
     @property
     def formated_created(self, no_cache=False):

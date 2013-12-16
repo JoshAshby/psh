@@ -100,7 +100,7 @@
       <!-- End alerts section -->
       <br>
 
-      {% if breadcrumbs_top or nav=="admin" %}
+      {% if breadcrumbs_top and not breadcrumbs %}
         <div class="row">
           <div class="col-md-10 col-md-offset-1">
             <ol class="breadcrumb">
@@ -132,7 +132,7 @@
       </div>
       <br>
 
-      {% if breadcrumbs and not (breadcrumbs_top or nav=="admin") %}
+      {% if breadcrumbs and not breadcrumbs_top %}
         <div class="row">
           <div class="col-md-10 col-md-offset-1">
             <ol class="breadcrumb">

@@ -18,18 +18,10 @@ import cStringIO
 
 def container_nginx_config(container):
     tmpl = t.PartialTemplate("configs/nginx")
-    tmpl.data = {"hostname": container.hostname,
-        "username": container.user.username,
-        "image": container.image.name}
+    tmpl.data = {"container": container}
 
     filz = cStringIO.StringIO()
-
-    for port, options in container.ports.iteritems():
-        if options["host"]:
-          tmpl.data = {"internal_port": options["internal"],
-                       "host_port": options["host"]}
-
-          filz.write(tmpl.render())
+    filz.write(tmpl.render())
 
     filz.seek(0)
     name = "_".join([container.user.id, container.name])
