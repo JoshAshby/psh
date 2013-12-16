@@ -62,6 +62,17 @@ class Container(RethinkModel):
 
         return fi
 
+    def update_ports(self, ports):
+        port_bindings = {}
+        for container, host in ports.iteritems():
+            port_bindings[container] = {
+                "host": host,
+                "internal": self.ports[container]["internal"]
+            }
+
+        self.ports = port_bindings
+        self.save()
+
     def queue_action(self, action):
         data = json.dumps({"id": self.id, "action": action})
         c.redis.rpush("spin:queue", data)

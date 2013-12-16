@@ -25,6 +25,7 @@ nav: new
           </div>
           <div class="col-md-6">
             <legend>Ports</legend>
+            <p>You can choose to route http traffic (and only http traffic) to a given port within the container. If you don't specify a port, then you can use the automatically generated ports on the right.</p>
             {% for port in ports %}
               <div class="row">
                 <div class="col-md-12">

@@ -13,7 +13,6 @@ import docker
 import json
 import logging
 import random
-import docker
 
 import config.config as c
 
@@ -27,6 +26,7 @@ logger = logging.getLogger(c.spinner.log_name)
 
 class Spinner(object):
     def __init__(self):
+        self.container = None
         pass
 
     def start(self):
@@ -43,7 +43,7 @@ class Spinner(object):
             next_parsed = json.loads(next_json)
 
             log = "Got Container doc id: {id} with action {action}".format(**next_parsed)
-            logger.info(log)
+            logger.debug(log)
 
             self.container = cm.Container(next_parsed["id"])
 
@@ -76,6 +76,8 @@ class Spinner(object):
 
         except docker.client.APIError as e:
             logger.error(e)
+            ps.pushover(message="Failed to build/start container {id}".format(id=self.container.id[:11]),
+                        title="Failed container build/start")
 
     def start_container(self):
         bindings = {}
@@ -90,7 +92,7 @@ class Spinner(object):
                 c.docker.start(self.container.docker_id, port_bindings=bindings)
                 success = True
 
-                logger.info("Container started: "+self.container.id)
+                logger.debug("Container started: "+self.container.id)
                 for con_port, host_port in bindings.iteritems():
                     self.container.ports[con_port]["internal"] = host_port
 
@@ -118,6 +120,8 @@ class Spinner(object):
     def stop_container(self):
         try:
             c.docker.stop(self.container.docker_id)
-            logger.info("Container stoped: "+self.container.id)
+            logger.debug("Container stoped: "+self.container.id)
         except docker.client.APIError as e:
             logger.error(e)
+            ps.pushover(message="Stopping container {id} failed.".format(id=self.container.id[:11]),
+                        title="Failed to stop container")

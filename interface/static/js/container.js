@@ -4,12 +4,14 @@
   $(function() {
     $("#restart").click(function() {
       var id;
+      $(this).preventDefault();
       id = $(this).parents("form").data("id");
       $(this).parents("form").attr("action", "/containers/" + id + "/restart");
       return $(this).parents("form").submit();
     });
     return $("#stop").click(function() {
       var id;
+      $(this).preventDefault();
       id = $(this).parents("form").data("id");
       $(this).parents("form").attr("action", "/containers/" + id + "/stop");
       return $(this).parents("form").submit();

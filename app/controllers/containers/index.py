@@ -80,6 +80,14 @@ class index(MixedObject):
                 self.view.template = "public/containers/disabled"
                 return self.view
 
+            if self.request.command == "update":
+                ports = {}
+                p = con.image.ports
+                for port in p:
+                    ports[port] = self.request.getParam("port_"+port, None)
+
+                con.update_ports(ports)
+
             if self.request.command == "start":
                 con.queue_action("start")
 

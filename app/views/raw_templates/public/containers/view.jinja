@@ -66,9 +66,10 @@ scriptFiles:
     <br>
     <div class="row">
       <div class="col-md-12">
-        <form method=POST>
+        <form method=POST action="/containers/{{container.id}}/update">
           <fieldset>
             <legend>Ports</legend>
+            <p>You can choose to route http traffic (and only http traffic) to a given port within the container. If you don't specify a port, then you can use the automatically generated ports on the right.</p>
             {% for port in container.ports %}
               <div class="row">
                 <div class="col-md-12">
@@ -83,6 +84,7 @@ scriptFiles:
               <br>
             {% endfor %}
           </fieldset>
+          <span class="help-block">Notice, the container will need to be restarted for these changes to go into effect.</span>
           <button class="btn btn-theme pull-right" type="submit">Update</button>
         </form>
 
