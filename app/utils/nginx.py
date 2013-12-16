@@ -17,8 +17,10 @@ import cStringIO
 
 
 def container_nginx_config(container):
-    tmpl = t.PartialTemplate("config/nginx")
-    tmpl.data = {"hostname": container.hostname}
+    tmpl = t.PartialTemplate("configs/nginx")
+    tmpl.data = {"hostname": container.hostname,
+        "username": container.user.username,
+        "image": container.image.name}
 
     filz = cStringIO.StringIO()
 
@@ -30,5 +32,6 @@ def container_nginx_config(container):
           filz.write(tmpl.render())
 
     filz.seek(0)
-    path = "/".join([c.dirs.nginx, container.hostname])
+    name = "_".join([container.user.id, container.name])
+    path = "/".join([c.dirs.nginx, name])
     fu.write_file(path, filz)

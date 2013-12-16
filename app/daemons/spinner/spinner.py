@@ -65,10 +65,8 @@ class Spinner(object):
         for port, options in container_model.ports.iteritems():
             ports.append(port)
 
-        name = container_model.user.username+":"+container_model.name
         container_id = c.docker.create_container(image=image_id,
                                                  ports=ports,
-                                                 name=name,
                                                  hostname=container_model.hostname)["Id"]
 
         container_model.docker_id = container_id
@@ -80,7 +78,7 @@ class Spinner(object):
         bindings = {}
         for port, options in container_model.ports.iteritems():
             if not "internal" in options or not options["internal"]:
-                bindings[port] = random.randint(1025, 500000)
+                bindings[port] = random.randint(1025, 65535)
 
         success = False
         error = None
@@ -99,7 +97,7 @@ class Spinner(object):
 
                     for port in bindings:
                         if bindings[port] == bad_port:
-                            bindings[port] = random.randint(1025, 500000)
+                            bindings[port] = random.randint(1025, 65535)
 
         if not error:
             logger.info("Container started: "+container_model.id)

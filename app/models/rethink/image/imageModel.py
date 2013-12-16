@@ -76,7 +76,6 @@ class Image(RethinkModel):
         self.save()
 
     def queue_build(self):
-        self.status = False
         self.save()
         c.redis.rpush("build:queue", self.id)
 

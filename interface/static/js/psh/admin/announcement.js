@@ -12,7 +12,6 @@ $(function() {
 
     $.post("/admin/announcements/toggle/"+id, function(data) {
       if(data[0]["data"]["success"]) {
-        console.log("dim-wit twat");
         if($(what).hasClass("btn-default")) {
           $(what).removeClass("btn-default")
                  .addClass("btn-theme")

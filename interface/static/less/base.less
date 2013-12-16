@@ -89,67 +89,6 @@ h4 {
   }
 }
 
-.cards-clean {
-  .flex-display();
-  .flex-direction(row);
-  .flex-wrap(wrap);
-  .justify-content(space-between);
-  .align-content(space-around);
-
-  .image {
-    .border-radius(5px);
-    .transition(all, 0.5s, ease);
-    width: 250px;
-    margin-bottom: 20px;
-
-    &:hover, &:active, &:focus {
-      .box-shadow(0px, 0px, 5px, 0px, @theme);
-
-      & > .caption {
-        .opacity(0.90);
-      }
-    }
-
-    img {
-      padding: 0px;
-      margin: 0px;
-      .border-radius(5px);
-      height: 200px;
-      width: 250px;
-    }
-
-    .caption {
-      .flex-display();
-      .flex-direction(row);
-      .justify-content(space-around);
-      .align-items(baseline);
-
-      position: absolute;
-      padding: 10px;
-      margin: 0px;
-      width: 250px;
-
-      background-color: black;
-      .transition(all, 0.5s, ease);
-      .opacity(0);
-      .border-top-right-radius(5px);
-      .border-top-left-radius(5px);
-
-      h6 {
-        font-weight: 500;
-      }
-
-      & > * { // Yeah yeah...
-        position: static;
-      }
-
-      & > .pull-right {
-        margin-left: auto;
-      }
-    }
-  }
-}
-
 .btn-primary, .btn-theme {
   color: white;
   background-color: @theme;
@@ -182,9 +121,9 @@ h4 {
   border: @theme solid 1px;
 }
 
-.input-group .form-control {
-  border: white solid 1px;
-}
+/*.input-group .form-control {*/
+  /*border: white solid 1px;*/
+/*}*/
 
 .nav_list {
   width: 200px;

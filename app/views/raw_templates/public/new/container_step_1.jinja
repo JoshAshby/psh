@@ -27,7 +27,7 @@ nav: new
             <div class="row">
               <label class="control-label col-md-2" for="image">Image:</label>
               <div class="col-md-10">
-                <select id="img" name="image">
+                <select id="img" name="image" class="form-control">
                   {% for image in images %}
                     <option value="{{image.id}}">{{image.name}}</option>
                   {% endfor %}

@@ -22,7 +22,7 @@ def write_file(path, files):
     """
     Simply writes the files contents the disk at the given location.
     """
-    with open(path, 'wb') as f:
+    with open(path, 'w+b') as f:
         f.write(files.read())
 
     return True
@@ -50,7 +50,7 @@ def download_file(url, path):
             fi.write(chunk)
         fi.seek(0)
 
-        write_file(fi, path)
+        write_file(path, fi)
 
         return path
 
