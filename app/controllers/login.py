@@ -13,6 +13,7 @@ joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
 from seshat.baseObject import HTMLObject
+from seshat.actions import Redirect
 import errors.session as se
 
 
@@ -28,11 +29,12 @@ class login(HTMLObject):
         Display the login page or redirect to their dashboard if they are already logged in
         """
         if self.request.session.id:
-            self.head = ("303 SEE OTHER",
-                [("location", "/")])
+            where = self.request.getParam("return-to", "/")
             self.request.session.push_alert("You've already been signed in as: %s"
                                            % self.request.session.username,
                                            "Whoa!", "info")
+
+            return Redirect(where)
 
         else:
             self.view.partial("about", "public/about/about")
@@ -52,10 +54,12 @@ class login(HTMLObject):
         exc = ""
         try:
             self.request.session.login(name, passwd)
-            self.head = ("303 SEE OTHER", [("location", "/")])
             self.request.session.push_alert("Welcome back, %s!" % name,
                                            "Ohia!", "success")
-            return
+
+            where = self.request.getParam("return-to", "/")
+
+            return Redirect(where)
 
         except se.UsernameError as e:
             exc = e

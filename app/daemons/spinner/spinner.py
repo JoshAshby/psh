@@ -44,39 +44,41 @@ class Spinner(object):
             log = "Got Container doc id: {id} with action {action}".format(**next_parsed)
             logger.info(log)
 
-            container = cm.Container(next_parsed["id"])
+            self.container = cm.Container(next_parsed["id"])
 
             if next_parsed["action"] == "build":
-                self.build_container(container)
+                self.build_container()
 
             elif next_parsed["action"] == "start":
-                self.start_container(container)
+                self.start_container()
 
             elif next_parsed["action"] == "restart":
-                self.restart_container(container)
+                self.restart_container()
 
             elif next_parsed["action"] == "stop":
-                self.stop_container(container)
+                self.stop_container()
 
-    def build_container(self, container_model):
-        image_id = container_model.image.docker_id
+    def build_container(self):
+        image_id = self.container.image.docker_id
 
-        ports = []
-        for port, options in container_model.ports.iteritems():
-            ports.append(port)
+        ports = self.container.ports.keys()
 
-        container_id = c.docker.create_container(image=image_id,
-                                                 ports=ports,
-                                                 hostname=container_model.hostname)["Id"]
+        try:
+            container_id = c.docker.create_container(image=image_id,
+                                                     ports=ports,
+                                                     hostname=self.container.hostname)["Id"]
 
-        container_model.docker_id = container_id
-        container_model.save()
+            self.container.docker_id = container_id
+            self.container.save()
 
-        self.start_container(container_model)
+            self.start_container()
 
-    def start_container(self, container_model):
+        except c.docker.client.APIError as e:
+            logger.error(e)
+
+    def start_container(self):
         bindings = {}
-        for port, options in container_model.ports.iteritems():
+        for port, options in self.container.ports.iteritems():
             if not "internal" in options or not options["internal"]:
                 bindings[port] = random.randint(1025, 65535)
 
@@ -84,14 +86,22 @@ class Spinner(object):
         error = None
         while not success and not error:
             try:
-                c.docker.start(container_model.docker_id, port_bindings=bindings)
+                c.docker.start(self.container.docker_id, port_bindings=bindings)
                 success = True
+
+                logger.info("Container started: "+self.container.id)
+                for con_port, host_port in bindings.iteritems():
+                    self.container.ports[con_port]["internal"] = host_port
+
+                self.container.save()
+                nu.container_nginx_config(self.container)
+
             except docker.client.APIError as e:
-                print e
                 if e.is_client_error():
                     error = e
                     logger.error(e)
                 if e.is_server_error():
+                    # This still has a chance to fail
                     msg = e.explanation.rsplit(":", 1)
                     bad_port = int(msg)
 
@@ -99,18 +109,13 @@ class Spinner(object):
                         if bindings[port] == bad_port:
                             bindings[port] = random.randint(1025, 65535)
 
-        if not error:
-            logger.info("Container started: "+container_model.id)
-            for con_port, host_port in bindings.iteritems():
-                container_model.ports[con_port]["internal"] = host_port
 
-            container_model.save()
+    def restart_container(self):
+        self.stop_container()
+        self.start_container()
 
-            nu.container_nginx_config(container_model)
-
-    def restart_container(self, container_model):
-        self.stop_container(self, container_model)
-        self.start_container(self, container_model)
-
-    def stop_container(self, container_model):
-        self.dc.stop(container_model.docker_id)
+    def stop_container(self):
+        try:
+            self.dc.stop(self.container.docker_id)
+        except c.docker.client.APIError as e:
+            logger.error(e)
