@@ -1,50 +1,71 @@
 +++
 theme_color: orange
-
 nav: admin_images
-
 breadcrumbs_top: True
 +++
 <div class="row">
   <div class="col-md-2">
     <i class="fa fa-file fa-5x"></i>
   </div>
-  <div class="col-md-10">
+  <div class="col-md-5">
     <h2>{{image.name}}</h2>
-    <b>Owner:</b> <a href="/admin/users/{{image.user.id}}">{{image.user.username}}</a>
-    <h5>Rev: {{image.rev}} {% if image.latest %}(<a href="/images/{{image.latest.id}}">latest</a>){% endif %}</h5>
+    <b>Owner: </b><a href="/admin/users/{{image.user.id}}">{{image.user.username}}</a><br>
+    <b>Rev: </b>{{image.rev}} {% if image.latest %}(<a href="/admin/images/{{image.latest.id}}">latest</a>){% endif %}<br>
+  </div>
+  <div class="col-md-5">
+    <b>Build Status: </b>
+    {% if image.build_status=="queue" %}
+      <span class="label label-default">Queued <i class="fa fa-refresh"></i></span>
+    {% elif image.build_status=="success" %}
+      <span class="label label-success">Built <i class="fa fa-check"></i></span>
+    {% else %}
+      <span class="label label-danger">Failed <i class="fa fa-frown"></i></span>
+    {% endif %}
   </div>
 </div>
 <hr>
 
 <ul class="nav nav-tabs">
   <li class="active"><a href="#info" data-toggle="tab">Info</a></li>
-  <li><a href="#log" data-toggle="tab">Build Log</a></li>
+  {% if image.build_status != "queue" %}
+    <li><a href="#log" data-toggle="tab">Build Log</a></li>
+  {% endif %}
   <li><a href="#files" data-toggle="tab">Files</a></li>
 </ul>
+
 <div class="tab-content">
   <div class="tab-pane active" id="info">
     <br>
     <div class="row">
       <div class="col-md-12">
         <b>Ports:</b> {{ image.ports|join(", ") }}<br>
-        <b>Created on:</b> {{image.formated_created}}
+        <b>Created on:</b> {{image.formated_created}}<br>
+        <br>
+        <br>
+        <form action="/admin/images/{{image.id}}/disable">
+          {% if not image.disable %}
+            <button class="btn btn-danger"><i class="fa fa-times"></i> Disable</button>
+          {% else %}
+            <button class="btn btn-success"><i class="fa fa-check"></i> Enable</button>
+          {% endif %}
+        </form>
       </div>
     </div>
   </div>
-  <div class="tab-pane" id="log">
-    <br>
-    <div class="row">
-      <div class="col-md-12">
-        <pre>{{image.log}}</pre>
+  {% if image.build_status != "queue" %}
+    <div class="tab-pane" id="log">
+      <br>
+      <div class="row">
+        <div class="col-md-12">
+          <pre>{{image.log}}</pre>
+        </div>
       </div>
     </div>
-  </div>
+  {% endif %}
   <div class="tab-pane" id="files">
     <br>
     <div class="row">
       <div class="col-md-12">
-
         <div class="row">
           <div class="col-md-12">
             <h1>Dockerfile</h1>
@@ -66,7 +87,6 @@ breadcrumbs_top: True
             </div>
           </div>
         {% endfor %}
-
       </div>
     </div>
   </div>

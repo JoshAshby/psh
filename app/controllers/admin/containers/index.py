@@ -71,4 +71,12 @@ class index(MixedObject):
             con.queue_action("stop")
             con.save()
 
+        if self.request.command == "update":
+            ports = {}
+            p = con.image.ports
+            for port in p:
+                ports[port] = self.request.getParam("port_"+port, None)
+
+            con.update_ports(ports)
+
         return Redirect("/admin/containers/"+self.request.id)

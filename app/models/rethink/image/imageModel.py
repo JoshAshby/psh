@@ -26,7 +26,7 @@ class Image(RethinkModel):
 
     def finish_init(self):
         if not self._data:
-            raise NotFoundError("Dockerfile was not found.")
+            raise NotFoundError("Image was not found.")
 
         self._formated_created = ""
         self._ports = []

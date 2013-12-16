@@ -4,3 +4,43 @@ breadcrumbs_top: True
 nav: admin_users
 +++
 {{tabs}}
+
+<div class="row">
+  <div class="col-md-12">
+    <br>
+    <form class="form-inline pull-right" role="pagination_options">
+      {{page.options}}
+    </form>
+    <br>
+    <br>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-striped table-hover table-condensed">
+      <thead>
+        <th>Name</th>
+        <th>Image</th>
+        <th>Created</th>
+        <th>Status</th>
+      </thead>
+      <tbody>
+        {% for container in page.pail %}
+          <tr {{ 'class="danger"' if container.disable }}>
+            <td><a href="/admin/containers/{{container.id}}">{{container.name}}</a></td>
+            <td><a href="/admin/images/{{container.image.id}}">{{container.image.name}}</a></td>
+            <td>{{image.formated_created}}</td>
+            <td>{{container.status}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    {{page.paginate}}
+  </div>
+</div>

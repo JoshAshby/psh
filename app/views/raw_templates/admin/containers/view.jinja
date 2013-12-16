@@ -1,0 +1,102 @@
++++
+theme_color: orange
+nav: admin_containers
+
+scriptFiles:
+ - admin/container
++++
+<div class="row">
+  <div class="col-md-2">
+    <i class="fa fa-desktop fa-5x"></i>
+  </div>
+  <div class="col-md-10">
+    <h2>{{container.name}}</h2>
+  </div>
+</div>
+<hr>
+
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#info" data-toggle="tab">Info</a></li>
+  <li><a href="#settings" data-toggle="tab">Settings</a></li>
+</ul>
+<div class="tab-content">
+  <div class="tab-pane active" id="info">
+    <br>
+    <div class="row">
+      <div class="col-md-12">
+        <b>Status: </b>
+        {{container.status}}
+      </div>
+    </div>
+    <br>
+    <br>
+    <div class="row">
+      <div class="col-md-12">
+        <b>Actions: </b>
+        {% if not container.status[:2]=="Up" %}
+          <form method="POST" action="/admin/containers/{{container.id}}/start">
+            <button id="start" class="btn btn-success"><i class="fa fa-power-off"></i> Start</button>
+          </form>
+        {% else %}
+          <form method="POST" data-id="{{container.id}}">
+            <div class="btn-group">
+              <button type="button" class="btn btn-danger" id="stop"><i class="fa fa-power-off"></i> Shutdown</button>
+              <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-caret-down"></i>
+                <span class="sr-only">Toggle Dropdown</span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li id="restart"><a href="#"><i class="fa fa-refresh"></i> Restart</a></li>
+              </ul>
+            </div>
+          </form>
+        {% endif %}
+        <br>
+        <br>
+        <form action="/admin/containers/{{container.id}}/disable">
+          {% if not container.disable %}
+            <button class="btn btn-danger"><i class="fa fa-times"></i> Disable</button>
+          {% else %}
+            <button class="btn btn-success"><i class="fa fa-check"></i> Enable</button>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+    <br>
+    <br>
+    <div class="row">
+      <div class="col-md-12">
+        <b>Built from image:</b> <a href="/admin/images/{{container.image.id}}">{{container.image.name}}</a><br>
+        <b>Created on:</b> {{container.formated_created}}
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane" id="settings">
+    <br>
+    <div class="row">
+      <div class="col-md-12">
+        <form method=POST action="/admin/containers/{{container.id}}/update">
+          <fieldset>
+            <legend>Ports</legend>
+            <p>You can choose to route http traffic (and only http traffic) to a given port within the container. If you don't specify a port, then you can use the automatically generated ports on the right.</p>
+            {% for port in container.ports %}
+              <div class="row">
+                <div class="col-md-12">
+                  <label class="sr-only" for="host">Host:</label>
+                  <div class="input-group">
+                    <span class="input-group-addon">{{port}}</span>
+                    <input class="form-control" type="text" name="port_{{port}}" placeholder="Host Port" value={{container.ports[port]["host"]}}>
+                    <span class="input-group-addon">{{container.ports[port]["internal"]}}</span>
+                  </div>
+                </div>
+              </div>
+              <br>
+            {% endfor %}
+          </fieldset>
+          <span class="help-block">Notice, the container will need to be restarted for these changes to go into effect.</span>
+          <button class="btn btn-theme pull-right" type="submit">Update</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
