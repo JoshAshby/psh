@@ -187,7 +187,6 @@ class template(object):
 
     @title.setter
     def title(self, value):
-        assert type(value) == str
         self._baseData.update({"title": value})
 
     def append(self, value):

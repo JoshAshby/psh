@@ -16,8 +16,6 @@ from seshat.MixedObject import MixedObject
 
 @autoRoute()
 class about(MixedObject):
-    """
-    """
     _title = "about"
     _default_tmpl = "public/about/about"
     def GET(self):

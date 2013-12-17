@@ -31,16 +31,16 @@ class MixedObject(base.BaseHTTPObject):
     def post_init_hook(self):
         self.head = ("200 OK", [("Content-Type", "text/html")])
 
-        try:
-            title = self._title
-        except:
-            title = "Untitled"
-
-        self.request.title = title
-
     def pre_content_hook(self):
         try:
           self.view = template(self._default_tmpl, self.request)
+          try:
+              title = self._title
+          except:
+              title = "Untitled"
+
+          self.view.title = title
+
         except:
           self.view = ""
 
@@ -82,14 +82,14 @@ class MixedObject(base.BaseHTTPObject):
         return content, self.head
 
     def post_content_hook(self, content):
-        if self._type == "JSON":
+        if self._type == "JSON" or type(content) is dict or type(content) is list:
             self.head = (self.head[0], [("Content-Type", "application/json")])
 
             response = [{"data": content}]
 
             return json.dumps(response)
 
-        elif self._type == "HTML":
+        else:
             self.head = (self.head[0], [("Content-Type", "text/html")])
 
             if isinstance(content, template):
