@@ -91,7 +91,7 @@ def dispatch(env, start_response):
         if content:
             header = request.generateHeader(header, len(content))
 
-        gevent.spawn(logResponse, request, status, header)
+        logResponse(request, status, header)
 
         start_response(status, header)
 

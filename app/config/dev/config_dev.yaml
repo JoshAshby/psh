@@ -1,8 +1,14 @@
 appName: &APP psh
 logName: *APP
 
+debug: true
+
 port: 8000
 address: 127.0.0.1
+use_pool: true
+max_connections: 10000
+
+time_format: "MM/DD/YYYY hh:mm a"
 
 files:
   pid: psh.pid
@@ -29,10 +35,6 @@ docker:
   port: 3945
   version: 1.7
   timeout: 600
-
-debug: true
-
-time_format: "MM/DD/YYYY hh:mm a"
 
 builder:
   log_name: psh_builder

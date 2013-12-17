@@ -15,10 +15,10 @@ joshuaashby@joshashby.com
 """
 import config.config as c
 import models.utils.dbUtils as dbu
-from config.standard import StandardConfig
+from utils.standard import StandardODM
 
 
-class CfgBuckets(StandardConfig):
+class CfgBuckets(StandardODM):
     def __init__(self, redis=c.redis):
         self._redis = redis
         keys = {}
@@ -32,7 +32,7 @@ class CfgBuckets(StandardConfig):
             desc = c.redis.get(desc_key)
 
             ID = key.split(":")[1]
-            keys[ID] = StandardConfig(name=name, description=desc, status=val, id=ID)
+            keys[ID] = StandardODM(name=name, description=desc, status=val, id=ID)
 
         self._data = keys
 

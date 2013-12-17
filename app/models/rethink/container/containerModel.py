@@ -10,7 +10,7 @@ import arrow
 import json
 
 import config.config as c
-from config.standard import StandardConfig
+from utils.standard import StandardODM
 
 from rethinkORM import RethinkModel
 from models.rethink.user import userModel as um
@@ -83,7 +83,7 @@ class Container(RethinkModel):
             containers = c.docker.containers(all=True)
             for container in containers:
                 if container["Id"] == self.docker_id:
-                    self._con = StandardConfig(**container)
+                    self._con = StandardODM(**container)
 
         if not self._con:
             raise NotFoundError("Container was not found in docker")

@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 """
-Base config object to take a dict and make it function more object like
-
 Also helpful for converting a dict into a standard object style interface.
 
 http://xkcd.com/353/
@@ -13,7 +11,13 @@ joshuaashby@joshashby.com
 """
 
 
-class StandardConfig(object):
+class StandardODM(object):
+    """
+    Object Dictionary Mapper
+
+    This is a basic ODM which takes in a dictionary and 
+    generates an object for it, much like an ORM would.
+    """
     _data = {}
     def __init__(self, *args, **kwargs):
         """

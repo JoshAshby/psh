@@ -12,7 +12,7 @@ joshuaashby@joshashby.com
 import uuid
 import config.config as c
 import models.utils.dbUtils as dbu
-from config.standard import StandardConfig
+from utils.standard import StandardODM
 
 import arrow
 
@@ -59,7 +59,7 @@ def all_announcements():
     return keys
 
 
-class CfgAnnouncements(StandardConfig):
+class CfgAnnouncements(StandardODM):
     def __init__(self, redis=c.redis):
         self._redis = redis
         keys = {}

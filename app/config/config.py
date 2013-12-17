@@ -15,7 +15,7 @@ import redis as red
 import rethinkdb as r
 import docker as d
 
-from standard import StandardConfig
+from utils.standard import StandardODM
 
 
 """
@@ -30,10 +30,10 @@ base_path = current_path.rsplit("config")[0]
 
 general = None
 with open(current_path + "config.yaml", "r") as open_config:
-    general = StandardConfig(**yaml.load(unicode(open_config.read())))
+    general = StandardODM(**yaml.load(unicode(open_config.read())))
 
 if not general:
-    raise Exception("Could not load config.yaml into StandardConfig!")
+    raise Exception("Could not load config.yaml into StandardODM!")
 
 
 def parse_files(conf):
@@ -67,13 +67,13 @@ del docker_url
 
 parse_files(general)
 
-builder = StandardConfig(**general.builder)
+builder = StandardODM(**general.builder)
 parse_files(builder)
 
-spinner = StandardConfig(**general.spinner)
+spinner = StandardODM(**general.spinner)
 parse_files(spinner)
 
-dirs = StandardConfig(**general.dirs)
-files = StandardConfig(**general.files)
+dirs = StandardODM(**general.dirs)
+files = StandardODM(**general.files)
 
 debug = general["debug"]

@@ -18,13 +18,13 @@ regex below
 import os
 import yaml
 
-from standard import StandardConfig
+from utils.standard import StandardODM
 
 current_path = os.getcwd() + "/config/"
 
 general = None
 with open(current_path + "initial.yaml", "r") as open_config:
-    general = StandardConfig(**yaml.load(unicode(open_config.read())))
+    general = StandardODM(**yaml.load(unicode(open_config.read())))
 
 if not general:
-    raise Exception("Could not load config.yaml into StandardConfig!")
+    raise Exception("Could not load config.yaml into StandardODM!")

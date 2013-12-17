@@ -18,11 +18,11 @@ from operator import itemgetter
 import urllib
 import math
 
-from config.standard import StandardConfig
+from utils.standard import StandardODM
 from views.template import PartialTemplate
 
 
-class Paginate(StandardConfig):
+class Paginate(StandardODM):
     def __init__(self, pail, request, sort="", perpage_default=24, sort_direction=""):
         """
         Now: PAGINATE ALL THE THINGS.
