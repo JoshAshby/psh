@@ -27,7 +27,7 @@ breadcrumbs_top: True
       </thead>
       <tbody>
         {% for image in page.pail %}
-          <tr {{ 'class="danger"' if container.disable }}>
+          <tr {{ 'class="danger"' if image.disable }}>
             <td><a href="/admin/images/{{image.id}}">{{image.name}}</a></td>
             <td>{{image.rev}}</td>
             <td>{{image.formated_created}}</td>

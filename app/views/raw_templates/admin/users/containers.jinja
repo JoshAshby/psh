@@ -30,7 +30,7 @@ nav: admin_users
           <tr {{ 'class="danger"' if container.disable }}>
             <td><a href="/admin/containers/{{container.id}}">{{container.name}}</a></td>
             <td><a href="/admin/images/{{container.image.id}}">{{container.image.name}}</a></td>
-            <td>{{image.formated_created}}</td>
+            <td>{{container.formated_created}}</td>
             <td>{{container.status}}</td>
           </tr>
         {% endfor %}

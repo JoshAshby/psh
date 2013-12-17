@@ -93,6 +93,13 @@ class index(MixedObject):
 
                 self.view.data = {"page": page}
 
+            if self.request.command == "containers":
+                q= r.table(cm.Container.table).filter({"user_id": user.id})
+                cons = RethinkCollection(cm.Container, query=q)
+                page = Paginate(cons, self.request, "name")
+
+                self.view.data = {"page": page}
+
             return self.view
 
     def POST(self):

@@ -11,6 +11,7 @@ scriptFiles:
   </div>
   <div class="col-md-10">
     <h2>{{container.name}}</h2>
+    <b>Owner: </b><a href="/admin/users/{{container.user.id}}">{{container.user.username}}</a><br>
   </div>
 </div>
 <hr>
@@ -19,6 +20,7 @@ scriptFiles:
   <li class="active"><a href="#info" data-toggle="tab">Info</a></li>
   <li><a href="#settings" data-toggle="tab">Settings</a></li>
 </ul>
+
 <div class="tab-content">
   <div class="tab-pane active" id="info">
     <br>
