@@ -11,7 +11,7 @@ $(function() {
     id=$(what).data("id");
 
     $.post("/admin/announcements/toggle/"+id, function(data) {
-      if(data[0]["data"]["success"]) {
+      if(data[0]["success"]) {
         if($(what).hasClass("btn-default")) {
           $(what).removeClass("btn-default")
                  .addClass("btn-theme")

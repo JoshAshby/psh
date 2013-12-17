@@ -2,8 +2,9 @@
 nav: containers
 
 scriptFiles:
- - container
+ - psh/container
 +++
+<input type="hidden" id="container-id" value="{{container.id}}" />
 <div class="row">
   <div class="col-md-2">
     <i class="fa fa-desktop fa-5x"></i>
@@ -24,7 +25,7 @@ scriptFiles:
     <div class="row">
       <div class="col-md-12">
         <b>Status: </b>
-        {{container.status}}
+        <span id="status">{{container.status}}</span>
       </div>
     </div>
     <br>
@@ -32,15 +33,9 @@ scriptFiles:
     <div class="row">
       <div class="col-md-12">
         <b>Actions: </b>
-          {% if not container.status[:2]=="Up" %}
-            <form method="POST" action="/containers/{{container.id}}/start">
-              <button id="start" class="btn btn-success"><i class="fa fa-power-off"></i> Start</button>
-            </form>
-          {% else %}
-
-            <form method="POST" data-id="{{container.id}}">
-              <div class="btn-group">
-                <button type="button" class="btn btn-danger" id="stop"><i class="fa fa-power-off"></i> Shutdown</button>
+              <button id="start" class="btn btn-success" data-loading-text="Starting..."><i class="fa fa-power-off"></i> Start</button>
+              <div class="btn-group" id="stop_restart">
+                <button type="button" class="btn btn-danger" id="stop" data-stopping-text="Stopping..." data-restarting-text="Restarting..."><i class="fa fa-power-off"></i> Shutdown</button>
                 <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
                   <i class="fa fa-caret-down"></i>
                   <span class="sr-only">Toggle Dropdown</span>
@@ -49,8 +44,6 @@ scriptFiles:
                   <li id="restart"><a href="#"><i class="fa fa-refresh"></i> Restart</a></li>
                 </ul>
               </div>
-            </form>
-          {% endif %}
       </div>
     </div>
     <br>

@@ -85,7 +85,7 @@ class MixedObject(base.BaseHTTPObject):
         if self._type == "JSON" or type(content) is dict or type(content) is list:
             self.head = (self.head[0], [("Content-Type", "application/json")])
 
-            response = [{"data": content}]
+            response = [content]
 
             return json.dumps(response)
 

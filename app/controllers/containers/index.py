@@ -90,11 +90,17 @@ class index(MixedObject):
 
             if self.request.command == "start":
                 con.queue_action("start")
+                return {"status": "success"}
 
             if self.request.command == "restart":
                 con.queue_action("restart")
+                return {"status": "success"}
 
             if self.request.command == "stop":
                 con.queue_action("stop")
+                return {"status": "success"}
+
+            if self.request.command == "status":
+                return {"status": con.status}
 
             return Redirect("/containers/"+con.id)
