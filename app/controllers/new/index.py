@@ -10,7 +10,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseObject import HTMLObject
+from seshat.MixedObject import MixedObject
 from seshat.objectMods import login
 from seshat.actions import Redirect
 
@@ -22,9 +22,9 @@ from errors.general import \
 
 @login()
 @autoRoute()
-class index(HTMLObject):
+class index(MixedObject):
     _title = "New Image"
-    _defaultTmpl = "public/new/dockerfile"
+    _default_tmpl = "public/new/dockerfile"
     def GET(self):
         return self.view
 

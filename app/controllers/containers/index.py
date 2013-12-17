@@ -10,7 +10,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseObject import MixedObject
+from seshat.MixedObject import MixedObject
 from seshat.objectMods import login
 from seshat.actions import Redirect
 
@@ -56,7 +56,7 @@ class index(MixedObject):
 
             self.view.template = "public/containers/view"
 
-            self.request.title = con.name
+            self.view.title = con.name
 
             self.view.data = {"container": con}
 

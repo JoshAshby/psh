@@ -11,15 +11,15 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.baseObject import HTMLObject
+from seshat.MixedObject import MixedObject
 
 
-class error404(HTMLObject):
+class error404(MixedObject):
     """
     Returns base 404 error page.
     """
     _title = "404 NOT FOUND"
-    _defaultTmpl = "error/404"
+    _default_tmpl = "error/404"
     def GET(self):
         """
         """
@@ -27,12 +27,12 @@ class error404(HTMLObject):
         return self.view
 
 
-class error401(HTMLObject):
+class error401(MixedObject):
     """
     Returns base 401 error page.
     """
     _title = "401 UNAUTHORIZED"
-    _defaultTmpl = "error/401"
+    _default_tmpl = "error/401"
     def GET(self):
         """
         """
@@ -40,12 +40,12 @@ class error401(HTMLObject):
         return self.view
 
 
-class error500(HTMLObject):
+class error500(MixedObject):
     """
     Returns base 500 error page.
     """
     _title = "500 INTERNAL SERVER ERROR"
-    _defaultTmpl = "error/500"
+    _default_tmpl = "error/500"
     def GET(self):
         """
         """

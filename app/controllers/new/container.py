@@ -10,7 +10,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseObject import MixedObject
+from seshat.MixedObject import MixedObject
 from seshat.objectMods import login
 from seshat.actions import Redirect
 
@@ -45,7 +45,7 @@ class container(MixedObject):
                 return Redirect("/new/container/step-1")
 
             ports = im.Image(self.request.session.c_image).ports
-            self.request.title = "New Container - Step 2"
+            self.view.title = "New Container - Step 2"
             self.view.template = "public/new/container_step_2"
             self.view.data = {"ports": ports}
 

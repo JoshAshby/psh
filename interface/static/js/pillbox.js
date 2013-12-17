@@ -43,7 +43,7 @@
         for (tag in _ref) {
           status = _ref[tag];
           if (status && tag) {
-            self._el.prepend(" <span class=\"label label-theme\">" + tag + " <i data-role=\"remove\" class=\"icon-remove\"></i></span> ");
+            self._el.prepend(" <span class=\"label label-theme\">" + tag + " <i data-role=\"remove\" class=\"fa fa-times\"></i></span> ");
             tags.push(tag);
           }
         }
@@ -101,7 +101,7 @@
       for (tag in _ref) {
         status = _ref[tag];
         if (status && tag) {
-          self._el.prepend(" <span class=\"label label-theme\">" + tag + " <i data-role=\"remove\" class=\"icon-remove\"></i></span> ");
+          self._el.prepend(" <span class=\"label label-theme\">" + tag + " <i data-role=\"remove\" class=\"fa fa-times\"></i></span> ");
           tags.push(tag);
         }
       }

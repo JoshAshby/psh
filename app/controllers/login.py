@@ -12,18 +12,18 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseObject import HTMLObject
+from seshat.MixedObject import MixedObject
 from seshat.actions import Redirect
 import errors.session as se
 
 
 @autoRoute()
-class login(HTMLObject):
+class login(MixedObject):
     """
 
     """
     _title = "Login"
-    _defaultTmpl = "public/auth/login"
+    _default_tmpl = "public/auth/login"
     def GET(self):
         """
         Display the login page or redirect to their dashboard if they are already logged in

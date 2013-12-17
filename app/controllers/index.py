@@ -12,18 +12,14 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseObject import HTMLObject
+from seshat.MixedObject import MixedObject
 from seshat.objectMods import login
 
 
 @login(redirect="/login")
 @autoRoute()
-class index(HTMLObject):
-    """
-    Returns base index page.
-    """
+class index(MixedObject):
     _title = "Home"
-    _defaultTmpl = "public/index/index"
+    _default_tmpl = "public/index/index"
     def GET(self):
-        #self.request.session.push_alert("testing")
         return self.view

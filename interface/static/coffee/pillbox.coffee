@@ -34,7 +34,7 @@ $.extend $.fn.pillbox,
       self._el.find("span.label").remove()
       for tag, status of self._tags
         if status and tag
-          self._el.prepend """ <span class="label label-theme">#{ tag } <i data-role="remove" class="icon-remove"></i></span> """
+          self._el.prepend """ <span class="label label-theme">#{ tag } <i data-role="remove" class="fa fa-times"></i></span> """
           tags.push tag
 
       val_string = tags.join ","
@@ -81,7 +81,7 @@ $.extend $.fn.pillbox,
     self._el.find("span.label").remove()
     for tag, status of self._tags
       if status and tag
-        self._el.prepend """ <span class="label label-theme">#{ tag } <i data-role="remove" class="icon-remove"></i></span> """
+        self._el.prepend """ <span class="label label-theme">#{ tag } <i data-role="remove" class="fa fa-times"></i></span> """
         tags.push tag
 
     val_string = tags.join ","

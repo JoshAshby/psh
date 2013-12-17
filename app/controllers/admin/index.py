@@ -10,14 +10,14 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseObject import HTMLObject
+from seshat.MixedObject import MixedObject
 from seshat.objectMods import login
 
 
 @login(["admin"])
 @autoRoute()
-class index(HTMLObject):
+class index(MixedObject):
     _title = "Admin Home"
-    _defaultTmpl = "admin/index/index"
+    _default_tmpl = "admin/index/index"
     def GET(self):
         return self.view

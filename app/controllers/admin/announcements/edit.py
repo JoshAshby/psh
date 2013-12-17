@@ -10,8 +10,9 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseObject import HTMLObject
+from seshat.MixedObject import MixedObject
 from seshat.objectMods import login
+from seshat.actions import Redirect
 
 import models.redis.baseRedisModel as brm
 
@@ -20,7 +21,7 @@ import arrow
 
 @login(["admin"])
 @autoRoute()
-class edit(HTMLObject):
+class edit(MixedObject):
     _title = "Site Announcements"
     _defaultTmpl = "admin/announcements/edit"
     def GET(self):
@@ -52,5 +53,4 @@ class edit(HTMLObject):
 
         self.request.announcements.edit_announcement(ID, message, status, start, end)
 
-        self._redirect("/admin/announcements")
-        return
+        return Redirect("/admin/announcements")

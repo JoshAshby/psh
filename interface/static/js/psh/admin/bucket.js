@@ -4,15 +4,14 @@ $(function() {
 
     $.post("/admin/buckets/toggle/"+id, function(data) {
       if(data[0]["data"]["success"]) {
-        console.log("dim-wit twat");
         if($(what).hasClass("btn-default")) {
           $(what).removeClass("btn-default")
                  .addClass("btn-theme")
-                 .html('<i class="icon-ok"></i>');
+                 .html('<i class="fa fa-check"></i>');
         } else {
           $(what).removeClass("btn-theme")
                  .addClass("btn-default")
-                 .html('<i class="icon-remove"></i>');
+                 .html('<i class="fa fa-times"></i>');
         }
       }
     });

@@ -15,7 +15,7 @@ $(function() {
         if($(what).hasClass("btn-default")) {
           $(what).removeClass("btn-default")
                  .addClass("btn-theme")
-                 .html('<i class="icon-ok"></i>')
+                 .html('<i class="fa fa-check"></i>')
                  .tooltip('hide')
                  .attr("title", "Enabled")
                  .tooltip('fixTitle')
@@ -23,7 +23,7 @@ $(function() {
         } else {
           $(what).removeClass("btn-theme")
                  .addClass("btn-default")
-                 .html('<i class="icon-remove"></i>')
+                 .html('<i class="fa fa-times"></i>')
                  .tooltip('hide')
                  .attr("title", "Disabled")
                  .tooltip('fixTitle')

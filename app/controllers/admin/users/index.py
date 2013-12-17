@@ -10,7 +10,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseObject import MixedObject
+from seshat.MixedObject import MixedObject
 from seshat.objectMods import login
 
 from seshat.actions import NotFound, Redirect
@@ -70,7 +70,7 @@ class index(MixedObject):
             else:
                 self.view.template = "admin/users/"+self.request.command
 
-            self.request.title = user.username
+            self.view.title = user.username
 
             imgs = r.table(im.Image.table).filter({"user_id": user.id})\
                 .count().run()

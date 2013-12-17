@@ -10,7 +10,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseObject import HTMLObject
+from seshat.MixedObject import MixedObject
 from seshat.objectMods import login
 from seshat.actions import Redirect
 
@@ -23,16 +23,15 @@ import arrow
 
 @login(["admin"])
 @autoRoute()
-class index(HTMLObject):
+class index(MixedObject):
     _title = "Site Announcements"
-    _defaultTmpl = "admin/announcements/index"
+    _default_tmpl = "admin/announcements/index"
     def GET(self):
         announcements = am.all_announcements()
 
         page = Paginate(announcements, self.request, "created")
-        f = page.pail
 
-        self.view.data = {"announcements": f, "page": page, "now": arrow.utcnow().format("MM/DD/YYYY HH:mm")}
+        self.view.data = {"page": page, "now": arrow.utcnow().format("MM/DD/YYYY HH:mm")}
 
         return self.view
 

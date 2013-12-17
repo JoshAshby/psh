@@ -10,14 +10,15 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseObject import JSONObject
+from seshat.MixedObject import MixedObject
 from seshat.objectMods import login
 
 
 @login(["admin"])
 @autoRoute()
-class toggle(JSONObject):
+class toggle(MixedObject):
     def POST(self):
+        self._type = "JSON"
         bucket_id = self.request.id
 
         self.request.buckets.toggle(bucket_id)

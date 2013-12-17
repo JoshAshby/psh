@@ -68,4 +68,4 @@ class AutoURL(object):
         else: return ""
 
     def __repr__(self):
-        return "< baseURL Object, title: " + self.title + " url: " + self.url + " object: " + self.pageObject.__module__ + "/" + self.pageObject.__name__ + " >"
+        return "< URL Object, title: " + self.title + " url: " + self.url + " object: " + self.pageObject.__module__ + "/" + self.pageObject.__name__ + " >"

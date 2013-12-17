@@ -11,15 +11,14 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseObject import HTMLObject
+from seshat.MixedObject import MixedObject
 
 
 @autoRoute()
-class about(HTMLObject):
+class about(MixedObject):
     """
     """
     _title = "about"
-    _defaultTmpl = "public/about/about"
+    _default_tmpl = "public/about/about"
     def GET(self):
-        self.view.data = {"header": "<h1>About Psh PaaS</h1>"}
         return self.view

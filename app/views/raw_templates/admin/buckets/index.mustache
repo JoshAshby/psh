@@ -4,7 +4,7 @@ theme_color: orange
 nav: admin_buckets
 breadcrumbs_top: True
 
-scriptsFiles:
+scriptFiles:
   - psh/admin/bucket
 +++
 <div class="row">
@@ -19,7 +19,7 @@ scriptsFiles:
 <br>
 <div class="row">
   <div class="col-md-8 col-md-offset-2 col-sm-12">
-    {{#buckets}}
+    {{#page.pail}}
       <div class="row">
         <div class="col-md-9">
           <h4>{{id}} <small>{{name}}</small></h4>
@@ -45,7 +45,7 @@ scriptsFiles:
         </div>
       </div>
       <hr>
-    {{/buckets}}
+    {{/page.pail}}
 
     {{{page.pager}}}
   </div>

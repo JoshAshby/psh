@@ -138,6 +138,7 @@ class template(object):
     def __init__(self, template, data=None):
         if data is None: data = {}
         self._baseData = {
+            "title": "",
             "req": data,
             "stylesheets": [],
             "scripts": "",
@@ -179,6 +180,15 @@ class template(object):
     def data(self, value):
         assert type(value) == dict
         self._baseData.update(value)
+
+    @property
+    def title(self):
+        return self._baseData["title"]
+
+    @title.setter
+    def title(self, value):
+        assert type(value) == str
+        self._baseData.update({"title": value})
 
     def append(self, value):
         self.data = value

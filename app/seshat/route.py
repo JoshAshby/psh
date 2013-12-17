@@ -13,12 +13,11 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import config.config as c
-import urls as u
+import routeTable as u
 
-import baseURL as bu
+import url as bu
 import logging
-logger = logging.getLogger(c.general["logName"]+".seshat.route")
+logger = logging.getLogger("seshat.route")
 
 
 def autoRoute(urls=u.urls):
@@ -26,7 +25,7 @@ def autoRoute(urls=u.urls):
         urlObject = bu.AutoURL(HTTPObject)
 
         urls.append(urlObject)
-        if c.debug: logger.debug("""Auto generated route table entry for:
+        logger.debug("""Auto generated route table entry for:
         Object: %(objectName)s
         Pattern: %(url)s""" % {"url": urlObject.url, "objectName": HTTPObject.__module__ + "/" + HTTPObject.__name__})
         return HTTPObject

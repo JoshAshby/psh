@@ -77,3 +77,5 @@ class RouteTable(object):
           })
 
         return string
+
+urls = RouteTable()

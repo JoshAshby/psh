@@ -13,10 +13,8 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import config.config as c
-
 import logging
-logger = logging.getLogger(c.general["logName"]+".seshat.request")
+logger = logging.getLogger("seshat.request")
 
 import Cookie
 import uuid

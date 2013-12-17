@@ -22,9 +22,9 @@ import traceback
 import logging
 from seshat.dispatch import dispatch
 
-import config.config as c
-logger = logging.getLogger(c.general["logName"]+".seshat")
+logger = logging.getLogger("seshat")
 
+import config.config as c
 
 def main():
     """

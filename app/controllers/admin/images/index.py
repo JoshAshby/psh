@@ -10,7 +10,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseObject import MixedObject
+from seshat.MixedObject import MixedObject
 from seshat.objectMods import login
 
 from seshat.actions import NotFound, Redirect
@@ -51,7 +51,7 @@ class index(MixedObject):
 
             self.view.template = "admin/images/view"
 
-            self.request.title = image.name
+            self.view.title = image.name
 
             self.view.data = {"image": image}
 

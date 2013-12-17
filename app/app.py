@@ -65,6 +65,10 @@ def setupLog():
     fh.setFormatter(formatter)
     logger.addHandler(fh)
 
+    logger_seshat = logging.getLogger("seshat")
+    logger_seshat.setLevel(level)
+    logger_seshat.addHandler(fh)
+
     if c.debug:
         """
         Make sure we're not in daemon mode if we're logging to console too
@@ -74,6 +78,7 @@ def setupLog():
             ch.setLevel(level)
             ch.setFormatter(formatter)
             logger.addHandler(ch)
+            logger_seshat.addHandler(ch)
         except:
             pass
 
