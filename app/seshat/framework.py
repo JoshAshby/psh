@@ -69,9 +69,7 @@ def serveForever():
         logger.warn("Shutdown py operations.")
     except Exception as exc:
         logger.critical("""Shutdown py operations, here's why: %s""" % exc)
-        gevent.shutdown
     except:
         logger.critical(traceback.format_exc())
     else:
         logger.critical("""Shutdown py operations for unknown reason!""")
-        gevent.shutdown
