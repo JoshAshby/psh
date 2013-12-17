@@ -24,5 +24,9 @@ class index(MixedObject):
     def GET(self):
         page = Paginate(self.request.buckets.list, self.request)
         self.view.data = {"page": page}
-
         return self.view
+
+    def POST(self):
+        bucket_id = self.request.id
+        self.request.buckets.toggle(bucket_id)
+        return {"success": True, "id": bucket_id}

@@ -18,8 +18,5 @@ from seshat.objectMods import login
 @autoRoute()
 class toggle(MixedObject):
     def POST(self):
-        self._type = "JSON"
-        announcement_id = self.request.id
-
-        self.request.announcements.toggle_announcement(announcement_id)
-        return {"success": True, "id": announcement_id}
+        self.request.announcements.toggle_announcement(self.request.id)
+        return {"success": True, "id": self.request.id}

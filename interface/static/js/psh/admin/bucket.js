@@ -2,7 +2,7 @@ $(function() {
   function toggle(what) {
     id=$(what).data("id");
 
-    $.post("/admin/buckets/toggle/"+id, function(data) {
+    $.post("/admin/buckets/"+id, function(data) {
       if(data[0]["success"]) {
         if($(what).hasClass("btn-default")) {
           $(what).removeClass("btn-default")
