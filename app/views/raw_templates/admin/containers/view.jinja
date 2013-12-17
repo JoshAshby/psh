@@ -3,8 +3,10 @@ theme_color: orange
 nav: admin_containers
 
 scriptFiles:
- - psh/container
+ - psh/admin/container
 +++
+<input type="hidden" id="container-id" value="{{container.id}}" />
+<input type="hidden" id="container-disable" value="{{container.disable}}" />
 <div class="row">
   <div class="col-md-2">
     <i class="fa fa-desktop fa-5x"></i>
@@ -27,41 +29,32 @@ scriptFiles:
     <div class="row">
       <div class="col-md-12">
         <b>Status: </b>
-        {{container.status}}
+        <span id="status">{{container.status}}</span>
       </div>
     </div>
     <br>
     <br>
     <div class="row">
       <div class="col-md-12">
-        <b>Actions: </b>
-        {% if not container.status[:2]=="Up" %}
-          <form method="POST" action="/admin/containers/{{container.id}}/start">
-            <button id="start" class="btn btn-success"><i class="fa fa-power-off"></i> Start</button>
-          </form>
+        {% if not container.disable %}
+          <b>Actions: </b>
+          <div class="btn-group">
+            <button id="start" class="btn btn-success" data-loading-text="Starting..."><i class="fa fa-power-off"></i> Start</button>
+            <button type="button" class="btn btn-danger" id="stop" data-stopping-text="Stopping..." data-restarting-text="Restarting..."><i class="fa fa-power-off"></i> Shutdown</button>
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-caret-down"></i>
+              <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li id="restart"><a href="#"><i class="fa fa-refresh"></i> Restart</a></li>
+              <li id="disable" {{ 'style="display: none"' if container.disable}}><a href="#"><i class="fa fa-times"></i> Disable</a></li>
+              <li id="enable" {{ 'style="display: none"' if not container.disable}}><a href="#"><i class="fa fa-check"></i> Enable</a></li>
+            </ul>
+          </div>
         {% else %}
-          <form method="POST" data-id="{{container.id}}">
-            <div class="btn-group">
-              <button type="button" class="btn btn-danger" id="stop"><i class="fa fa-power-off"></i> Shutdown</button>
-              <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
-                <i class="fa fa-caret-down"></i>
-                <span class="sr-only">Toggle Dropdown</span>
-              </button>
-              <ul class="dropdown-menu" role="menu">
-                <li id="restart"><a href="#"><i class="fa fa-refresh"></i> Restart</a></li>
-              </ul>
-            </div>
-          </form>
+          <p>This container is currently disabled, and not running.</p>
+          <button class="btn btn-success" id="enable"><i class="fa fa-check"></i> Enable</button>
         {% endif %}
-        <br>
-        <br>
-        <form action="/admin/containers/{{container.id}}/disable">
-          {% if not container.disable %}
-            <button class="btn btn-danger"><i class="fa fa-times"></i> Disable</button>
-          {% else %}
-            <button class="btn btn-success"><i class="fa fa-check"></i> Enable</button>
-          {% endif %}
-        </form>
       </div>
     </div>
     <br>

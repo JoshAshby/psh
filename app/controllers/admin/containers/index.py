@@ -52,6 +52,8 @@ class index(MixedObject):
             self.view.template = "admin/containers/view"
 
             self.view.title = con.name
+            if not con.disable:
+                self.view.scripts = ["psh/container"]
 
             self.view.data = {"container": con}
 
@@ -70,6 +72,11 @@ class index(MixedObject):
             con.disable = not con.disable
             con.queue_action("stop")
             con.save()
+
+            if con.disable:
+                return {"status": "disabled"}
+            else:
+                return {"status": "enabled"}
 
         if self.request.command == "update":
             ports = {}

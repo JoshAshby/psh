@@ -92,7 +92,10 @@ class Container(RethinkModel):
 
     @property
     def status(self):
-        return self.docker.Status
+        if not self.disable:
+            return self.docker.Status
+        else:
+          return "Disabled"
 
     @property
     def formated_created(self, no_cache=False):

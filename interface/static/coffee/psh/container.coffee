@@ -21,12 +21,15 @@ $ ->
       $("#status").html data[0]["status"]
       $("#start").button 'reset'
       $("#stop").button 'reset'
+
       if not data[0]["status"].search "Up"
         $("#start").hide()
-        $("#stop_restart").show()
+        $("#stop").show()
+        $("#restart").show()
       else
         $("#start").show()
-        $("#stop_restart").hide()
+        $("#stop").hide()
+        $("#restart").hide()
 
     .done ->
         setTimeout worker, 30000

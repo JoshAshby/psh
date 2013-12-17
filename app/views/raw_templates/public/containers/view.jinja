@@ -33,17 +33,17 @@ scriptFiles:
     <div class="row">
       <div class="col-md-12">
         <b>Actions: </b>
-              <button id="start" class="btn btn-success" data-loading-text="Starting..."><i class="fa fa-power-off"></i> Start</button>
-              <div class="btn-group" id="stop_restart">
-                <button type="button" class="btn btn-danger" id="stop" data-stopping-text="Stopping..." data-restarting-text="Restarting..."><i class="fa fa-power-off"></i> Shutdown</button>
-                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
-                  <i class="fa fa-caret-down"></i>
-                  <span class="sr-only">Toggle Dropdown</span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                  <li id="restart"><a href="#"><i class="fa fa-refresh"></i> Restart</a></li>
-                </ul>
-              </div>
+        <div class="btn-group">
+          <button id="start" class="btn btn-success" data-loading-text="Starting..."><i class="fa fa-power-off"></i> Start</button>
+          <button type="button" class="btn btn-danger" id="stop" data-stopping-text="Stopping..." data-restarting-text="Restarting..."><i class="fa fa-power-off"></i> Shutdown</button>
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="restart-dropdown">
+            <i class="fa fa-caret-down"></i>
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li id="restart"><a href="#"><i class="fa fa-refresh"></i> Restart</a></li>
+          </ul>
+        </div>
       </div>
     </div>
     <br>

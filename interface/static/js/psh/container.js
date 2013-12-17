@@ -29,12 +29,14 @@
         $("#stop").button('reset');
         if (!data[0]["status"].search("Up")) {
           $("#start").hide();
-          return $("#stop_restart").show();
+          $("#stop").show();
+          return $("#restart").show();
         } else {
           $("#start").show();
-          return $("#stop_restart").hide();
+          $("#stop").hide();
+          return $("#restart").hide();
         }
-      }).always(function() {
+      }).done(function() {
         return setTimeout(worker, 30000);
       });
     })();
