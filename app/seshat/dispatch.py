@@ -49,20 +49,8 @@ def dispatch(env, start_response):
 
     logRequest(request)
 
-    found, ID = u.urls.get(request.url)
+    found = u.urls.get(request)
     if found is not None:
-        parts = ID.split('/', 1)
-        request.id = parts[0]
-        if len(parts) > 1:
-            request.command = parts[1]
-        else:
-            request.command = None
-
-        if request.id:
-            request.pre_id_url = request.url.path.split(request.id)[0].strip("/").split("/")
-        else:
-            request.pre_id_url = request.url.path.strip("/").split("/")
-
         obj = found.__module__+"/"+found.__name__
         newHTTPObject = found(request)
         logObj(request, obj)

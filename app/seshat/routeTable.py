@@ -22,7 +22,7 @@ class RouteTable(object):
     def append(self, url):
         self._data[url.url] = url
 
-    def get(self, parsed_url):
+    def get(self, request):
         """
         Attempts to find the closest match to the given url.
         Its messy but it gets the job done. mostly well. not sure on
@@ -31,6 +31,7 @@ class RouteTable(object):
 
         :parsed_url: urlparse.ParseResult
         """
+        parsed_url = request.url
         obj = None
         extended = ""
         base = None
@@ -59,9 +60,24 @@ class RouteTable(object):
                             found = True
 
         if base is not None:
-            obj = self._data[base].pageObject
+            request.post_route(extended)
 
-        return obj, extended
+            print base
+
+            if request.command:
+                name = "/".join([base, request.command])
+                if not name in self._data:
+                    name = base
+            elif request.id:
+                name = "/".join([base, "view"])
+                if not name in self._data:
+                    name = base
+            else:
+                name = base
+
+            obj = self._data[name].pageObject
+
+        return obj
 
     def __repr__(self):
         routes = ""

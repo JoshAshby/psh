@@ -90,6 +90,20 @@ class requestItem(object):
         self.id = None
         self.command = None
 
+    def post_route(self, extended):
+        if extended:
+            parts = extended.split('/', 1)
+            self.id = parts[0]
+            if len(parts) > 1:
+                self.command = parts[1]
+            else:
+                self.command = None
+
+            if self.id:
+                self.pre_id_url = self.url.path.split(self.id)[0].strip("/").split("/")
+            else:
+                self.pre_id_url = self.url.path.strip("/").split("/")
+
     def buildParams(self):
         all_mem = {}
         all_raw = {}
