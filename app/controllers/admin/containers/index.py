@@ -13,9 +13,6 @@ from seshat.route import autoRoute
 from seshat.MixedObject import MixedObject
 from seshat.objectMods import login
 
-from seshat.actions import NotFound, Redirect
-from errors.general import NotFoundError
-
 from rethinkORM import RethinkCollection
 
 from models.rethink.container import containerModel as cm
@@ -30,60 +27,15 @@ class index(MixedObject):
     _title = "Containers"
     _default_tmpl = "admin/containers/index"
     def GET(self):
-        if not self.request.id:
-            disabled = self.request.getParam("d", True)
-            if disabled:
-                q = dbu.rql_where_not(cm.Container.table, "disable", True)
-                res = RethinkCollection(cm.Container, query=q)
-            else:
-                res = RethinkCollection(cm.Container)
-
-            page = Paginate(res, self.request, "name")
-
-            self.view.data = {"page": page}
-
-            return self.view
+        disabled = self.request.getParam("d", True)
+        if disabled:
+            q = dbu.rql_where_not(cm.Container.table, "disable", True)
+            res = RethinkCollection(cm.Container, query=q)
         else:
-            try:
-                con = cm.Container(self.request.id)
-            except NotFoundError:
-                return NotFound()
+            res = RethinkCollection(cm.Container)
 
-            self.view.template = "admin/containers/view"
+        page = Paginate(res, self.request, "name")
 
-            self.view.title = con.name
-            if not con.disable:
-                self.view.scripts = ["psh/container"]
+        self.view.data = {"page": page}
 
-            self.view.data = {"container": con}
-
-            return self.view
-
-    def POST(self):
-        if not self.request.id:
-            return Redirect("/admin/containers")
-
-        try:
-            con = cm.Container(self.request.id)
-        except NotFoundError:
-            return NotFound()
-
-        if self.request.command == "disable":
-            con.disable = not con.disable
-            con.queue_action("stop")
-            con.save()
-
-            if con.disable:
-                return {"status": "disabled"}
-            else:
-                return {"status": "enabled"}
-
-        if self.request.command == "update":
-            ports = {}
-            p = con.image.ports
-            for port in p:
-                ports[port] = self.request.getParam("port_"+port, None)
-
-            con.update_ports(ports)
-
-        return Redirect("/admin/containers/"+self.request.id)
+        return self.view

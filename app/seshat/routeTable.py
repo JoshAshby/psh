@@ -62,18 +62,16 @@ class RouteTable(object):
         if base is not None:
             request.post_route(extended)
 
-            print base
+            name = base
 
             if request.command:
-                name = "/".join([base, request.command])
-                if not name in self._data:
-                    name = base
+                tmp = "/".join([base, request.command])
+                if tmp in self._data:
+                    name = tmp
             elif request.id:
-                name = "/".join([base, "view"])
-                if not name in self._data:
-                    name = base
-            else:
-                name = base
+                tmp = "/".join([base, "view"])
+                if tmp in self._data:
+                    name = tmp
 
             obj = self._data[name].pageObject
 

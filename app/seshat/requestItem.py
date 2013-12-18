@@ -99,10 +99,10 @@ class requestItem(object):
             else:
                 self.command = None
 
-            if self.id:
-                self.pre_id_url = self.url.path.split(self.id)[0].strip("/").split("/")
-            else:
-                self.pre_id_url = self.url.path.strip("/").split("/")
+        if self.id:
+            self.pre_id_url = self.url.path.split(self.id)[0].strip("/").split("/")
+        else:
+            self.pre_id_url = self.url.path.strip("/").split("/")
 
     def buildParams(self):
         all_mem = {}
