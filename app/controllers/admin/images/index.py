@@ -13,9 +13,6 @@ from seshat.route import autoRoute
 from seshat.MixedObject import MixedObject
 from seshat.objectMods import login
 
-from seshat.actions import NotFound, Redirect
-from errors.general import NotFoundError
-
 from rethinkORM import RethinkCollection
 
 from models.rethink.image import imageModel as im
@@ -30,44 +27,15 @@ class index(MixedObject):
     _title = "Images"
     _default_tmpl = "admin/images/index"
     def GET(self):
-        if not self.request.id:
-            disabled = self.request.getParam("d", True)
-            if disabled:
-                q = dbu.rql_where_not(im.Image.table, "disable", True)
-                res = RethinkCollection(im.Image, query=q)
-            else:
-                res = RethinkCollection(im.Image)
-
-            page = Paginate(res, self.request, "name")
-
-            self.view.data = {"page": page}
-
-            return self.view
+        disabled = self.request.getParam("d", True)
+        if disabled:
+            q = dbu.rql_where_not(im.Image.table, "disable", True)
+            res = RethinkCollection(im.Image, query=q)
         else:
-            try:
-                image = im.Image(self.request.id)
-            except NotFoundError:
-                return NotFound()
+            res = RethinkCollection(im.Image)
 
-            self.view.template = "admin/images/view"
+        page = Paginate(res, self.request, "name")
 
-            self.view.title = image.name
+        self.view.data = {"page": page}
 
-            self.view.data = {"image": image}
-
-            return self.view
-
-    def POST(self):
-        if not self.request.id:
-            return Redirect("/admin/images")
-
-        try:
-            image = im.Image(self.request.id)
-        except NotFoundError:
-            return NotFound()
-
-        if self.request.command == "disable":
-            image.disable = not image.disable
-            image.save()
-
-        return Redirect("/admin/images/"+self.request.id)
+        return self.view
