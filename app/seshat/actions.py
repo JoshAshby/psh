@@ -27,7 +27,7 @@ class BaseAction(object):
 
 class Redirect(BaseAction):
     def __init__(self, loc):
-        self.head = ("303 SEE OTHER", [("Location", loc)])
+        self.head = ("303 SEE OTHER", [("Location", str(loc))])
 
 
 class NotFound(BaseAction):

@@ -46,7 +46,7 @@ class Builder(object):
             logger.debug("Got Image document id: "+next_id)
             self.image = im.Image(next_id)
             self.image_tag = "/".join([self.image.user.username, self.image.name])
-            self.image_tag = "-".join([self.image_tag, self.image.rev])
+            self.image_tag = "-".join([self.image_tag, str(self.image.rev)])
 
             self.build()
 

@@ -114,7 +114,7 @@ class Spinner(object):
                     else:
                         error = e
 
-        logger.error(e)
+        if error: logger.error(error)
 
     def restart_container(self):
         self.stop_container()
