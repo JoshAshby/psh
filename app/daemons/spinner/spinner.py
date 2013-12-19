@@ -102,16 +102,19 @@ class Spinner(object):
             except docker.client.APIError as e:
                 if e.is_client_error():
                     error = e
-                    logger.error(e)
                 if e.is_server_error():
-                    # This still has a chance to fail
-                    msg = e.explanation.rsplit(":", 1)
-                    bad_port = int(msg)
+                    if "port" in e:
+                        # This still has a chance to fail
+                        msg = e.explanation.rsplit(":", 1)
+                        bad_port = int(msg)
 
-                    for port in bindings:
-                        if bindings[port] == bad_port:
-                            bindings[port] = random.randint(1025, 65535)
+                        for port in bindings:
+                            if bindings[port] == bad_port:
+                                bindings[port] = random.randint(1025, 65535)
+                    else:
+                        error = e
 
+        logger.error(e)
 
     def restart_container(self):
         self.stop_container()
