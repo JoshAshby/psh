@@ -2,42 +2,69 @@
 (function() {
 
   $(function() {
-    var id, worker;
+    var default_button_classes, default_icon_classes, id, parse_state, states, worker, worker_id;
+    default_button_classes = "btn";
+    default_icon_classes = "fa";
     id = $("#container-id").val();
-    $("#start").click(function() {
-      return $.post("/containers/" + id + "/start", function(data) {
-        $("#start").button('loading');
-        return worker();
+    worker_id = null;
+    states = {
+      running: {
+        text: "Shutdown",
+        icon: "fa-power-off",
+        color: "btn-danger",
+        extra: function() {
+          return $("#restart").show();
+        }
+      },
+      stopped: {
+        text: "Start",
+        icon: "fa-power-off",
+        color: "btn-success",
+        extra: function() {
+          return $("#restart").hide();
+        }
+      }
+    };
+    parse_state = function(current) {
+      var tmp;
+      tmp = states[current];
+      $("#wat_button").html("<i class=\"" + default_icon_classes + " " + tmp.icon + "\"></i> " + tmp.text).removeClass().addClass("" + default_button_classes + " " + tmp.color);
+      return tmp.extra();
+    };
+    $("#wat_button").click(function() {
+      var action;
+      if ($(this).hasClass("btn-success")) {
+        action = "start";
+      } else {
+        action = "stop";
+      }
+      return $.post("/containers/" + id + "/" + action, function(data) {
+        $("#wat_button").button(action);
+        clearTimeout(worker_id);
+        return worker_id = setTimeout(worker, 1000);
       });
     });
     $("#restart").click(function() {
       return $.post("/containers/" + id + "/restart", function(data) {
-        $("#stop").button('restarting');
-        return worker();
-      });
-    });
-    $("#stop").click(function() {
-      return $.post("/containers/" + id + "/stop", function(data) {
-        $("#stop").button('stopping');
-        return worker();
+        $("#wat_button").button("restart");
+        clearTimeout(worker_id);
+        return worker_id = setTimeout(worker, 1000);
       });
     });
     return (worker = function() {
+      clearTimeout(worker_id);
       return $.post("/containers/" + id + "/status", function(data) {
         $("#status").html(data[0]["status"]);
-        $("#start").button('reset');
-        $("#stop").button('reset');
-        if (!data[0]["status"].search("Up")) {
-          $("#start").hide();
-          $("#stop").show();
-          return $("#restart").show();
+        $("#wat_button").button('reset');
+        if (data[0]["status"].search("Up")) {
+          return parse_state("stopped");
         } else {
-          $("#start").show();
-          $("#stop").hide();
-          return $("#restart").hide();
+          return parse_state("running");
         }
       }).done(function() {
-        return setTimeout(worker, 30000);
+        return worker_id = setTimeout(worker, 30000);
+      }).fail(function() {
+        return clearTimeout(worker_id);
       });
     })();
   });

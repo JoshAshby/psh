@@ -38,19 +38,7 @@ scriptFiles:
       <div class="col-md-12">
         {% if not container.disable %}
           <b>Actions: </b>
-          <div class="btn-group">
-            <button id="start" class="btn btn-success" data-loading-text="Starting..."><i class="fa fa-power-off"></i> Start</button>
-            <button type="button" class="btn btn-danger" id="stop" data-stopping-text="Stopping..." data-restarting-text="Restarting..."><i class="fa fa-power-off"></i> Shutdown</button>
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-caret-down"></i>
-              <span class="sr-only">Toggle Dropdown</span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-              <li id="restart"><a href="#"><i class="fa fa-refresh"></i> Restart</a></li>
-              <li id="disable" {{ 'style="display: none"' if container.disable}}><a href="#"><i class="fa fa-times"></i> Disable</a></li>
-              <li id="enable" {{ 'style="display: none"' if not container.disable}}><a href="#"><i class="fa fa-check"></i> Enable</a></li>
-            </ul>
-          </div>
+          <button id="wat_button" class="btn btn-default" data-stop-text="Stopping..." data-start-text="Starting..." data-restart-text="Restarting...">Loading Extension</button> <button id="restart" class="btn btn-default"><i class="fa fa-refresh"></i> Restart</button>
         {% else %}
           <p>This container is currently disabled, and not running.</p>
           <button class="btn btn-success" id="enable"><i class="fa fa-check"></i> Enable</button>
