@@ -4,6 +4,7 @@ nav: admin_containers
 
 scriptFiles:
  - psh/admin/container
+ - psh/container
 +++
 <input type="hidden" id="container-id" value="{{container.id}}" />
 <input type="hidden" id="container-disable" value="{{container.disable}}" />
@@ -38,7 +39,7 @@ scriptFiles:
       <div class="col-md-12">
         {% if not container.disable %}
           <b>Actions: </b>
-          <button id="wat_button" class="btn btn-default" data-stop-text="Stopping..." data-start-text="Starting..." data-restart-text="Restarting...">Loading Extension</button> <button id="restart" class="btn btn-default"><i class="fa fa-refresh"></i> Restart</button>
+          <button id="wat_button" class="btn btn-default" data-stop-text="Stopping..." data-start-text="Starting..." data-restart-text="Restarting...">Loading Extension</button> <button id="restart" class="btn btn-default"><i class="fa fa-refresh"></i> Restart</button> <button class="btn btn-danger" id="disable"><i class="fa fa-times"></i> Disable</button>
         {% else %}
           <p>This container is currently disabled, and not running.</p>
           <button class="btn btn-success" id="enable"><i class="fa fa-check"></i> Enable</button>

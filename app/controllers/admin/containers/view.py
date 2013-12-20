@@ -31,8 +31,6 @@ class view(MixedObject):
             return NotFound()
 
         self.view.title = con.name
-        if not con.disable:
-            self.view.scripts = ["psh/container"]
 
         self.view.data = {"container": con}
 

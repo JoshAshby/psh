@@ -28,7 +28,7 @@ from utils.paginate import Paginate
 
 @login(["admin"])
 @autoRoute()
-class index(MixedObject):
+class containers(MixedObject):
     _title = "Users"
     _default_tmpl = "admin/users/containers"
     def GET(self):
