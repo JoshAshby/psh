@@ -27,7 +27,7 @@ databases:
   rethink:
     db: psh
   redis:
-    db: 1
+    db: 0
     URL: localhost
 
 docker:

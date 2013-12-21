@@ -25,7 +25,7 @@ buckets:
 flush:
   rethink:
     users: true
-    dockerfiles: true
+    containers: true
     images: true
 
   redis:
