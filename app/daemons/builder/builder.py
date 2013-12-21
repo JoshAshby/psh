@@ -30,7 +30,6 @@ class Builder(object):
     def __init__(self):
         self.image = None
         self.image_tag = ""
-        pass
 
     def start(self):
         try:
@@ -42,13 +41,19 @@ class Builder(object):
 
     def poll(self):
         while True:
-            next_id = c.redis.blpop("build:queue")[1]
-            logger.debug("Got Image document id: "+next_id)
-            self.image = im.Image(next_id)
-            self.image_tag = "/".join([self.image.user.username, self.image.name])
-            self.image_tag = "-".join([self.image_tag, str(self.image.rev)])
+            next_id = c.redis.blpop(["build:queue", "build:command"])
+            if next_id[0] == "build:queue":
+                next_id = next_id[1]
+                logger.debug("Got Image document id: "+next_id)
+                self.image = im.Image(next_id)
+                self.image_tag = "/".join([self.image.user.username,
+                                           self.image.name])
+                self.image_tag = "-".join([self.image_tag,
+                                           str(self.image.rev)])
 
-            self.build()
+                self.build()
+            else:
+                pass
 
     def build(self):
         if not self.image.additional_files:
@@ -63,7 +68,9 @@ class Builder(object):
             dockerfile.seek(0)
 
             logger.debug("Building "+self.image.id)
-            s, m = c.docker.build(fileobj=dockerfile, tag=self.image_tag, rm=True)
+            s, m = c.docker.build(fileobj=dockerfile,
+                                  tag=self.image_tag,
+                                  rm=True)
 
             self.successful_build(s, m)
 
@@ -92,14 +99,23 @@ class Builder(object):
         except docker.client.APIError as e:
             self.failed_build(e)
 
-
-    def failed_build(self, image_model, e):
-        ps.pushover(message="Building of image {id} failed.".format(id=self.image.id[:11]),
-                    title="Failed image build")
-        logger.error(str(e))
-        self.image.add_image("failed", log=str(e))
-
     def successful_build(self, s, m):
         img = c.docker.images(self.image_tag)[0]
         self.image.add_image("success", log=m, docker_id=img["Id"])
         logger.debug("Build for "+self.image.id+" done")
+
+    def failed_build(self, image_model, e):
+        self.image.add_image("failed", log=str(e))
+
+        logger.error(e)
+
+        c.redis.rpush("build:errors", str(e))
+        if c.redis.llen("build:errors") > 500:
+            c.redis.lpop("build:errors")
+
+        try:
+            ps.pushover(message="Building of image {id} failed."\
+                .format(id=self.image.id[:11]),
+                        title="Failed image build")
+        except:
+            pass

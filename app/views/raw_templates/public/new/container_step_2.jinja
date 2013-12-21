@@ -14,9 +14,9 @@ nav: new
           <div class="col-md-6">
             <legend>Domain</legend>
             <div class="row">
-              <label class="control-label col-md-2" for="hostname">Domain:</label>
+              <label class="control-label col-md-2" for="domain">Domain:</label>
               <div class="col-md-10">
-                <input type="text" class="form-control" id="hostname" name="hostname" placeholder="Domain..." value="{{hostname}}">
+                <input type="text" class="form-control" id="domain" name="domain" placeholder="Domain..." value="{{domain}}">
                 <span class="help-block">
                   The is different from the containers name, and should be a domain that you own. Once you finish getting your new container spun up, you'll recieve instructions on how to point your domain at it.
                 </span>
@@ -24,20 +24,21 @@ nav: new
             </div>
           </div>
           <div class="col-md-6">
-            <legend>Ports</legend>
-            <p>You can choose to route http traffic (and only http traffic) to a given port within the container. If you don't specify a port, then you can use the automatically generated ports on the right.</p>
-            {% for port in ports %}
-              <div class="row">
-                <div class="col-md-12">
-                  <label class="sr-only" for="host">Host:</label>
-                  <div class="input-group">
-                    <span class="input-group-addon">{{port}}</span>
-                    <input class="form-control" type="text" name="port_{{port}}" placeholder="Host Port">
-                  </div>
-                </div>
+            <legend>Http Port</legend>
+            <div class="row">
+              <div class="col-md-12">
+                <label class="sr-only" for="http_port">HTTP Port</label>
+                <select name="http_port" id="http_port" class="form-control">
+                  {% for port in ports %}
+                    <option value="{{port}}">{{port}}</option>
+                  {% endfor %}
+                </select>
+                <span class="help-block">
+                  You can choose to route HTTP traffic (and only HTTP traffic) to a single port within the container.
+                </span>
               </div>
-              <br>
-            {% endfor %}
+            </div>
+            <br>
           </div>
         </div>
       </fieldset>

@@ -59,11 +59,13 @@ class view(MixedObject):
             self.view.template = "public/containers/disabled"
             return self.view
 
-        ports = {}
-        p = con.image.ports
-        for port in p:
-            ports[port] = self.request.getParam("port_"+port, None)
+        domains = self.request.getParam("domains", "")
+        http_port = self.request.getParam("http_port")
 
-        con.update_ports(ports)
+        if domains or http_port:
+            if type(domains) is not list:
+                domains = [domains]
+
+            con.update_http_port(http_port, domains)
 
         return Redirect("/containers/"+con.id)

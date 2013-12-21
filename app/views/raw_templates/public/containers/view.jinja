@@ -49,28 +49,35 @@ scriptFiles:
     <br>
     <div class="row">
       <div class="col-md-12">
-        <form method=POST>
+        <form method="POST">
           <fieldset>
-            <legend>Ports</legend>
-            <p>You can choose to route http traffic (and only http traffic) to a given port within the container. If you don't specify a port, then you can use the automatically generated ports on the right.</p>
-            {% for port in container.ports %}
-              <div class="row">
-                <div class="col-md-12">
-                  <label class="sr-only" for="host">Host:</label>
-                  <div class="input-group">
-                    <span class="input-group-addon">{{port}}</span>
-                    <input class="form-control" type="text" name="port_{{port}}" placeholder="Host Port" value={{container.ports[port]["host"]}}>
-                    <span class="input-group-addon">{{container.ports[port]["internal"]}}</span>
-                  </div>
-                </div>
+            <div class="row">
+              <div class="col-md-6">
+                <legend>Domain</legend>
+                <label class="control-label sr-only" for="domain">Domain:</label>
+                {% for domain in container.domains %}
+                  <input type="text" class="form-control" id="domains" name="domains" placeholder="Domain..." value="{{domain}}">
+                {% endfor %}
+                <span class="help-block">
+                  TODO: This
+                </span>
               </div>
-              <br>
-            {% endfor %}
+              <div class="col-md-6">
+                <legend>Http Port</legend>
+                <label class="sr-only" for="http_port">HTTP Port</label>
+                <select name="http_port" id="http_port" class="form-control">
+                  {% for port in container.image.ports %}
+                    <option value="{{port}}" {{ 'selected' if port==container.http_port }}>{{port}}</option>
+                  {% endfor %}
+                </select>
+                <span class="help-block">
+                  You can choose to route HTTP traffic (and only HTTP traffic) to a given port within the container.
+                </span>
+              </div>
+            </div>
           </fieldset>
-          <span class="help-block">Notice, the container will need to be restarted for these changes to go into effect.</span>
-          <button class="btn btn-theme pull-right" type="submit">Update</button>
+          <button class="btn btn-theme pull-right" type="submit">Update <i class="fa fa-check"></i></button>
         </form>
-
       </div>
     </div>
   </div>

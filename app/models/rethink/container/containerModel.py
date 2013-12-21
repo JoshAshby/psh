@@ -16,6 +16,8 @@ from rethinkORM import RethinkModel
 from models.rethink.user import userModel as um
 from models.rethink.image import imageModel as im
 
+import utils.hipache as hi
+
 from errors.general import \
       NotFoundError
 
@@ -33,27 +35,16 @@ class Container(RethinkModel):
         self._image = None
 
     @classmethod
-    def new_container(cls, user_id, name, image_id, ports, hostname):
-        """
-        ports should be in the form of:
-        {
-          container_port: host
-        }
-
-        where host can be None or a number
-        """
-        port_bindings = {}
-        for container, host in ports.iteritems():
-            port_bindings[container] = {
-                "host": host,
-                "internal": None
-            }
+    def new_container(cls, user_id, name, image_id, domains, http_port):
+        image = im.Image(image_id)
+        ports = { port: None for port in image.ports }
 
         fi = cls.create(user_id=user_id,
                         image_id=image_id,
                         name=name,
-                        ports=port_bindings,
-                        hostname=hostname,
+                        http_port=http_port,
+                        domains=domains,
+                        ports=ports,
                         created=arrow.utcnow().timestamp,
                         disable=False,
                         docker_id=None)
@@ -62,16 +53,15 @@ class Container(RethinkModel):
 
         return fi
 
-    def update_ports(self, ports):
-        port_bindings = {}
-        for container, host in ports.iteritems():
-            port_bindings[container] = {
-                "host": host,
-                "internal": self.ports[container]["internal"]
-            }
+    def update_http_port(self, port, new_domains=None):
+        if new_domains and new_domains != self.domains:
+            hi.remove_container_routes(self, new_domains)
+            self.domains = new_domains
 
-        self.ports = port_bindings
+        self.http_port = port
         self.save()
+
+        hi.route_container_ports(self)
 
     def queue_action(self, action):
         data = json.dumps({"id": self.id, "action": action})
@@ -85,17 +75,16 @@ class Container(RethinkModel):
                 if container["Id"] == self.docker_id:
                     self._con = StandardODM(**container)
 
-        if not self._con:
-            raise NotFoundError("Container was not found in docker")
-
         return self._con
 
     @property
     def status(self):
+        if not self.docker:
+            return "Queued"
         if not self.disable:
             return self.docker.Status
         else:
-          return "Disabled"
+            return "Disabled"
 
     @property
     def formated_created(self, no_cache=False):

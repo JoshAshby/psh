@@ -56,17 +56,13 @@ class container(MixedObject):
             name = self.request.getParam("name")
             image = self.request.getParam("image")
 
-          # TODO: Return if name is already used
-
             found = r.table(cm.Container.table)\
                 .filter({"user_id": self.request.session.id, "name": name})\
                 .count().run()
 
             if found:
-                self.view.data = {
-                    "error": "name",
-                    "msg": "You already have a container by that name! Please choose a different one."
-                }
+                self.request.session.push_alert("This name is already in use by another container of yours. Please choose another.",
+                                                level="error")
                 return self.view
 
             self.request.session.c_image = image
@@ -76,21 +72,21 @@ class container(MixedObject):
 
         elif self.request.id == "step-2":
             if not "c_name" in self.request.session:
-                self.request.session.push_alert("Missing vital info (Please fill out a name for the container before procceding to step 2)!", level="error")
+                self.request.session.push_alert("Missing vital info (Please fill out a name for the container before procceding to step 2)!",
+                                                level="error")
                 return Redirect("/new/container/step-1")
 
-            domain = self.request.getParam("hostname", "")
+            domains = self.request.getParam("domains", "")
+            http_port = self.request.getParam("http_port")
 
-            ports = {}
-            p = im.Image(self.request.session.c_image).ports
-            for port in p:
-                ports[port] = self.request.getParam("port_"+port, None)
+            if type(domains) is not list:
+                domains = [domains]
 
             container = cm.Container.new_container(user_id=self.request.session.id,
                                                    image_id=self.request.session.c_image,
                                                    name=self.request.session.c_name,
-                                                   ports=ports,
-                                                   hostname=domain)
+                                                   http_port=http_port,
+                                                   domains=domains)
 
             del self.request.session.c_name
             del self.request.session.c_image
