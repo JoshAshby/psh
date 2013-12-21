@@ -82,6 +82,8 @@ class container(MixedObject):
             if type(domains) is not list:
                 domains = [domains]
 
+            domains = [ domain for domain in domains if domain ]
+
             container = cm.Container.new_container(user_id=self.request.session.id,
                                                    image_id=self.request.session.c_image,
                                                    name=self.request.session.c_name,

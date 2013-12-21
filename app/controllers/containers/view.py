@@ -66,6 +66,8 @@ class view(MixedObject):
             if type(domains) is not list:
                 domains = [domains]
 
+            domains = [ domain for domain in domains if domain ]
+
             con.update_http_port(http_port, domains)
 
         return Redirect("/containers/"+con.id)

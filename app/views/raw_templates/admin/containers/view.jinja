@@ -21,7 +21,10 @@ scriptFiles:
 
 <ul class="nav nav-tabs">
   <li class="active"><a href="#info" data-toggle="tab">Info</a></li>
-  <li><a href="#settings" data-toggle="tab">Settings</a></li>
+  {% if container.status != "Queued" %}
+    <li><a href="#ports" data-toggle="tab">Ports</a></li>
+    <li><a href="#settings" data-toggle="tab">Settings</a></li>
+  {% endif %}
 </ul>
 
 <div class="tab-content">
@@ -59,28 +62,77 @@ scriptFiles:
     <br>
     <div class="row">
       <div class="col-md-12">
-        <form method=POST action="/admin/containers/{{container.id}}/update">
+        <form method="POST">
           <fieldset>
-            <legend>Ports</legend>
-            <p>You can choose to route http traffic (and only http traffic) to a given port within the container. If you don't specify a port, then you can use the automatically generated ports on the right.</p>
-            {% for port in container.ports %}
-              <div class="row">
-                <div class="col-md-12">
-                  <label class="sr-only" for="host">Host:</label>
-                  <div class="input-group">
-                    <span class="input-group-addon">{{port}}</span>
-                    <input class="form-control" type="text" name="port_{{port}}" placeholder="Host Port" value={{container.ports[port]["host"]}}>
-                    <span class="input-group-addon">{{container.ports[port]["internal"]}}</span>
+            <div class="row">
+              <div class="col-md-6">
+                <legend>Domains</legend>
+                <div class="form-group">
+                  <div id="domain_inputs">
+                    {% for domain in container.domains %}
+                      <label class="control-label sr-only" for="domain">Domain:</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="domains" placeholder="Domain..." value="{{domain}}">
+                        <span class="input-group-btn">
+                          <button class="btn btn-default remove_domain"><i class="fa fa-times"></i></button>
+                        </span>
+                      </div>
+                      <br>
+                    {% endfor %}
                   </div>
+                  <button class="btn btn-theme btn-sm" id="add_domain"><i class="fa fa-plus"></i></button>
+                  <span class="help-block">
+                    TODO: This
+                  </span>
                 </div>
               </div>
-              <br>
-            {% endfor %}
+              <div class="col-md-6">
+                <legend>Http Port</legend>
+                <div class="form-group"
+                  <label class="sr-only" for="http_port">HTTP Port</label>
+                  <select name="http_port" id="http_port" class="form-control">
+                    {% for port in container.image.ports %}
+                      <option value="{{port}}" {{ 'selected' if port==container.http_port }}>{{port}}</option>
+                    {% endfor %}
+                  </select>
+                  <span class="help-block">
+                    You can choose to route HTTP traffic (and only HTTP traffic) to a given port within the container.
+                  </span>
+                </div>
+              </div>
+            </div>
           </fieldset>
-          <span class="help-block">Notice, the container will need to be restarted for these changes to go into effect.</span>
-          <button class="btn btn-theme pull-right" type="submit">Update</button>
+          <button class="btn btn-theme pull-right" type="submit">Update <i class="fa fa-check"></i></button>
         </form>
       </div>
     </div>
   </div>
+  <div class="tab-pane" id="ports">
+    <br>
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table">
+          <thead>
+            <th>Container Port</th>
+            <th>Domain Port</th>
+            <th>HTTP (Port 80)</th>
+          </thead>
+          <tbody>
+            {% for internal, external in container.ports.iteritems() %}
+              <tr {{ 'class="success"' if internal==container.http_port }}>
+                <td>{{internal}}</td>
+                <td>{{external}}</td>
+                <td class="text-success">
+                  {% if internal==container.http_port %}
+                    <i class="fa fa-check"></i>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
 </div>

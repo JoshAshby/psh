@@ -43,6 +43,23 @@ $ ->
       clearTimeout worker_id
       worker_id = setTimeout worker, 1000
 
+  $("#add_domain").click (e) ->
+    e.preventDefault()
+    $("#domain_inputs").append """
+      <div class="input-group">
+        <input type="text" class="form-control" name="domains" Placeholder="Domain..." />
+        <span class="input-group-btn">
+          <button class="btn btn-default remove_domain"><i class="fa fa-times"></i></button>
+        </span>
+      </div>
+      <br>
+      """
+
+  $(".remove_domain").click (e) ->
+    e.preventDefault()
+    $(this).parents("div.input-group").next().remove()
+    $(this).parents("div.input-group").remove()
+
   (worker = () ->
     clearTimeout worker_id
     $.post "/containers/#{ id }/status", (data) ->

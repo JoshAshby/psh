@@ -13,7 +13,7 @@ from seshat.route import autoRoute
 from seshat.MixedObject import MixedObject
 from seshat.objectMods import login
 
-from seshat.actions import NotFound
+from seshat.actions import NotFound, Redirect
 from errors.general import NotFoundError
 
 from models.rethink.container import containerModel as cm
@@ -35,3 +35,25 @@ class view(MixedObject):
         self.view.data = {"container": con}
 
         return self.view
+
+    def POST(self):
+        if not self.request.id:
+            return Redirect("/admin/containers")
+
+        try:
+            con = cm.Container(self.request.id)
+        except NotFoundError:
+            return NotFound()
+
+        domains = self.request.getParam("domains", "")
+        http_port = self.request.getParam("http_port")
+
+        if domains or http_port:
+            if type(domains) is not list:
+                domains = [domains]
+
+            domains = [ domain for domain in domains if domain ]
+
+            con.update_http_port(http_port, domains)
+
+        return Redirect("/admin/containers/"+self.request.id)

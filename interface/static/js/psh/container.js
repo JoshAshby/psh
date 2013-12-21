@@ -51,6 +51,15 @@
         return worker_id = setTimeout(worker, 1000);
       });
     });
+    $("#add_domain").click(function(e) {
+      e.preventDefault();
+      return $("#domain_inputs").append("<div class=\"input-group\">\n  <input type=\"text\" class=\"form-control\" name=\"domains\" Placeholder=\"Domain...\" />\n  <span class=\"input-group-btn\">\n    <button class=\"btn btn-default remove_domain\"><i class=\"fa fa-times\"></i></button>\n  </span>\n</div>\n<br>");
+    });
+    $(".remove_domain").click(function(e) {
+      e.preventDefault();
+      $(this).parents("div.input-group").next().remove();
+      return $(this).parents("div.input-group").remove();
+    });
     return (worker = function() {
       clearTimeout(worker_id);
       return $.post("/containers/" + id + "/status", function(data) {
