@@ -82,8 +82,8 @@ class session(brm.SeshatRedisModel):
         if len(foundUser) > 0:
             foundUser = um.User(**foundUser[0])
             if not foundUser.disable:
-                if foundUser.password == bcrypt.hashpw(password,
-                        foundUser.password):
+                if str(foundUser.password) == bcrypt.hashpw(str(password),
+                        str(foundUser.password)):
                     self.username = foundUser.username
                     self.id = foundUser.id
                     self.groups = foundUser.groups
