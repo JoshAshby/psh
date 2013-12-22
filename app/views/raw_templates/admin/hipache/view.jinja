@@ -1,0 +1,48 @@
++++
+theme_color: orange
+nav: admin_hipache
+breadcrumbs_top: True
+
+scriptFiles:
+ - psh/admin/hipache
++++
+<div class="row">
+  <div class="col-md-2">
+    <i class="fa fa-random fa-5x"></i>
+  </div>
+  <div class="col-md-10">
+    <h2>{{route.domain}}</h2>
+    <b>Redis Key: </b>{{route.name}}<br>
+  </div>
+</div>
+<hr>
+
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#info" data-toggle="tab">Routes</a></li>
+  <button class="btn btn-danger pull-right" id="remove" data-id="{{route.domain}}">Delete <i class="fa fa-times"></i></button>
+</ul>
+
+<div class="tab-content">
+  <div class="tab-pane active" id="info">
+    <br>
+    <div class="row">
+      <div class="col-md-12">
+        <form method=POST>
+          <div id="routes">
+            {% for r in route.destinations %}
+              <div class="input-group">
+                <input type="text" class="form-control" name="domains" value="{{r}}">
+                <span class="input-group-btn">
+                  <button class="btn btn-default remove_route"><i class="fa fa-times"></i></button>
+                </span>
+              </div>
+              <br>
+            {% endfor %}
+          </div>
+          <button id="add_route" class="btn btn-default"><i class="fa fa-plus"></i></button>
+          <button type="submit" class="btn btn-theme pull-right">Update <i class="fa fa-check"></i></button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

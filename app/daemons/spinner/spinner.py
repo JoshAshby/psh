@@ -17,9 +17,9 @@ import random
 import config.config as c
 
 from models.rethink.container import containerModel as cm
+import models.redis.hipache.hipacheModel as him
 
 import utils.pushover as ps
-import utils.hipache as hi
 
 logger = logging.getLogger(c.spinner.log_name)
 
@@ -96,7 +96,7 @@ class Spinner(object):
 
                 self.container.ports = bindings
                 self.container.save()
-                hi.route_container_ports(self.container)
+                him.route_container_ports(self.container)
 
                 success = True
 

@@ -15,19 +15,11 @@ from seshat.objectMods import login
 
 from models.redis.hipache import hipacheModel as him
 
-from utils.paginate import Paginate
-
 
 @login(["admin"])
 @autoRoute()
-class index(MixedObject):
-    _title = "Hipache Routes"
-    _default_tmpl = "admin/hipache/index"
-    def GET(self):
-        letter = self.request.getParam("q")
-        routes = him.routes(letter+"*")
-        page = Paginate(routes, self.request, "domain")
+class delete(MixedObject):
+    def POST(self):
+        him.remove_route(self.request.id)
 
-        self.view.data = {"page": page}
-
-        return self.view
+        return {"status": "success"}

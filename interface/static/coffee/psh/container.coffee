@@ -55,7 +55,7 @@ $ ->
       <br>
       """
 
-  $(".remove_domain").click (e) ->
+  $("#domain_inputs").on "click", ".remove_domain", (e) ->
     e.preventDefault()
     $(this).parents("div.input-group").next().remove()
     $(this).parents("div.input-group").remove()

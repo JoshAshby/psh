@@ -1,8 +1,2 @@
-- Be able to change/update the domain for containers  
-- Be smart about updating the ports on a container  
-- Move container port proxy stuff to hipache  
- - Rewrite Hipache config module (Uses redis, neat stuff that)  
- - Ditch nginx proxy code  
-- Monitor system health? Would be nice  
- - Including Hipache and Docker  
+- Error viewing pages for builder and spinner error queues in redis  
 - 

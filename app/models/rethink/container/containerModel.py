@@ -16,7 +16,7 @@ from rethinkORM import RethinkModel
 from models.rethink.user import userModel as um
 from models.rethink.image import imageModel as im
 
-import utils.hipache as hi
+import models.redis.hipache.hipacheModel as him
 
 from errors.general import \
       NotFoundError
@@ -55,13 +55,13 @@ class Container(RethinkModel):
 
     def update_http_port(self, port, new_domains=None):
         if new_domains and new_domains != self.domains:
-            hi.remove_container_routes(self, new_domains)
+            him.remove_container_routes(self, new_domains)
             self.domains = new_domains
 
         self.http_port = port
         self.save()
 
-        hi.route_container_ports(self)
+        him.route_container_ports(self)
 
     def queue_action(self, action):
         data = json.dumps({"id": self.id, "action": action})

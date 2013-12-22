@@ -55,7 +55,7 @@
       e.preventDefault();
       return $("#domain_inputs").append("<div class=\"input-group\">\n  <input type=\"text\" class=\"form-control\" name=\"domains\" Placeholder=\"Domain...\" />\n  <span class=\"input-group-btn\">\n    <button class=\"btn btn-default remove_domain\"><i class=\"fa fa-times\"></i></button>\n  </span>\n</div>\n<br>");
     });
-    $(".remove_domain").click(function(e) {
+    $("#domain_inputs").on("click", ".remove_domain", function(e) {
       e.preventDefault();
       $(this).parents("div.input-group").next().remove();
       return $(this).parents("div.input-group").remove();
