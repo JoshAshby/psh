@@ -24,6 +24,8 @@ class new(MixedObject):
     _title = "New Hipache Route"
     _default_tmpl = "admin/hipache/new"
     def GET(self):
+        self.view.partial("sidebar", "partials/admin/sidebar_links",
+                          {"command": "hipache"})
         return self.view
 
     def POST(self):

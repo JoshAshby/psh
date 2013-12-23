@@ -24,6 +24,8 @@ class view(MixedObject):
     _title = "Hipache Route"
     _default_tmpl = "admin/hipache/view"
     def GET(self):
+        self.view.partial("sidebar", "partials/admin/sidebar_links",
+                          {"command": "hipache"})
         route = him.Route(self.request.id)
 
         if not route.domain:

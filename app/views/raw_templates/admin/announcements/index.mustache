@@ -1,4 +1,5 @@
 +++
+base: skeletons/sidebar
 theme_color: orange
 
 nav: admin_annoucements
@@ -12,9 +13,6 @@ stylesheets:
   - lib/bootstrap-datetimepicker.min
 +++
 
-<ol class="breadcrumb">
-  <span class="pull-right">T'would be {{now}}</span>
-</ol>
 
 <div class="row">
   <div class="col-md-4 col-md-offset-2 col-sm-12">
@@ -86,7 +84,8 @@ stylesheets:
           <div class="caption">
             <form method="POST">
               <fieldset>
-                <legend>New Announcement...</legend>
+                <legend>New Announcement...
+                <small class="pull-right">T'would be {{now}}</small></legend>
                 <div class="form-group">
                   <div class="row">
                     <div class="col-md-6">

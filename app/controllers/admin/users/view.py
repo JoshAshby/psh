@@ -29,6 +29,8 @@ class view(MixedObject):
     _title = "Users"
     _default_tmpl = "admin/users/settings"
     def GET(self):
+        self.view.partial("sidebar", "partials/admin/sidebar_links",
+                          {"command": "users"})
         try:
             user = um.User(self.request.id)
 

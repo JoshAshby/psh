@@ -27,6 +27,8 @@ class index(MixedObject):
     _title = "Images"
     _default_tmpl = "admin/images/index"
     def GET(self):
+        self.view.partial("sidebar", "partials/admin/sidebar_links",
+                          {"command": "images"})
         disabled = self.request.getParam("d", True)
         if disabled:
             q = dbu.rql_where_not(im.Image.table, "disable", True)

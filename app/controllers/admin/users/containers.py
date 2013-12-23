@@ -32,32 +32,34 @@ class containers(MixedObject):
     _title = "Users"
     _default_tmpl = "admin/users/containers"
     def GET(self):
-            try:
-                user = um.User(self.request.id)
+        self.view.partial("sidebar", "partials/admin/sidebar_links",
+                          {"command": "users"})
+        try:
+            user = um.User(self.request.id)
 
-            except NotFoundError:
-                return NotFound()
+        except NotFoundError:
+            return NotFound()
 
-            self.view.title = user.username
+        self.view.title = user.username
 
-            imgs = r.table(im.Image.table).filter({"user_id": user.id})\
-                .count().run()
-            cons = r.table(cm.Container.table).filter({"user_id": user.id})\
-                .count().run()
+        imgs = r.table(im.Image.table).filter({"user_id": user.id})\
+            .count().run()
+        cons = r.table(cm.Container.table).filter({"user_id": user.id})\
+            .count().run()
 
-            self.view.partial("tabs",
-                              "partials/admin/users/tabs",
-                              {"user": user,
-                               "command": self.request.command,
-                               "images": imgs,
-                               "containers": cons})
+        self.view.partial("tabs",
+                          "partials/admin/users/tabs",
+                          {"user": user,
+                           "command": self.request.command,
+                           "images": imgs,
+                           "containers": cons})
 
-            self.view.data = {"user": user}
+        self.view.data = {"user": user}
 
-            q= r.table(cm.Container.table).filter({"user_id": user.id})
-            cons = RethinkCollection(cm.Container, query=q)
-            page = Paginate(cons, self.request, "name")
+        q= r.table(cm.Container.table).filter({"user_id": user.id})
+        cons = RethinkCollection(cm.Container, query=q)
+        page = Paginate(cons, self.request, "name")
 
-            self.view.data = {"page": page}
+        self.view.data = {"page": page}
 
-            return self.view
+        return self.view

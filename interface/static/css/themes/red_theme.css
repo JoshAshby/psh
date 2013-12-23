@@ -12,14 +12,14 @@ h5,
 h6 {
   font-family: 'Noto Sans', sans-serif;
 }
-/*body {*/
-/*background: url(/static/css/imgs/subtle_carbon.png) repeat;*/
-/*}*/
+body {
+  background-color: #f7f5fa;
+}
 a {
-  color: #ffa033;
+  color: #e60000;
 }
 a:hover {
-  color: #cc6d00;
+  color: #800000;
 }
 h4 a {
   text-decoration: none;
@@ -34,8 +34,9 @@ h4 a:active {
   width: 100%;
   color: #eee;
   padding-bottom: 30px;
+  height: 50px;
   max-width: 100%;
-  background-color: #b35f00;
+  background-color: #660000;
 }
 .container-full h1 {
   font-family: 'Maven Pro', sans-serif;
@@ -48,8 +49,9 @@ h4 a:active {
   width: 100%;
   color: #eee;
   padding-bottom: 30px;
+  height: 50px;
   max-width: 100%;
-  background-color: #b35f00;
+  background-color: #660000;
   background-color: #b30000;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -93,7 +95,7 @@ footer {
   -o-transition: all 0.5s ease;
   -ms-transition: all 0.5s ease;
   transition: all 0.5s ease;
-  border: #ff8800 solid 1px;
+  border: #b30000 solid 1px;
 }
 .thumbnail a.thumbnail:hover,
 .thumbnail a.thumbnail:active,
@@ -103,8 +105,8 @@ footer {
 .btn-primary,
 .btn-theme {
   color: white;
-  background-color: #ff8800;
-  border: #ff8800 solid 1px;
+  background-color: #b30000;
+  border: #b30000 solid 1px;
 }
 .btn-primary:focus,
 .btn-theme:focus,
@@ -112,24 +114,24 @@ footer {
 .btn-theme:hover,
 .btn-primary:active,
 .btn-theme:active {
-  background-color: #cc6d00;
-  border: #cc6d00 solid 1px;
+  background-color: #800000;
+  border: #800000 solid 1px;
 }
 .label-theme {
   color: white;
-  background-color: #ff8800;
-  border: #ff8800 solid 1px;
+  background-color: #b30000;
+  border: #b30000 solid 1px;
 }
 .dropdown-menu > .active > a,
 .dropdown-menu > .active > a:hover,
 .dropdown-menu > .active > a:focus,
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus {
-  background-color: #ff8800;
+  background-color: #b30000;
 }
 .pager li > a:hover,
 .pager li > a:focus {
-  background-color: #ff8800;
+  background-color: #b30000;
   color: white;
 }
 .pagination > .active > a,
@@ -142,8 +144,8 @@ footer {
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
   color: white;
-  background-color: #ff8800;
-  border: #ff8800 solid 1px;
+  background-color: #b30000;
+  border: #b30000 solid 1px;
 }
 /*.input-group .form-control {*/
 /*border: white solid 1px;*/
@@ -177,10 +179,10 @@ footer {
 }
 .tt-suggestion.tt-is-under-cursor {
   color: white;
-  background-color: #ff8800;
+  background-color: #b30000;
 }
 .tt-suggestion.tt-is-under-cursor a {
-  color: #ff8800;
+  color: #b30000;
 }
 .tt-suggestion p {
   margin: 0;

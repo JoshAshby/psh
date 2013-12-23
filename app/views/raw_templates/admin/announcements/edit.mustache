@@ -1,4 +1,5 @@
 +++
+base: skeletons/sidebar
 theme_color: orange
 
 nav: admin_annoucements
@@ -21,17 +22,14 @@ scripts: "
   "
 +++
 
-<ol class="breadcrumb">
-  <span class="pull-right">T'would be {{now}}</span>
-</ol>
-
 <div class="row">
   <div class="col-md-8 col-md-offset-2 col-sm-12">
     <div class="thumbnail">
       <div class="caption">
         <form method="POST">
           <fieldset>
-            <legend>Edit Announcement...</legend>
+            <legend>Edit Announcement...
+            <small class="pull-right">T'would be {{now}}</small></legend>
             <div class="form-group">
               <div class="row">
                 <div class="col-md-6">

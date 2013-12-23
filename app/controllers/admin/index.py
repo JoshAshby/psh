@@ -20,4 +20,6 @@ class index(MixedObject):
     _title = "Admin Home"
     _default_tmpl = "admin/index/index"
     def GET(self):
+        self.view.partial("sidebar", "partials/admin/sidebar_links",
+                          {"command": "home"})
         return self.view

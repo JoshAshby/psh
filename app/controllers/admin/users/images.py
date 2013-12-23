@@ -32,6 +32,8 @@ class images(MixedObject):
     _title = "Users"
     _default_tmpl = "admin/users/images"
     def GET(self):
+        self.view.partial("sidebar", "partials/admin/sidebar_links",
+                          {"command": "users"})
         try:
             user = um.User(self.request.id)
 

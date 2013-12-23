@@ -1,2 +1,6 @@
 - Error viewing pages for builder and spinner error queues in redis  
-- 
+- better dict merging for templates (and one that doesn't break everything)
+- maybe better searching of hipache routes? By name or destination maybe?
+- Maybe look into eventually moving to the python supplied daemon tools
+- controller to send pause/start commands to the spinner and builder
+- Write things on the domain settings for containers

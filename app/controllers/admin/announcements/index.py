@@ -27,6 +27,8 @@ class index(MixedObject):
     _title = "Site Announcements"
     _default_tmpl = "admin/announcements/index"
     def GET(self):
+        self.view.partial("sidebar", "partials/admin/sidebar_links",
+                          {"command": "announcements"})
         announcements = am.all_announcements()
 
         page = Paginate(announcements, self.request, "created")

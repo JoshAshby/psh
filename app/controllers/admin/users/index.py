@@ -27,6 +27,8 @@ class index(MixedObject):
     _title = "Users"
     _default_tmpl = "admin/users/index"
     def GET(self):
+        self.view.partial("sidebar", "partials/admin/sidebar_links",
+                          {"command": "users"})
         disabled = self.request.getParam("d", True)
         if disabled:
             q = dbu.rql_where_not(um.User.table, "disable", True)

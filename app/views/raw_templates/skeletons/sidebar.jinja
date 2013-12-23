@@ -13,12 +13,12 @@
 
     <!-- Begin page stylsheets -->
     <link href="/static/css/themes/{{theme_color}}_theme.css" rel="stylesheet">
+    <link href="/static/css/sidebars/sidebar.css" rel="stylesheet">
     {% for sheet in stylesheets %}
       <link href="/static/css/{{sheet}}.css" rel="stylesheet">
     {% endfor %}
 
     <style>
-      .container { padding-top: 70px; }
       {{styles}}
     </style>
     <!-- End page style sheets -->
@@ -26,6 +26,7 @@
     <script src="http://code.jquery.com/jquery.js"></script>
   </head>
   <body>
+
     <nav class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
@@ -76,117 +77,63 @@
       </div><!-- /.navbar-collapse -->
     </nav>
 
-    {% if req.has_announcements %}
-      <div class="container container-alert">
-        <div class="row">
-          <div class="col-md-1 col-sm-1" style="text-align: center;">
-            <i class="fa fa-exclamation fa-4x"></i>
-          </div>
-          <div class="col-md-10 col-sm-10">
-            {% for announcement in req.announcements %}
-              {{announcement}}
-            {% endfor %}
-          </div>
+    <div id="wrapper">
+      <div id="sidebar-wrapper" class="col-sm-2">
+        <div id="sidebar">
+          <ul class="nav list-group">
+            <li><a href="#" id="hide"><i class="fa fa-chevron-left fa-fw"></i> Hide sidebar</a></li>
+          </ul>
+          {{sidebar}}
         </div>
       </div>
-    {% endif %}
+      <div id="main-wrapper" class="col-sm-10 pull-right">
 
-    <div class="container">
-      {% if req.session.alerts %}
-        <!-- Begin alerts section -->
-        <div class="row">
-          <div class="col-md-10 col-md-offset-1">
-            {{req.session.alerts}}
+        {% if req.has_announcements and not hide_announcements %}
+          <div class="container container-alert">
+            <div class="row">
+              <div class="col-md-1 col-sm-1" style="text-align: center;">
+                <i class="fa fa-exclamation fa-4x"></i>
+              </div>
+              <div class="col-md-10 col-sm-10">
+                {% for announcement in req.announcements %}
+                  {{announcement}}
+                {% endfor %}
+              </div>
+            </div>
           </div>
-        </div>
-        <!-- End alerts section -->
-        <br>
-      {% endif %}
+        {% endif %}
 
-      {% if breadcrumbs_top and not breadcrumbs %}
-        <div class="row">
-          <div class="col-md-10 col-md-offset-1">
-            <ol class="breadcrumb">
-              {% set breadcrumb_parts = "" %}
-              {% for bit in req.pre_id_url %}
-                {% set breadcrumb_parts = breadcrumb_parts+"/"+bit %}
-                {% if loop.last and not req.command and not req.id %}
-                  <li class="active">{{bit|capitalize}}</li>
-                {% elif loop.last and req.id and not req.command %}
-                  <li><a href="{{breadcrumb_parts}}">{{bit|capitalize}}</a></li>
-                  <li class="active">{{req.id|truncate(10, True)}}</li>
-                {% elif loop.last and req.command %}
-                  <li><a href="{{breadcrumb_parts}}">{{bit|capitalize}}</a></li>
-                  <li><a href="{{breadcrumb_parts}}/{{req.id}}">{{req.id|truncate(10, True)}}</a></li>
-                  <li class="active">{{req.command|capitalize}}</li>
-                {% else %}
-                  <li><a href="{{breadcrumb_parts}}">{{bit|capitalize}}</a></li>
-                {% endif %}
-              {% endfor %}
-            </ol>
+        <div id="main">
+          <div class="row" style="display: none">
+            <div class="col-sm-12">
+              <a href="#" id="show" class="btn btn-default btn-sm"><i class="fa fa-chevron-left fa-fw"></i> Show sidebar</a>
+            </div>
           </div>
-        </div>
-      {% endif %}
 
-      <div class="row">
-        <div class="col-md-10 col-md-offset-1">
+          {% if req.session.alerts %}
+            <!-- Begin alerts section -->
+            <div class="row">
+              <div class="col-md-10 col-md-offset-1">
+                {{req.session.alerts}}
+              </div>
+            </div>
+            <!-- End alerts section -->
+          {% endif %}
+
           {{body}}
         </div>
       </div>
-      <br>
-
-      {% if breadcrumbs and not breadcrumbs_top %}
-        <div class="row">
-          <div class="col-md-10 col-md-offset-1">
-            <ol class="breadcrumb">
-              {% set breadcrumb_parts = "" %}
-              {% for bit in req.pre_id_url %}
-                {% set breadcrumb_parts = breadcrumb_parts+"/"+bit %}
-                {% if loop.last and not req.command and not req.id %}
-                  <li class="active">{{bit|capitalize}}</li>
-                {% elif loop.last and req.id and not req.command %}
-                  <li><a href="{{breadcrumb_parts}}">{{bit|capitalize}}</a></li>
-                  <li class="active">{{req.id|truncate(10, True)}}</li>
-                {% elif loop.last and req.command %}
-                  <li><a href="{{breadcrumb_parts}}">{{bit|capitalize}}</a></li>
-                  <li><a href="{{breadcrumb_parts}}/{{req.id}}">{{req.id|truncate(10, True)}}</a></li>
-                  <li class="active">{{req.command|capitalize}}</li>
-                {% else %}
-                  <li><a href="{{breadcrumb_parts}}">{{bit|capitalize}}</a></li>
-                {% endif %}
-              {% endfor %}
-            </ol>
-          </div>
-        </div>
-      {% endif %}
-
-      <hr>
-      <footer id="footer">
-        <div class="row">
-          <div class="col-md-6">
-            <a href="https://github.com/JoshAshby">JoshAshby - Psh PaaS 2013</a>
-            <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.
-          </div>
-          <div class="col-md-6">
-            <p class="pull-right"><a href="/about">About</a> | <a href="#top">Back to top</a></p>
-          </div>
-        </div>
-      </footer>
     </div>
+
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
     <!-- Begin page scripts -->
+    <script src="/static/js/sidebar.js"></script>
     {% for script in scriptFiles %}
       <script src="/static/js/{{script}}.js"></script>
     {% endfor %}
 
     <script>
-      {% if not req.session.id %}
-        $(function() {
-          $("#nav_extra_menu_btn").popover();
-        });
-      {% endif %}
-
       {{scripts}}
 
       // Multi level menus from: http://bootply.com/92442

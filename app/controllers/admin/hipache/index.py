@@ -24,6 +24,8 @@ class index(MixedObject):
     _title = "Hipache Routes"
     _default_tmpl = "admin/hipache/index"
     def GET(self):
+        self.view.partial("sidebar", "partials/admin/sidebar_links",
+                          {"command": "hipache"})
         letter = self.request.getParam("q")
         routes = him.routes(letter+"*")
         page = Paginate(routes, self.request, "domain")
