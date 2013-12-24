@@ -1,5 +1,8 @@
 @import "../colors";
 
+@footer_height: 20px;
+@sidebar_color: #222;
+
 body {
   padding-top: 50px;
 }
@@ -15,7 +18,7 @@ body {
     top: 0;
     left: 0;
     display: inline-block;
-    padding-bottom: 50px;
+    padding-bottom: @footer_height;
   }
   #main-wrapper {
     height: 100%;
@@ -32,12 +35,12 @@ body {
   }
   #sidebar-wrapper {
     height: 100%;
-    padding: 50px 0 50px 0;
+    padding: 50px 0 @footer_height 0;
     position: fixed;
     /*border-right: 1px solid darken(white, 33%);*/
   }
   #sidebar {
-    background-color: #222;
+    background-color: @sidebar_color;
     position: relative;
     height:100%;
     overflow-x: auto;
@@ -46,14 +49,15 @@ body {
       color: @background;
       padding-left: 5px;
     }
-    a.active {
+    a.active, a:hover, a:focus {
       text-decoration: none;
       background-color: @background;
     }
   }
   .footer {
-    background-color: #222;
-    padding-top: 10px;
+    background-color: @sidebar_color;
+    padding-top: 3px;
+    font-size: 10px;
   }
 }
 #show {

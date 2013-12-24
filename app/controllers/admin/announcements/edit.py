@@ -23,7 +23,7 @@ import arrow
 @autoRoute()
 class edit(MixedObject):
     _title = "Site Announcements"
-    _defaultTmpl = "admin/announcements/edit"
+    _default_tmpl = "admin/announcements/edit"
     def GET(self):
         self.view.partial("sidebar", "partials/admin/sidebar_links",
                           {"command": "announcements"})
