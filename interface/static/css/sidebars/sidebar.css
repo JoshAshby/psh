@@ -53,3 +53,6 @@ body {
 #show {
   margin-bottom: 10px;
 }
+.navbar-fixed-top {
+  border-width: 0px;
+}

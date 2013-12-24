@@ -4,14 +4,36 @@ theme_color: orange
 nav: admin_hipache
 breadcrumbs_top: True
 +++
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Quick Hipache Route</h3>
+      </div>
+      <div class="panel-body">
+        <form method="POST" action="/admin/hipache">
+          <div class="input-group">
+            <input class="form-control" type="text" name="source" placeholder="Route source...">
+            <span class="input-group-addon">
+              <i class="fa fa-arrow-right"></i>
+            </span>
+            <input class="form-control" type="text" name="destination" placeholder="Destination...">
+            <div class="input-group-btn">
+              <button type="submit" class="btn btn-theme">Add Route <i class="fa fa-check"></i></button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="row">
   <div class="col-md-6">
     <form>
       <div class="form-group">
         <div class="input-group">
-          <span class="input-group-btn">
-            <a href="/admin/hipache/new" class="btn btn-theme btn-sm">New</a>
-          </span>
           <input type="text" class="form-control input-sm" name="q" value="{{ req.getParam("q") }}" placeholder="Search">
           <span class="input-group-btn">
             <button class="btn btn-theme btn-sm" type="submit"><i class="fa fa-search"></i></button>
