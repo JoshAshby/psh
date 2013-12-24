@@ -88,27 +88,27 @@
       </div>
       <div id="main-wrapper" class="col-sm-10 pull-right">
 
-        {% if req.has_announcements and not hide_announcements %}
-          <div class="container container-alert">
-            <div class="row">
-              <div class="col-md-1 col-sm-1" style="text-align: center;">
-                <i class="fa fa-exclamation fa-4x"></i>
-              </div>
-              <div class="col-md-10 col-sm-10">
-                {% for announcement in req.announcements %}
-                  {{announcement}}
-                {% endfor %}
-              </div>
-            </div>
-          </div>
-        {% endif %}
-
         <div id="main">
           <div class="row" style="display: none">
             <div class="col-sm-12">
               <a href="#" id="show" class="btn btn-default btn-sm"><i class="fa fa-chevron-left fa-fw"></i> Show sidebar</a>
             </div>
           </div>
+
+          {% if req.has_announcements and not hide_announcements %}
+            <div class="alert alert-danger">
+              <div class="row">
+                <div class="col-md-1 col-sm-1" style="text-align: center;">
+                  <i class="fa fa-exclamation fa-2x"></i>
+                </div>
+                <div class="col-md-10 col-sm-10">
+                  {% for announcement in req.announcements %}
+                    {{announcement}}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          {% endif %}
 
           {% if req.session.alerts %}
             <!-- Begin alerts section -->
@@ -122,6 +122,15 @@
 
           {{body}}
         </div>
+      </div>
+      <div class="col-sm-12 footer">
+        <ul class="list-inline">
+          <li><a href="http://github.com/JoshAshby">Josh Ashby - Psh PaaS 2013</a></li>
+          <li><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a></li>
+
+          <li class="pull-right"><a href="/about">About</a></li>
+
+        </ul>
       </div>
     </div>
 

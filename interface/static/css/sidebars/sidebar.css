@@ -13,6 +13,7 @@ body {
     top: 0;
     left: 0;
     display: inline-block;
+    padding-bottom: 50px;
   }
   #main-wrapper {
     height: 100%;
@@ -29,7 +30,7 @@ body {
   }
   #sidebar-wrapper {
     height: 100%;
-    padding: 50px 0 0px 0;
+    padding: 50px 0 50px 0;
     position: fixed;
     /*border-right: 1px solid darken(white, 33%);*/
   
@@ -48,6 +49,10 @@ body {
   #sidebar a.active {
     text-decoration: none;
     background-color: #f7f5fa;
+  }
+  .footer {
+    background-color: #222;
+    padding-top: 10px;
   }
 }
 #show {

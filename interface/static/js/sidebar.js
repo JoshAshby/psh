@@ -2,17 +2,34 @@
 (function() {
 
   $(function() {
-    $("#hide").click(function(e) {
-      e.preventDefault();
+    var hide, show, wat;
+    hide = function(e) {
+      if (e) {
+        e.preventDefault();
+      }
       $("#sidebar-wrapper").hide().removeClass("col-sm-2");
       $("#main-wrapper").removeClass("col-sm-10 pull-right").addClass("col-sm-10 col-sm-offset-1");
-      return $("#show").parents(".row").show();
+      $("#show").parents(".row").show();
+      return sessionStorage.setItem("sidebar", "hide");
+    };
+    show = function(e) {
+      if (e) {
+        e.preventDefault();
+      }
+      $("#show").parents(".row").hide();
+      $("#main-wrapper").removeClass("col-sm-12").addClass("col-sm-10 pull-right");
+      $("#sidebar-wrapper").show().addClass("col-sm-2");
+      return sessionStorage.setItem("sidebar", "show");
+    };
+    wat = sessionStorage.getItem("sidebar");
+    if (wat !== null && wat === "hide") {
+      hide();
+    }
+    $("#hide").click(function(e) {
+      return hide(e);
     });
     return $("#show").click(function(e) {
-      e.preventDefault();
-      $(this).parents(".row").hide();
-      $("#main-wrapper").removeClass("col-sm-12").addClass("col-sm-10 pull-right");
-      return $("#sidebar-wrapper").show().addClass("col-sm-2");
+      return show(e);
     });
   });
 
