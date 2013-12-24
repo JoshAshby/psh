@@ -2,7 +2,7 @@ $ ->
   $("#hide").click (e) ->
     e.preventDefault()
     $("#sidebar-wrapper").hide().removeClass "col-sm-2"
-    $("#main-wrapper").removeClass("col-sm-10 pull-right").addClass "col-sm-12"
+    $("#main-wrapper").removeClass("col-sm-10 pull-right").addClass "col-sm-10 col-sm-offset-1"
     $("#show").parents(".row").show()
 
   $("#show").click (e) ->

@@ -27,6 +27,8 @@ class container(MixedObject):
     _title = "New Container - Step 1"
     _default_tmpl = "public/new/container_step_1"
     def GET(self):
+        self.view.partial("sidebar", "partials/public/sidebar_links",
+                          {"command": "new_container"})
         if self.request.id == "step-1" or not self.request.id:
             q = dbu.rql_where_not(im.Image.table, "disable", True)\
                 .filter({"user_id": self.request.session.id}).order_by("name")

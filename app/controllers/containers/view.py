@@ -26,6 +26,8 @@ class view(MixedObject):
     _title = "Containers"
     _default_tmpl = "public/containers/view"
     def GET(self):
+        self.view.partial("sidebar", "partials/public/sidebar_links",
+                          {"command": "containers"})
         try:
             con = cm.Container(self.request.id)
         except NotFoundError:

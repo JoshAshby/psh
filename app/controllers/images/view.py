@@ -26,6 +26,8 @@ class view(MixedObject):
     _title = "Images"
     _default_tmpl = "public/images/index"
     def GET(self):
+        self.view.partial("sidebar", "partials/public/sidebar_links",
+                          {"command": "images"})
         try:
             image = im.Image(self.request.id)
         except NotFoundError:

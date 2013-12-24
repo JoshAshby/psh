@@ -154,7 +154,7 @@ class template(object):
         }
 
         self._template = template
-        self._base = "skeletons/navbar"
+        self._base = "skeletons/sidebar"
 
     @property
     def template(self):

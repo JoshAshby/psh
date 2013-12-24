@@ -26,6 +26,8 @@ class index(MixedObject):
     _title = "New Image"
     _default_tmpl = "public/new/dockerfile"
     def GET(self):
+        self.view.partial("sidebar", "partials/public/sidebar_links",
+                          {"command": "new_image"})
         return self.view
 
     def POST(self):

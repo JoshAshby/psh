@@ -26,6 +26,8 @@ class index(MixedObject):
     _title = "Containers"
     _default_tmpl = "public/containers/index"
     def GET(self):
+        self.view.partial("sidebar", "partials/public/sidebar_links",
+                          {"command": "containers"})
         q = dbu.rql_where_not(cm.Container.table, "disable", True)\
             .filter({"user_id": self.request.session.id})
 

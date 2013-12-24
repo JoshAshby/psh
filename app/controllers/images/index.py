@@ -26,6 +26,8 @@ class index(MixedObject):
     _title = "Images"
     _default_tmpl = "public/images/index"
     def GET(self):
+        self.view.partial("sidebar", "partials/public/sidebar_links",
+                          {"command": "images"})
         q = dbu.rql_where_not(im.Image.table, "disable", True)\
             .filter({"user_id": self.request.session.id})
         q = dbu.rql_highest_revs(query=q, field="name")

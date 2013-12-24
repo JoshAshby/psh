@@ -1,0 +1,8 @@
+<ul class="nav list-group">
+  <li><a href="/" class="{{ 'active' if command=="home" }}"><i class="fa fa-fw fa-home"></i> Home</a></li>
+  <li><a href="/new" class="{{ 'active' if command=="new_image" }}"><i class="fa fa-fw fa-file"></i> New Image</a></li>
+  <li><a href="/new/container" class="{{ 'active' if command=="new_container" }}"><i class="fa fa-fw fa-desktop"></i> New Container</a></li>
+  <li><h4>Your Stuff</h4></li>
+  <li><a href="/images" class="{{ 'active' if command=="images" }}"><i class="fa fa-fw fa-file"></i> Images</a></li>
+  <li><a href="/containers" class="{{ 'active' if command=="containers" }}"><i class="fa fa-fw fa-desktop"></i> Containers</a></li>
+</ul>

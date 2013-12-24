@@ -5,7 +5,7 @@
     $("#hide").click(function(e) {
       e.preventDefault();
       $("#sidebar-wrapper").hide().removeClass("col-sm-2");
-      $("#main-wrapper").removeClass("col-sm-10 pull-right").addClass("col-sm-12");
+      $("#main-wrapper").removeClass("col-sm-10 pull-right").addClass("col-sm-10 col-sm-offset-1");
       return $("#show").parents(".row").show();
     });
     return $("#show").click(function(e) {
