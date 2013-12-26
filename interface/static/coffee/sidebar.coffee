@@ -7,6 +7,9 @@ $ ->
     $("#show").parents(".row").show()
     sessionStorage.setItem "sidebar", "hide"
 
+    $.event.trigger
+      type: "sidebar-hide"
+
   show = (e) ->
     if e
       e.preventDefault()
@@ -14,6 +17,9 @@ $ ->
     $("#main-wrapper").removeClass("col-sm-12").addClass "col-sm-10 pull-right"
     $("#sidebar-wrapper").show().addClass "col-sm-2"
     sessionStorage.setItem "sidebar", "show"
+
+    $.event.trigger
+      type: "sidebar-show"
 
   wat = sessionStorage.getItem("sidebar")
 

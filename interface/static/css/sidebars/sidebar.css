@@ -46,6 +46,7 @@ body {
     color: #f7f5fa;
     padding-left: 5px;
   }
+  #sidebar li.active,
   #sidebar a.active,
   #sidebar a:hover,
   #sidebar a:focus {
