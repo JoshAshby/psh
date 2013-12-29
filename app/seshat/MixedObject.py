@@ -55,14 +55,15 @@ class MixedObject(base.BaseHTTPObject):
                 self.head = ("303 SEE OTHER", [("Location", self._redirect_url)])
             return "", self.head
 
-        if self._groups and (not self.request.session.has_perm(root_group) \
-           or not len(set(self._groups).union(self.request.session.groups)) >= 1):
-                self.request.session.push_alert("You are not authorized to perfom this action.", level="error")
-                if not self._redirect_url:
-                    self.head = ("401 UNAUTHORIZED", [])
-                else:
-                    self.head = ("303 SEE OTHER", [("Location", self._redirect_url)])
-                return "", self.head
+        if self._groups:
+            if not len(set(self._groups).intersection(set(self.request.session.groups))) >= 1:
+                if not self.request.session.has_perm(root_group):
+                    self.request.session.push_alert("You are not authorized to perfom this action.", level="error")
+                    if not self._redirect_url:
+                        self.head = ("401 UNAUTHORIZED", [])
+                    else:
+                        self.head = ("303 SEE OTHER", [("Location", self._redirect_url)])
+                    return "", self.head
 
         self.pre_content_hook()
         try:

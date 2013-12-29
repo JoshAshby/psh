@@ -69,9 +69,13 @@ parse_files(general)
 
 builder = StandardODM(**general.builder)
 parse_files(builder)
+builder.files = StandardODM(**builder.files)
+builder.dirs = StandardODM(**builder.dirs)
 
 spinner = StandardODM(**general.spinner)
 parse_files(spinner)
+spinner.files = StandardODM(**spinner.files)
+spinner.dirs = StandardODM(**spinner.dirs)
 
 dirs = StandardODM(**general.dirs)
 files = StandardODM(**general.files)
