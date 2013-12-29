@@ -4,6 +4,7 @@ body {
 @media (min-width: 768px) {
   body {
     overflow: hidden;
+    background-color: #222222;
   }
   #wrapper {
     min-height: 100%;
@@ -27,6 +28,16 @@ body {
     overflow-y: auto;
     overflow-x: auto;
     padding: 10px 15px;
+    background-color: #f7f5fa;
+    -webkit-border-top-left-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    border-top-left-radius: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    -webkit-background-clip: padding-box;
+    -moz-border-radius-bottomleft: 5px;
+    -moz-background-clip: padding;
+    border-bottom-left-radius: 5px;
+    background-clip: padding-box;
   }
   #sidebar-wrapper {
     height: 100%;
@@ -46,12 +57,21 @@ body {
     color: #f7f5fa;
     padding-left: 5px;
   }
-  #sidebar li.active,
-  #sidebar a.active,
-  #sidebar a:hover,
-  #sidebar a:focus {
+  #sidebar .nav > li.active,
+  #sidebar .nav > li > a.active,
+  #sidebar .nav > li > a:hover,
+  #sidebar .nav > li > a:focus {
     text-decoration: none;
     background-color: #f7f5fa;
+    -webkit-border-top-left-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    border-top-left-radius: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    -webkit-background-clip: padding-box;
+    -moz-border-radius-bottomleft: 5px;
+    -moz-background-clip: padding;
+    border-bottom-left-radius: 5px;
+    background-clip: padding-box;
   }
   .footer {
     background-color: #222222;

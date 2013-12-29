@@ -1,4 +1,5 @@
 @import "../colors";
+@import "../lesshat";
 
 @footer_height: 20px;
 @sidebar_color: #222;
@@ -9,6 +10,7 @@ body {
 @media (min-width: 768px) {
   body {
     overflow: hidden;
+    background-color: @sidebar_color;
   }
   #wrapper {
     min-height: 100%;
@@ -32,6 +34,9 @@ body {
     overflow-y: auto;
     overflow-x: auto;
     padding: 10px 15px;
+    background-color: @background;
+    .lh-border-top-left-radius(5px);
+    .lh-border-bottom-left-radius(5px);
   }
   #sidebar-wrapper {
     height: 100%;
@@ -49,9 +54,11 @@ body {
       color: @background;
       padding-left: 5px;
     }
-    li.active, a.active, a:hover, a:focus {
+    .nav>li.active, .nav>li>a.active, .nav>li>a:hover, .nav>li>a:focus {
       text-decoration: none;
       background-color: @background;
+      .lh-border-top-left-radius(5px);
+      .lh-border-bottom-left-radius(5px);
     }
   }
   .footer {
